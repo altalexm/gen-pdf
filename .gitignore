@@ -1,0 +1,46 @@
+# Entorno Virtual de Python
+venv/
+.venv/
+env/
+.env/
+
+# Archivos de caché y compilados de Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Archivos de Distribución y Compilación
+build/
+dist/
+*.egg-info/
+*.spec
+
+# Logs y archivos de sesión
+# No queremos subir los logs de ejecución al repositorio.
+logs/
+*.log
+
+# Archivos de configuración de IDEs y editores
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Archivos específicos del sistema operativo
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Archivos de respaldo de editores
+*~
+*.swp
+*.swo
+
+*.json

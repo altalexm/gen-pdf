@@ -7,6 +7,22 @@ y este proyecto se adhiere al [Versionado Semántico](https://semver.org/spec/v2
 
 ---
 
+## [3.0.2] - [Fecha: 28/10/2025]
+
+### ✨ Añadido (Added)
+
+- Sistema de actualizaciones automáticas integrado con GitLab
+- Verificación automática de nuevas versiones al iniciar la aplicación
+- Botón "Buscar Actualizaciones" en la interfaz de usuario
+- Descarga automática de nuevas versiones desde GitLab Releases
+- Diálogo elegante para mostrar detalles de actualizaciones disponibles
+- Configuración flexible para repositorios públicos, privados e internos
+
+### 🔧 Mejorado (Changed)
+
+- Agregadas dependencias `requests` y `packaging` para el sistema de actualizaciones
+- Integración completa con la API de GitLab para verificación de releases
+
 ## [3.0.1] - [Fecha: 23/10/2025]
 
 ### 🐛 Corregido (Fixed)

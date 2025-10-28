@@ -7,6 +7,19 @@ y este proyecto se adhiere al [Versionado Semántico](https://semver.org/spec/v2
 
 ---
 
+## [3.0.3] - [Fecha: 28/10/2025]
+
+### 🐛 Corregido (Fixed)
+
+- Corregido PROJECT_ID en configuración de GitLab (de 'amacias/starpdf' a '7')
+- Solucionado error 404 al verificar actualizaciones desde GitLab API
+- Sistema de actualizaciones automáticas ahora funciona correctamente
+
+### 🔧 Mejorado (Changed)
+
+- Optimizada configuración para GitLab API usando ID numérico del proyecto
+- Verificación de actualizaciones más estable y confiable
+
 ## [3.0.2] - [Fecha: 28/10/2025]
 
 ### ✨ Añadido (Added)

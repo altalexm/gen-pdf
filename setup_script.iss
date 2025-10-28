@@ -1,7 +1,7 @@
 [Setup]
 AppName=StarPDF
 AppId={{StarPDF}}
-AppVersion=3.0.2
+AppVersion=3.0.3
 AppPublisher=STAR SOFTWARE
 DefaultDirName={autopf}\StarPDF
 DefaultGroupName=StarPDF
@@ -9,7 +9,7 @@ UninstallDisplayIcon={app}\StarPDF.exe
 Compression=lzma2
 SolidCompression=yes
 WizardStyle=modern
-OutputBaseFilename=StarPDF-3.0.2-setup
+OutputBaseFilename=StarPDF-3.0.3-setup
 LicenseFile=LICENSE
 PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog

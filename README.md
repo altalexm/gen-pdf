@@ -1,4 +1,4 @@
-# StarPDF - Plataforma Profesional de Documentación v3.0.2
+# StarPDF - Plataforma Profesional de Documentación v3.0.3
 
 _Una aplicación de escritorio modular y elegante para generar documentos corporativos de alta calidad, desde Actas de Reunión hasta Acuerdos de Confidencialidad, todo desde una única interfaz intuitiva. Desarrollada por STAR Software._
 

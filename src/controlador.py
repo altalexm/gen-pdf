@@ -8,6 +8,7 @@ from tkinter import filedialog
 from pathlib import Path
 from .app_principal import AppPrincipal
 from .documento_base import DocumentoBase
+from .gitlab_updater import setup_gitlab_updater
 
 logger = logging.getLogger(__name__)
 
@@ -19,6 +20,9 @@ class Controlador:
         self.base_path = base_path
         self.modulos_cargados = {}
         self.modulo_activo: DocumentoBase | None = None
+        
+        # Configurar sistema de actualizaciones con GitLab
+        self.updater = setup_gitlab_updater(self, self)
 
     def iniciar_aplicacion(self):
         documentos = self.config.get('documentos', [])
@@ -138,3 +142,31 @@ class Controlador:
             self.vista.mostrar_mensaje('info', 'Éxito', "La sesión se ha cargado correctamente.")
         except Exception as e:
             logger.exception("Error al cargar sesión."); self.vista.mostrar_mensaje('error', 'Error', f"No se pudo cargar la sesión:\n{e}")
+
+    # Métodos para el sistema de configuración (requeridos por el updater)
+    def get(self, key, default=None):
+        """Obtiene valor de configuración"""
+        return self.config.get('app', {}).get(key, default)
+    
+    def set(self, key, value):
+        """Establece valor de configuración"""
+        if 'app' not in self.config:
+            self.config['app'] = {}
+        self.config['app'][key] = value
+        self.guardar_config()
+    
+    def guardar_config(self):
+        """Guarda la configuración"""
+        try:
+            with open(self.user_config_path, 'w', encoding='utf-8') as f:
+                yaml.dump(self.config, f, default_flow_style=False, allow_unicode=True)
+        except Exception as e:
+            logger.exception("Error al guardar configuración")
+    
+    def verificar_actualizaciones(self):
+        """Verifica manualmente las actualizaciones desde GitLab"""
+        if hasattr(self, 'updater'):
+            self.updater.check_manual_updates()
+        else:
+            self.vista.mostrar_mensaje('warning', 'Sistema de actualizaciones', 
+                                     'El sistema de actualizaciones no está disponible.')

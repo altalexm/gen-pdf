@@ -80,6 +80,12 @@ class AppPrincipal(ctk.CTk):
                 
                 btn.grid(row=3+i, column=0, padx=20, pady=5, sticky="ew")
 
+        # Botón para buscar actualizaciones en GitLab
+        update_button = ctk.CTkButton(self.sidebar_frame, text="Buscar Actualizaciones", 
+                                     anchor="w", hover_color=hover_color,
+                                     command=lambda: self.controlador.verificar_actualizaciones() if self.controlador else None)
+        update_button.grid(row=5, column=0, padx=20, pady=5, sticky="ew")
+
         settings_button = ctk.CTkButton(self.sidebar_frame, text="Ajustes", image=self.icon_settings, anchor="w",
                                         hover_color=hover_color,
                                         command=lambda: self.controlador.mostrar_frame("settings"))

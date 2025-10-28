@@ -4,7 +4,8 @@ import os
 import sys
 import logging
 import logging.config
-import json  # Usaremos JSON temporalmente en lugar de YAML
+import json  # Para leer configuración base
+import yaml  # Para leer configuración de usuario
 import customtkinter as ctk
 from pathlib import Path
 
@@ -31,7 +32,7 @@ def get_user_config_path(app_name="StarPDF") -> Path:
     user_docs = Path.home() / "Documents"
     app_config_dir = user_docs / app_name
     app_config_dir.mkdir(exist_ok=True)
-    return app_config_dir / "config.json"  # Cambiado a .json
+    return app_config_dir / "config.json"  # El archivo sigue siendo config.json
 
 def setup_logging(log_path: Path):
     config_log = {
@@ -48,29 +49,55 @@ def setup_logging(log_path: Path):
     logging.info("INICIO DE SESIÓN DE LA APLICACIÓN")
 
 def cargar_configuracion(base_path_arg: Path, user_config_path_arg: Path) -> dict:
-    base_config_path = base_path_arg / "config.json"  # Cambiado a .json
+    base_config_path = base_path_arg / "config.json"  # Base sigue siendo JSON
     logging.info(f"Buscando configuración en:")
     logging.info(f"1. Usuario: {user_config_path_arg}")
     logging.info(f"2. Base: {base_config_path}")
+    
+    # Cargar configuración base para obtener la versión actual de la aplicación
+    base_config = {}
+    if base_config_path.exists():
+        try:
+            with open(base_config_path, 'r', encoding='utf-8') as f:
+                base_config = json.load(f) or {}
+        except Exception as e:
+            logging.error(f"Error al leer config base: {e}")
     
     if user_config_path_arg.exists():
         logging.info(f"Cargando config de usuario: {user_config_path_arg}")
         try:
             with open(user_config_path_arg, 'r', encoding='utf-8') as f: 
-                return json.load(f) or {}
-        except json.JSONDecodeError as e:
+                user_config = yaml.safe_load(f) or {}
+            
+            # Verificar si la versión de la aplicación es más nueva que la del usuario
+            app_version = base_config.get('app', {}).get('app_version', '0.0.0')
+            user_version = user_config.get('app', {}).get('app_version', '0.0.0')
+            
+            if app_version != user_version:
+                logging.info(f"Actualizando versión en config de usuario: {user_version} -> {app_version}")
+                # Actualizar solo la versión, mantener otras configuraciones del usuario
+                if 'app' not in user_config:
+                    user_config['app'] = {}
+                user_config['app']['app_version'] = app_version
+                
+                # Guardar configuración actualizada en formato YAML
+                with open(user_config_path_arg, 'w', encoding='utf-8') as f:
+                    yaml.dump(user_config, f, default_flow_style=False, allow_unicode=True)
+                logging.info(f"Config de usuario actualizada con nueva versión: {app_version}")
+            
+            return user_config
+        except Exception as e:
             logging.error(f"Error al leer config de usuario: {e}")
             return {}
     elif base_config_path.exists():
         logging.info(f"Cargando config base: {base_config_path}")
         logging.warning(f"No se encontró config de usuario. Creando desde plantilla: {base_config_path}")
         try:
-            with open(base_config_path, 'r', encoding='utf-8') as f: 
-                temp_conf = json.load(f) or {}
+            # Crear config de usuario en formato YAML
             with open(user_config_path_arg, 'w', encoding='utf-8') as f: 
-                json.dump(temp_conf, f, ensure_ascii=False, indent=2)
+                yaml.dump(base_config, f, default_flow_style=False, allow_unicode=True)
             logging.info(f"Config de usuario creada en: {user_config_path_arg}")
-            return temp_conf
+            return base_config
         except Exception as e:
             logging.error(f"Error al procesar config: {e}")
             return {}
@@ -81,7 +108,7 @@ def cargar_configuracion(base_path_arg: Path, user_config_path_arg: Path) -> dic
 def main():
     base_path = get_base_path()
     
-    base_config_path_temp = base_path / "config.json"  # Cambiado a .json
+    base_config_path_temp = base_path / "config.json"  # Base sigue siendo JSON
     app_name = "StarPDF" 
     if base_config_path_temp.exists():
         try:

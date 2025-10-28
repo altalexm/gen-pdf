@@ -1,6 +1,6 @@
 app:
   app_name: "StarPDF"
-  app_version: "3.0.3"
+  app_version: "3.0.4"
   default_theme: System
   default_color_theme: blue
   icon_sun: assets/icons/sun.png

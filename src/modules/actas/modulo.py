@@ -15,7 +15,8 @@ class PDFActa(FPDF):
         super().__init__()
         self.company_name = company_name
         self.logo_path = logo_path
-        self.set_margins(25, 25, 25)
+        # Configuramos márgenes más conservadores para evitar problemas de espacio
+        self.set_margins(20, 20, 20)  # Reducimos un poco los márgenes
         self.title_color = (60, 60, 60)
 
     def header(self):
@@ -181,6 +182,13 @@ class ModuloActas(DocumentoBase):
 
             pdf.add_page()
             pdf.set_auto_page_break(auto=True, margin=25)
+            
+            # Validamos las dimensiones del PDF antes de continuar
+            ancho_util = float(pdf.w) - float(pdf.l_margin) - float(pdf.r_margin)
+            alto_util = float(pdf.h) - float(pdf.t_margin) - float(pdf.b_margin)
+            
+            if ancho_util < 50 or alto_util < 50:
+                return False, f"Error: Las dimensiones del PDF son insuficientes (ancho: {ancho_util}, alto: {alto_util})"
 
             self._seccion_titulo(pdf, '1. Información Básica')
             info = datos
@@ -190,10 +198,34 @@ class ModuloActas(DocumentoBase):
             }
             for key, label in info_labels.items():
                 if info.get(key):
+                    # Guardamos la posición Y actual
+                    y_inicial = pdf.get_y()
+                    
                     pdf.set_font('Arial', 'B', 10)
                     pdf.cell(40, 8, f"{label}:", border=0)
                     pdf.set_font('Arial', '', 10)
-                    pdf.multi_cell(0, 8, info.get(key, ''))
+                    
+                    # Calculamos el ancho disponible para el contenido
+                    ancho_disponible = pdf.w - pdf.l_margin - pdf.r_margin - 40
+                    valor = str(info.get(key, ''))
+                    
+                    try:
+                        # Posicionamos el cursor para el contenido
+                        pdf.set_xy(pdf.l_margin + 40, y_inicial)
+                        
+                        # Intentamos usar multi_cell con el ancho calculado
+                        if ancho_disponible > 20:  # Aseguramos un mínimo de espacio
+                            pdf.multi_cell(ancho_disponible, 8, valor, border=0)
+                        else:
+                            # Si no hay suficiente espacio, usamos cell normal
+                            pdf.cell(ancho_disponible, 8, valor[:50] + "..." if len(valor) > 50 else valor, border=0, ln=1)
+                    except Exception:
+                        # Fallback: volvemos a posición inicial y usamos cell simple
+                        pdf.set_xy(pdf.l_margin + 40, y_inicial)
+                        pdf.cell(0, 8, valor[:50] + "..." if len(valor) > 50 else valor, border=0, ln=1)
+                    
+                    # Aseguramos que estamos en la línea siguiente
+                    pdf.ln(2)
 
             pdf.ln(5)
 
@@ -205,7 +237,23 @@ class ModuloActas(DocumentoBase):
             prox = datos.get('proxima_reunion', {})
             contenido_prox = f"Fecha: {prox.get('fecha', '')} | Hora: {prox.get('hora', '')} | Lugar: {prox.get('lugar', '')}"
             pdf.set_font('Arial', '', 10)
-            pdf.multi_cell(0, 8, contenido_prox, border=0, align='L')
+            
+            try:
+                # Guardamos posición inicial y establecemos X al margen izquierdo
+                y_inicial = pdf.get_y()
+                pdf.set_x(pdf.l_margin)
+                
+                # Validamos el ancho antes de usar multi_cell
+                ancho_disponible = pdf.w - pdf.l_margin - pdf.r_margin
+                if ancho_disponible > 30:
+                    pdf.multi_cell(ancho_disponible, 8, contenido_prox, border=0, align='L')
+                else:
+                    pdf.cell(0, 8, contenido_prox[:80] + "..." if len(contenido_prox) > 80 else contenido_prox, border=0, ln=1)
+            except Exception:
+                # Fallback: posición segura y cell normal
+                pdf.set_x(pdf.l_margin)
+                pdf.cell(0, 8, contenido_prox[:80] + "..." if len(contenido_prox) > 80 else contenido_prox, border=0, ln=1)
+                
             pdf.ln(5)
 
             espacio_restante = float(pdf.h) - float(pdf.get_y())
@@ -217,23 +265,57 @@ class ModuloActas(DocumentoBase):
             firmas = datos.get('firmas', {})
             moderador = firmas.get('moderador', {})
             responsable = firmas.get('responsable_acta', {})
-            ancho_util = float(pdf.w) - float(pdf.l_margin) - float(pdf.r_margin)
-            gap, ancho_columna = 5.0, (ancho_util - 5.0) / 2.0
             
-            y_before_signatures = pdf.get_y()
+            # Cálculo de anchos con validación
+            ancho_util = float(pdf.w) - float(pdf.l_margin) - float(pdf.r_margin)
+            gap = 10.0  # Aumentamos el gap para dar más espacio
+            
+            # Validamos que haya suficiente espacio para las dos columnas
+            if ancho_util < 80:  # Si hay menos de 80 unidades, usar una sola columna
+                # Firmas en una sola columna
+                pdf.set_font('Arial', 'B', 10)
+                pdf.cell(0, 8, "Moderador:", border=0, ln=1)
+                pdf.set_font('Arial', '', 10)
+                pdf.multi_cell(0, 6, f"Nombre: {moderador.get('nombre', '')}")
+                pdf.multi_cell(0, 6, f"Fecha: {moderador.get('fecha', '')}")
+                pdf.ln(5)
+                
+                pdf.set_font('Arial', 'B', 10)
+                pdf.cell(0, 8, "Responsable de Acta:", border=0, ln=1)
+                pdf.set_font('Arial', '', 10)
+                pdf.multi_cell(0, 6, f"Nombre: {responsable.get('nombre', '')}")
+                pdf.multi_cell(0, 6, f"Fecha: {responsable.get('fecha', '')}")
+            else:
+                # Firmas en dos columnas
+                ancho_columna = (ancho_util - gap) / 2.0
+                
+                # Validamos que cada columna tenga un ancho mínimo razonable
+                if ancho_columna < 30:
+                    ancho_columna = 30
+                    gap = max(5, ancho_util - (2 * ancho_columna))
+                
+                y_before_signatures = pdf.get_y()
 
-            # Columna 1 (Moderador)
-            pdf.set_font('Arial', '', 10)
-            pdf.multi_cell(ancho_columna, 8, f"\n\n\n\n{moderador.get('nombre', '')}\nModerador", border=0, align='C')
-            pdf.line(pdf.l_margin, y_before_signatures + 24, pdf.l_margin + ancho_columna, y_before_signatures + 24)
+                # Columna 1 (Moderador)
+                pdf.set_xy(pdf.l_margin, y_before_signatures)
+                pdf.set_font('Arial', '', 10)
+                pdf.multi_cell(ancho_columna, 8, f"\n\n\n\n{moderador.get('nombre', '')}\nModerador", border=0, align='C')
+                
+                # Línea de firma para moderador
+                y_linea = y_before_signatures + 24
+                pdf.line(pdf.l_margin, y_linea, pdf.l_margin + ancho_columna, y_linea)
 
-            # Columna 2 (Responsable)
-            pdf.set_y(y_before_signatures)
-            pdf.set_x(pdf.l_margin + ancho_columna + gap)
-            pdf.set_font('Arial', '', 10)
-            pdf.multi_cell(ancho_columna, 8, f"\n\n\n\n{responsable.get('nombre', '')}\nResponsable de Acta", border=0, align='C')
-            x_start_resp = pdf.l_margin + ancho_columna + gap
-            pdf.line(x_start_resp, y_before_signatures + 24, x_start_resp + ancho_columna, y_before_signatures + 24)
+                # Columna 2 (Responsable)
+                x_responsable = pdf.l_margin + ancho_columna + gap
+                pdf.set_xy(x_responsable, y_before_signatures)
+                pdf.set_font('Arial', '', 10)
+                pdf.multi_cell(ancho_columna, 8, f"\n\n\n\n{responsable.get('nombre', '')}\nResponsable de Acta", border=0, align='C')
+                
+                # Línea de firma para responsable
+                pdf.line(x_responsable, y_linea, x_responsable + ancho_columna, y_linea)
+                
+                # Nos aseguramos de posicionar el cursor después de las firmas
+                pdf.set_y(y_linea + 5)
 
             pdf.output(str(ruta_archivo))
             return True, None
@@ -245,7 +327,16 @@ class ModuloActas(DocumentoBase):
         pdf.set_font('Arial', 'B', 12)
         pdf.set_text_color(40, 40, 40)
         pdf.cell(0, 10, titulo, 0, 1, 'L')
-        pdf.line(pdf.get_x(), pdf.get_y(), pdf.get_x() + 70, pdf.get_y())
+        
+        # Guardamos posición actual para dibujar la línea correctamente
+        x_actual = pdf.get_x()
+        y_actual = pdf.get_y()
+        
+        # Dibujamos la línea decorativa
+        pdf.line(pdf.l_margin, y_actual, pdf.l_margin + 70, y_actual)
+        
+        # Restauramos posición y continuamos
+        pdf.set_xy(x_actual, y_actual)
         pdf.ln(5)
 
     def _crear_seccion_lista_simple(self, pdf: FPDF, titulo: str, lista: list):
@@ -256,7 +347,33 @@ class ModuloActas(DocumentoBase):
             pdf.cell(0, 6, "- (No hay elementos)", 0, 1)
         else:
             for item in lista: 
-                pdf.multi_cell(0, 6, f"{chr(149)} {item}")
+                # Validamos que el item no esté vacío y el ancho sea suficiente
+                item_text = str(item) if item else "- (Sin contenido)"
+                
+                try:
+                    # Guardamos la posición Y inicial
+                    y_inicial = pdf.get_y()
+                    
+                    # Establecemos posición X al margen izquierdo
+                    pdf.set_x(pdf.l_margin)
+                    
+                    # Calculamos el ancho disponible
+                    ancho_disponible = pdf.w - pdf.l_margin - pdf.r_margin
+                    
+                    if ancho_disponible > 30:
+                        # Usamos multi_cell con el ancho completo disponible
+                        pdf.multi_cell(ancho_disponible, 6, f"{chr(149)} {item_text}", border=0)
+                    else:
+                        # Si hay problemas de espacio, usamos cell normal
+                        pdf.cell(0, 6, f"{chr(149)} {item_text[:50]}...", 0, 1)
+                        
+                except Exception:
+                    # Si hay problemas con multi_cell, usamos cell normal
+                    pdf.set_x(pdf.l_margin)
+                    pdf.cell(0, 6, f"{chr(149)} {item_text[:50]}...", 0, 1)
+                
+                # Pequeño espacio entre elementos
+                pdf.ln(1)
         pdf.ln(5)
     
     def _crear_seccion_lista_compleja(self, pdf: FPDF, titulo: str, lista: list):
@@ -266,10 +383,33 @@ class ModuloActas(DocumentoBase):
             pdf.cell(0, 6, "- (No hay elementos)", 0, 1)
         else:
             for i, punto in enumerate(lista, 1):
-                pdf.set_font('Arial', 'B', 10)
-                pdf.multi_cell(0, 6, f"{i}. {punto.get('titulo', 'Sin título')}")
-                pdf.set_font('Arial', '', 10)
-                pdf.set_x(float(pdf.l_margin) + 5.0)
-                pdf.multi_cell(0, 6, f"{punto.get('descripcion', 'Sin descripción')}")
-                pdf.ln(2)
+                try:
+                    # Guardamos posición inicial
+                    y_inicial = pdf.get_y()
+                    
+                    pdf.set_font('Arial', 'B', 10)
+                    titulo_punto = punto.get('titulo', 'Sin título')
+                    pdf.cell(0, 6, f"{i}. {titulo_punto}", 0, 1)
+                    
+                    pdf.set_font('Arial', '', 10)
+                    # Establecemos correctamente la posición X con indentación
+                    pdf.set_x(pdf.l_margin + 5.0)
+                    descripcion_punto = punto.get('descripcion', 'Sin descripción')
+                    
+                    # Calculamos el ancho disponible con la indentación
+                    ancho_disponible = pdf.w - pdf.l_margin - pdf.r_margin - 5.0
+                    
+                    if ancho_disponible > 20:
+                        pdf.multi_cell(ancho_disponible, 6, descripcion_punto, border=0)
+                    else:
+                        pdf.cell(0, 6, descripcion_punto[:50] + "..." if len(descripcion_punto) > 50 else descripcion_punto, 0, 1)
+                    
+                    pdf.ln(2)
+                except Exception:
+                    # Si hay problemas, usamos cell normal
+                    pdf.set_font('Arial', 'B', 10)
+                    pdf.cell(0, 6, f"{i}. {titulo_punto[:50]}...", 0, 1)
+                    pdf.set_font('Arial', '', 10)
+                    pdf.cell(0, 6, f"   {descripcion_punto[:50]}...", 0, 1)
+                    pdf.ln(2)
         pdf.ln(5)

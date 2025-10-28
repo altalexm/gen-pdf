@@ -3,8 +3,8 @@
 # URL de tu instancia de GitLab
 GITLAB_URL = "https://gitlab-prod.star-software.net"
 
-# ID del proyecto (formato: usuario/proyecto o grupo/proyecto)
-PROJECT_ID = "amacias/starpdf"
+# ID del proyecto (puede ser numérico o formato: usuario/proyecto)
+PROJECT_ID = "7"  # ID numérico del proyecto StarPDF
 
 # Token de acceso personal (requerido para repos internos)
 # Para obtenerlo: GitLab → Settings → Access Tokens → Personal Access Tokens

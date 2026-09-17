@@ -51,6 +51,7 @@ select:focus,input:focus,textarea:focus{border-color:var(--accent);outline:none;
 .doctitle{flex:1;max-width:460px;background:transparent;border:1px solid transparent;border-radius:9px;padding:8px 12px;font-size:15px;font-weight:600;color:var(--topbar-ink)}
 .doctitle:hover{border-color:var(--line)}
 .split{position:relative;display:flex}
+.toolstrip{display:contents}
 .split #btnPdf{border-radius:9px 0 0 9px}
 .split .arrow{border-radius:0 9px 9px 0;border-left:1px solid rgba(255,255,255,.35);padding:7px 9px}
 .menu{position:absolute;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow-lg);padding:6px;min-width:200px;z-index:60}
@@ -244,6 +245,7 @@ html[data-theme="dark"] .toast{background:#e9e7e1;color:#1c1917}
   /* bottom sheet: canvas stays visible above, no content hidden behind */
   #panel{position:fixed;left:0;right:0;bottom:0;top:auto;width:auto;max-height:54vh;z-index:70;box-shadow:0 -10px 32px rgba(16,24,40,.25);border-left:0;border-top:1px solid var(--line);border-radius:16px 16px 0 0;transition:transform .24s ease,opacity .2s ease,visibility 0s}
   #panel>*{min-width:0}
+  #panel::before{content:'';display:block;width:44px;height:4px;border-radius:2px;background:var(--line);margin:0 auto 12px}
   #shell.panel-hidden #panel{transform:translateY(103%);opacity:0;visibility:hidden;width:auto;padding:16px 18px;border-left:0;border-top:1px solid var(--line);transition:transform .24s ease,opacity .2s ease,visibility 0s .25s}
   #panel.hidden{display:none}
 }
@@ -254,11 +256,16 @@ html[data-theme="dark"] .toast{background:#e9e7e1;color:#1c1917}
   #scrim{position:fixed;left:0;right:0;top:53px;bottom:0;background:rgba(20,16,8,.4);z-index:65}
   #toolbar{top:0}
   #sheet{padding:28px 22px}
-  .doctitle{max-width:none;flex-basis:100%;order:5}
-  #topbar{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
-  #topbar::-webkit-scrollbar{display:none}
-  #topbar>*{flex:none}
-  #topbar .doctitle{flex:1 0 140px}
+  /* two-row topbar: brand + export always visible, tools scroll below */
+  #topbar{flex-wrap:wrap;row-gap:6px}
+  #btnSide{order:1}
+  .brand{order:2}
+  .doctitle{order:3;flex:1 1 90px;min-width:0;max-width:none}
+  #topbar .spacer{display:none}
+  .split{order:4;margin-left:auto}
+  .toolstrip{order:5;display:flex;gap:6px;overflow-x:auto;flex:1 0 100%;scrollbar-width:none;padding-bottom:1px}
+  .toolstrip::-webkit-scrollbar{display:none}
+  .toolstrip>*{flex:none}
   .brand .word{display:none}
   /* blocks stack instead of squeezing */
   .kv{grid-template-columns:1fr;row-gap:0}

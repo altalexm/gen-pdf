@@ -441,6 +441,8 @@ function selectVisual(id) {
 function selectBlock(id) {
   selectedId = id; selectVisual(id); renderPanel();
   if (matchMedia('(max-width:1180px)').matches) { inspHidden = false; applyChrome(); }
+  // On phones the drawer and the sheet cannot coexist: selecting wins.
+  if (matchMedia('(max-width:860px)').matches) { sideHidden = true; applyChrome(); }
 }
 function moveBlock(id, targetId, before) {
   const from = idxOf(id); if (from < 0) return;
@@ -1296,6 +1298,8 @@ async function init() {
   $('#sideKeys').onclick = () => openKeys();
   $('#btnSide').onclick = () => {
     sideHidden = !sideHidden;
+    // On phones the drawer and the sheet cannot coexist: opening wins.
+    if (!sideHidden && matchMedia('(max-width:860px)').matches) inspHidden = true;
     try { localStorage.setItem('genpdf.side', sideHidden ? '0' : '1'); } catch {}
     applyChrome();
   };

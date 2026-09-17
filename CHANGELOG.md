@@ -16,6 +16,7 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 - Collapsed panels can no longer intercept pointer events (delayed `visibility`).
 - Inspector no longer covers the canvas on load in narrow viewports.
+- Mobile drawer and bottom sheet are mutually exclusive; drawer sits below the topbar with scrim; Export stays visible in a two-row topbar; sheet gets a grab handle.
 
 ### Added
 

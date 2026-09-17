@@ -60,10 +60,13 @@ select:focus,input:focus,textarea:focus{border-color:var(--accent);outline:none;
 .menu input{margin:4px;width:calc(100% - 8px)}
 #exportMenu{right:0;top:calc(100% + 6px)}
 
-/* shell */
+/* shell — side panels collapse by sliding their column to 0 (animated),
+   never display:none, so the canvas never jumps */
 #shell{flex:1;display:grid;grid-template-columns:auto minmax(0,1fr) auto;min-height:0}
 /* sidebar */
-#sidebar{width:272px;background:var(--panel);border-right:1px solid var(--line);display:flex;flex-direction:column;padding:14px 12px;gap:14px;overflow-y:auto;min-height:0}
+#sidebar{width:272px;background:var(--panel);border-right:1px solid var(--line);display:flex;flex-direction:column;padding:14px 12px;gap:14px;overflow:hidden auto;min-height:0;transition:width .24s ease,opacity .2s ease,padding .24s ease,border-color .2s ease}
+#shell.side-hidden #sidebar{width:0;opacity:0;padding-left:0;padding-right:0;border-right-width:0}
+#sidebar>*{min-width:228px}
 .sideSearch input{background:var(--panel2);border-color:transparent}
 .sideGroup{display:flex;flex-direction:column;gap:7px}
 .sideGroup.grow{min-height:120px}
@@ -86,7 +89,9 @@ select:focus,input:focus,textarea:focus{border-color:var(--accent);outline:none;
 /* editor column */
 #viewEditor{display:flex;flex-direction:column;min-width:0;min-height:0}
 #viewLibrary{padding:24px 28px;overflow:auto;max-width:1080px;width:100%;margin:0 auto}
-#panel{width:324px;background:var(--panel);border-left:1px solid var(--line);padding:16px 18px;overflow:auto}
+#panel{width:324px;background:var(--panel);border-left:1px solid var(--line);padding:16px 18px;overflow:hidden auto;transition:width .24s ease,opacity .2s ease,padding .24s ease,border-color .2s ease}
+#shell.panel-hidden #panel{width:0;opacity:0;padding-left:0;padding-right:0;border-left-width:0}
+#panel>*{min-width:270px}
 #panel.hidden{display:none}
 .sideItem .nm{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 /* toolbar */

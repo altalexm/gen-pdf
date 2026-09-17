@@ -13,6 +13,7 @@ const t = (k) => (I18N[lang] && I18N[lang][k]) || I18N.en[k] || k;
 
 /* ================= state ================= */
 let doc = null, libraryId = null, selectedId = null;
+let currentView = 'editor', sideHidden = false, inspHidden = false;
 let history = [], future = [], focusSnapshot = null, layoutCache = null;
 let templates = [], userTemplates = [], libTrash = false, libFav = false;
 let commentsCache = [];
@@ -72,13 +73,19 @@ function applyZoom() {
   $('#zoomVal').textContent = Math.round(zoom * 100) + '%';
   localStorage.setItem('genpdf.zoom', zoom);
 }
+function applyChrome() {
+  const shell = $('#shell');
+  shell.classList.toggle('side-hidden', sideHidden);
+  shell.classList.toggle('panel-hidden', inspHidden || currentView !== 'editor');
+}
 function switchView(name) {
+  currentView = name;
   document.querySelectorAll('#sidebar [data-view]').forEach(b => b.classList.toggle('active', b.dataset.view === name));
   $('#viewEditor').hidden = name !== 'editor';
   $('#viewLibrary').hidden = name !== 'library';
-  $('#panel').style.display = name === 'editor' ? '' : 'none';
+  applyChrome();
   if (name === 'library') renderLib();
-  if (matchMedia('(max-width:860px)').matches) $('#sidebar').hidden = true;
+  if (matchMedia('(max-width:860px)').matches) { sideHidden = true; applyChrome(); }
 }
 
 /* ================= sidebar ================= */
@@ -110,7 +117,7 @@ async function renderSidebar() {
     const sm = document.createElement('small');
     sm.textContent = new Date(d.updated_at * 1000).toLocaleDateString();
     b.appendChild(sm);
-    b.onclick = () => { openLibraryDoc(d.id); if (matchMedia('(max-width:860px)').matches) $('#sidebar').hidden = true; };
+    b.onclick = () => { openLibraryDoc(d.id); if (matchMedia('(max-width:860px)').matches) { sideHidden = true; applyChrome(); } };
     rec.appendChild(b);
   });
   const st = $('#sideTemplates');
@@ -429,7 +436,7 @@ function selectVisual(id) {
 }
 function selectBlock(id) {
   selectedId = id; selectVisual(id); renderPanel();
-  if (matchMedia('(max-width:1180px)').matches) panel.classList.remove('hidden');
+  if (matchMedia('(max-width:1180px)').matches) { inspHidden = false; applyChrome(); }
 }
 function moveBlock(id, targetId, before) {
   const from = idxOf(id); if (from < 0) return;
@@ -564,7 +571,7 @@ function panelCloseBtn() {
   const x = document.createElement('button');
   x.textContent = '✕'; x.className = 'ghost'; x.style.cssText = 'position:absolute;top:8px;right:8px';
   x.style.display = matchMedia('(max-width:1180px)').matches ? '' : 'none';
-  x.onclick = () => panel.classList.add('hidden');
+  x.onclick = () => { inspHidden = true; applyChrome(); };
   panel.appendChild(x);
 }
 function msgBox() { let m = $('#msgs'); if (!m) { m = document.createElement('div'); m.id = 'msgs'; panel.appendChild(m); } return m; }
@@ -1215,9 +1222,12 @@ async function init() {
   doc.tags = doc.tags || []; doc.status = doc.status || 'draft';
   await loadComments();
   try {
-    if (localStorage.getItem('genpdf.side') === '0' || matchMedia('(max-width:860px)').matches) $('#sidebar').hidden = true;
-    if (localStorage.getItem('genpdf.insp') === '0' || matchMedia('(max-width:1180px)').matches) panel.classList.add('hidden');
+    const storedSide = localStorage.getItem('genpdf.side');
+    const storedInsp = localStorage.getItem('genpdf.insp');
+    sideHidden = storedSide === '0' || (storedSide === null && matchMedia('(max-width:860px)').matches);
+    inspHidden = storedInsp === '0' || (storedInsp === null && matchMedia('(max-width:1180px)').matches);
   } catch { /* ignore */ }
+  applyChrome();
   renderAll(); refreshLayout(); renderSidebar();
   if (!localStorage.getItem('genpdf.hint')) $('#hintbar').hidden = false;
   $('#hintX').onclick = () => { $('#hintbar').hidden = true; localStorage.setItem('genpdf.hint', '1'); };
@@ -1249,13 +1259,14 @@ async function init() {
   $('#sideTrash').onclick = () => { libTrash = true; switchView('library'); };
   $('#sideKeys').onclick = () => openKeys();
   $('#btnSide').onclick = () => {
-    const sb = $('#sidebar');
-    sb.hidden = !sb.hidden;
-    try { localStorage.setItem('genpdf.side', sb.hidden ? '0' : '1'); } catch {}
+    sideHidden = !sideHidden;
+    try { localStorage.setItem('genpdf.side', sideHidden ? '0' : '1'); } catch {}
+    applyChrome();
   };
   $('#btnPanel').onclick = () => {
-    panel.classList.toggle('hidden');
-    try { localStorage.setItem('genpdf.insp', panel.classList.contains('hidden') ? '0' : '1'); } catch {}
+    inspHidden = !inspHidden;
+    try { localStorage.setItem('genpdf.insp', inspHidden ? '0' : '1'); } catch {}
+    applyChrome();
   };
   $('#sideSearch').addEventListener('keydown', e => {
     if (e.key === 'Enter') {

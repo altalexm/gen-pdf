@@ -7,6 +7,10 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+
+- Full visual redesign: workspace sidebar (search, recents, templates, trash), slim blurred topbar, collapsible inspector, warm-paper canvas, Inter type, refined dark mode, loading skeletons, print-safe chrome.
+
 ### Added
 
 - New blocks: `columns` (up to 3), `pagebreak`, `toc` (auto entries with real page numbers, two-pass render).

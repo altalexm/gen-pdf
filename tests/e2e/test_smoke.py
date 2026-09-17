@@ -41,7 +41,7 @@ def test_save_and_reopen_from_library(page, server):
     page.wait_for_selector("#sheet .block")
     page.click("#btnSave")
     page.wait_for_selector(".toast")
-    page.click('#rail [data-view="library"]')
+    page.click('#sidebar [data-view="library"]')
     page.wait_for_selector(".libCard")
     assert page.locator(".libCard").count() >= 1
     page.locator(".libCard button").first.click()

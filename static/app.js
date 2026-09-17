@@ -5,8 +5,8 @@ const docTitle = $('#docTitle'), tplSelect = $('#tplSelect');
 
 /* ================= i18n ================= */
 const I18N = {
-  en: { docTitlePh: 'Document title', newBtn: 'New', saveBtn: 'Save', exportPdf: 'Export PDF', vEditor: 'Edit', vLibrary: 'Docs', addLabel: 'Add:', bText: 'Text', bKv: 'Key-values', bBullets: 'Bullets', formatLabel: 'Format:', zoomLabel: 'Zoom:', hint: 'Click any text to edit it · type / for blocks · drag ⠿ to move · Ctrl+K for actions', emptyDoc: 'Empty document — add your first block above, or pick a template.', libraryTitle: 'Library', searchPh: 'Search…', newDoc: '+ New document', tplGallery: 'Templates', docsTitle: 'Documents', blockDoc: 'Document', company: 'Company (header/footer)', options: 'Options', pageNumbers: 'Page numbers', size: 'Size', orientation: 'Orientation', portrait: 'Portrait', landscape: 'Landscape', margin: 'Margin (mm)', tags: 'Tags (comma separated)', favorite: 'Favorite', status: 'Status', selHint: 'Select a block in the preview to edit its properties. Drag ⠿ to reorder.', block: 'Block', convertTo: 'Convert to', alignment: 'Alignment', level: 'Level', text: 'Text', addRow: '+ Add row', addItem: '+ Add item', addEntry: '+ Add entry', addCol: '+ Column', removeEntry: 'Remove entry', up: '↑ Up', down: '↓ Down', dup: '⧉ Duplicate', del: '✕ Delete', color: 'Color', headers: 'Headers (| separated)', addRowT: '+ Row', src: 'Image URL (or upload below)', upload: 'Upload image…', width: 'Width %', caption: 'Caption', open: 'Open', duplicate: 'Duplicate', delete: 'Delete', restore: 'Restore', purge: 'Delete forever', saved: 'Saved to library', savedAt: 'Saved', editing: 'Editing…', loaded: 'Document loaded', exported: 'Downloaded', fixFirst: 'Fix errors before exporting', noDocs: 'No documents here.', blocksN: 'blocks', wordsN: 'words', pagesN: 'pages', templateLoaded: 'Template loaded', imported: 'Imported', confirmDel: 'Move to trash?', confirmPurge: 'Delete forever? This cannot be undone.', palettePh: 'Type a command…', theme: 'Theme', language: 'Language', undo: 'Undo', redo: 'Redo', save: 'Save to library', export: 'Export', goEditor: 'Go to editor', goLibrary: 'Go to library', validate: 'Validate now', zoomIn: 'Zoom in', zoomOut: 'Zoom out', zoomReset: 'Reset zoom', newFrom: 'New from template', shortcuts: 'Keyboard shortcuts', close: 'Close', history: 'History', comments: 'Comments', addComment: 'Add comment', yourName: 'Your name', writeComment: 'Write a comment…', resolve: 'Resolve', reopen: 'Reopen', noComments: 'No comments yet.', needSave: 'Save the document to the library first to use comments.', signHere: 'Sign here', drawLeft: 'Draw left signature', drawRight: 'Draw right signature', clearDrawing: 'Remove drawing', tplNamePh: 'Template name…', tplDescPh: 'Description…', saveTpl: 'Save current as template', tplSaved: 'Template saved', tplDeleted: 'Template deleted', confirmTplDel: 'Delete this template?', varsTitle: 'Fill in the values', createDoc: 'Create document', trashTitle: 'Trash', backToDocs: 'Back to documents', print: 'Print (browser)', findVersions: 'Versions', diffVsCurrent: 'Diff vs current', restoreVersion: 'Restore this version', restored: 'Version restored', depth: 'Depth', allTags: '🏷 All tags', allStates: 'All states', draft: 'Draft', in_review: 'In review', approved: 'Approved', favOnly: 'Favorites only', emptyTrash: 'Trash is empty.' },
-  es: { docTitlePh: 'Título del documento', newBtn: 'Nuevo', saveBtn: 'Guardar', exportPdf: 'Exportar PDF', vEditor: 'Editar', vLibrary: 'Docs', addLabel: 'Añadir:', bText: 'Texto', bKv: 'Claves', bBullets: 'Viñetas', formatLabel: 'Formato:', zoomLabel: 'Zoom:', hint: 'Clic en cualquier texto para editar · escribe / para bloques · arrastra ⠿ para mover · Ctrl+K para acciones', emptyDoc: 'Documento vacío — añade tu primer bloque arriba o elige una plantilla.', libraryTitle: 'Biblioteca', searchPh: 'Buscar…', newDoc: '+ Nuevo documento', tplGallery: 'Plantillas', docsTitle: 'Documentos', blockDoc: 'Documento', company: 'Organización (cabecera/pie)', options: 'Opciones', pageNumbers: 'Números de página', size: 'Tamaño', orientation: 'Orientación', portrait: 'Vertical', landscape: 'Horizontal', margin: 'Margen (mm)', tags: 'Etiquetas (separadas por comas)', favorite: 'Favorito', status: 'Estado', selHint: 'Selecciona un bloque en la vista previa. Arrastra ⠿ para reordenar.', block: 'Bloque', convertTo: 'Convertir a', alignment: 'Alineación', level: 'Nivel', text: 'Texto', addRow: '+ Añadir fila', addItem: '+ Añadir punto', addEntry: '+ Añadir entrada', addCol: '+ Columna', removeEntry: 'Quitar entrada', up: '↑ Subir', down: '↓ Bajar', dup: '⧉ Duplicar', del: '✕ Borrar', color: 'Color', headers: 'Cabeceras (| separadas)', addRowT: '+ Fila', src: 'URL de imagen (o sube abajo)', upload: 'Subir imagen…', width: 'Ancho %', caption: 'Pie', open: 'Abrir', duplicate: 'Duplicar', delete: 'Borrar', restore: 'Restaurar', purge: 'Borrar para siempre', saved: 'Guardado en biblioteca', savedAt: 'Guardado', editing: 'Editando…', loaded: 'Documento cargado', exported: 'Descargado', fixFirst: 'Corrige los errores antes de exportar', noDocs: 'Nada por aquí.', blocksN: 'bloques', wordsN: 'palabras', pagesN: 'páginas', templateLoaded: 'Plantilla cargada', imported: 'Importado', confirmDel: '¿Mover a la papelera?', confirmPurge: '¿Borrar para siempre? No se puede deshacer.', palettePh: 'Escribe un comando…', theme: 'Tema', language: 'Idioma', undo: 'Deshacer', redo: 'Rehacer', save: 'Guardar en biblioteca', export: 'Exportar', goEditor: 'Ir al editor', goLibrary: 'Ir a la biblioteca', validate: 'Validar ahora', zoomIn: 'Acercar', zoomOut: 'Alejar', zoomReset: 'Zoom 100%', newFrom: 'Nuevo desde plantilla', shortcuts: 'Atajos de teclado', close: 'Cerrar', history: 'Historial', comments: 'Comentarios', addComment: 'Comentar', yourName: 'Tu nombre', writeComment: 'Escribe un comentario…', resolve: 'Resolver', reopen: 'Reabrir', noComments: 'Sin comentarios.', needSave: 'Guarda el documento en la biblioteca para comentar.', signHere: 'Firma aquí', drawLeft: 'Dibujar firma izquierda', drawRight: 'Dibujar firma derecha', clearDrawing: 'Quitar dibujo', tplNamePh: 'Nombre de plantilla…', tplDescPh: 'Descripción…', saveTpl: 'Guardar actual como plantilla', tplSaved: 'Plantilla guardada', tplDeleted: 'Plantilla borrada', confirmTplDel: '¿Borrar esta plantilla?', varsTitle: 'Rellena los valores', createDoc: 'Crear documento', trashTitle: 'Papelera', backToDocs: 'Volver a documentos', print: 'Imprimir (navegador)', findVersions: 'Versiones', diffVsCurrent: 'Diff vs actual', restoreVersion: 'Restaurar esta versión', restored: 'Versión restaurada', depth: 'Profundidad', allTags: '🏷 Todas', allStates: 'Todos los estados', draft: 'Borrador', in_review: 'En revisión', approved: 'Aprobado', favOnly: 'Solo favoritos', emptyTrash: 'Papelera vacía.' },
+  en: { docTitlePh: 'Document title', newBtn: 'New', saveBtn: 'Save', exportPdf: 'Export PDF', vEditor: 'Edit', vLibrary: 'Docs', addLabel: 'Add:', bText: 'Text', bKv: 'Key-values', bBullets: 'Bullets', formatLabel: 'Format:', zoomLabel: 'Zoom:', hint: 'Click any text to edit it · type / for blocks · drag ⠿ to move · Ctrl+K for actions', emptyDoc: 'Empty document — add your first block above, or pick a template.', libraryTitle: 'Library', searchPh: 'Search…', newDoc: '+ New document', tplGallery: 'Templates', docsTitle: 'Documents', blockDoc: 'Document', company: 'Company (header/footer)', options: 'Options', pageNumbers: 'Page numbers', size: 'Size', orientation: 'Orientation', portrait: 'Portrait', landscape: 'Landscape', margin: 'Margin (mm)', tags: 'Tags (comma separated)', favorite: 'Favorite', status: 'Status', selHint: 'Select a block in the preview to edit its properties. Drag ⠿ to reorder.', block: 'Block', convertTo: 'Convert to', alignment: 'Alignment', level: 'Level', text: 'Text', addRow: '+ Add row', addItem: '+ Add item', addEntry: '+ Add entry', addCol: '+ Column', removeEntry: 'Remove entry', up: '↑ Up', down: '↓ Down', dup: '⧉ Duplicate', del: '✕ Delete', color: 'Color', headers: 'Headers (| separated)', addRowT: '+ Row', src: 'Image URL (or upload below)', upload: 'Upload image…', width: 'Width %', caption: 'Caption', open: 'Open', duplicate: 'Duplicate', delete: 'Delete', restore: 'Restore', purge: 'Delete forever', saved: 'Saved to library', savedAt: 'Saved', editing: 'Editing…', loaded: 'Document loaded', exported: 'Downloaded', fixFirst: 'Fix errors before exporting', noDocs: 'No documents here.', blocksN: 'blocks', wordsN: 'words', pagesN: 'pages', templateLoaded: 'Template loaded', imported: 'Imported', confirmDel: 'Move to trash?', confirmPurge: 'Delete forever? This cannot be undone.', palettePh: 'Type a command…', theme: 'Theme', language: 'Language', undo: 'Undo', redo: 'Redo', save: 'Save to library', export: 'Export', goEditor: 'Go to editor', goLibrary: 'Go to library', validate: 'Validate now', zoomIn: 'Zoom in', zoomOut: 'Zoom out', zoomReset: 'Reset zoom', newFrom: 'New from template', shortcuts: 'Keyboard shortcuts', close: 'Close', history: 'History', comments: 'Comments', newDocTitle: 'New', recentTitle: 'Recent', addComment: 'Add comment', yourName: 'Your name', writeComment: 'Write a comment…', resolve: 'Resolve', reopen: 'Reopen', noComments: 'No comments yet.', needSave: 'Save the document to the library first to use comments.', signHere: 'Sign here', drawLeft: 'Draw left signature', drawRight: 'Draw right signature', clearDrawing: 'Remove drawing', tplNamePh: 'Template name…', tplDescPh: 'Description…', saveTpl: 'Save current as template', tplSaved: 'Template saved', tplDeleted: 'Template deleted', confirmTplDel: 'Delete this template?', varsTitle: 'Fill in the values', createDoc: 'Create document', trashTitle: 'Trash', backToDocs: 'Back to documents', print: 'Print (browser)', findVersions: 'Versions', diffVsCurrent: 'Diff vs current', restoreVersion: 'Restore this version', restored: 'Version restored', depth: 'Depth', allTags: '🏷 All tags', allStates: 'All states', draft: 'Draft', in_review: 'In review', approved: 'Approved', favOnly: 'Favorites only', emptyTrash: 'Trash is empty.' },
+  es: { docTitlePh: 'Título del documento', newBtn: 'Nuevo', saveBtn: 'Guardar', exportPdf: 'Exportar PDF', vEditor: 'Editar', vLibrary: 'Docs', addLabel: 'Añadir:', bText: 'Texto', bKv: 'Claves', bBullets: 'Viñetas', formatLabel: 'Formato:', zoomLabel: 'Zoom:', hint: 'Clic en cualquier texto para editar · escribe / para bloques · arrastra ⠿ para mover · Ctrl+K para acciones', emptyDoc: 'Documento vacío — añade tu primer bloque arriba o elige una plantilla.', libraryTitle: 'Biblioteca', searchPh: 'Buscar…', newDoc: '+ Nuevo documento', tplGallery: 'Plantillas', docsTitle: 'Documentos', blockDoc: 'Documento', company: 'Organización (cabecera/pie)', options: 'Opciones', pageNumbers: 'Números de página', size: 'Tamaño', orientation: 'Orientación', portrait: 'Vertical', landscape: 'Horizontal', margin: 'Margen (mm)', tags: 'Etiquetas (separadas por comas)', favorite: 'Favorito', status: 'Estado', selHint: 'Selecciona un bloque en la vista previa. Arrastra ⠿ para reordenar.', block: 'Bloque', convertTo: 'Convertir a', alignment: 'Alineación', level: 'Nivel', text: 'Texto', addRow: '+ Añadir fila', addItem: '+ Añadir punto', addEntry: '+ Añadir entrada', addCol: '+ Columna', removeEntry: 'Quitar entrada', up: '↑ Subir', down: '↓ Bajar', dup: '⧉ Duplicar', del: '✕ Borrar', color: 'Color', headers: 'Cabeceras (| separadas)', addRowT: '+ Fila', src: 'URL de imagen (o sube abajo)', upload: 'Subir imagen…', width: 'Ancho %', caption: 'Pie', open: 'Abrir', duplicate: 'Duplicar', delete: 'Borrar', restore: 'Restaurar', purge: 'Borrar para siempre', saved: 'Guardado en biblioteca', savedAt: 'Guardado', editing: 'Editando…', loaded: 'Documento cargado', exported: 'Descargado', fixFirst: 'Corrige los errores antes de exportar', noDocs: 'Nada por aquí.', blocksN: 'bloques', wordsN: 'palabras', pagesN: 'páginas', templateLoaded: 'Plantilla cargada', imported: 'Importado', confirmDel: '¿Mover a la papelera?', confirmPurge: '¿Borrar para siempre? No se puede deshacer.', palettePh: 'Escribe un comando…', theme: 'Tema', language: 'Idioma', undo: 'Deshacer', redo: 'Rehacer', save: 'Guardar en biblioteca', export: 'Exportar', goEditor: 'Ir al editor', goLibrary: 'Ir a la biblioteca', validate: 'Validar ahora', zoomIn: 'Acercar', zoomOut: 'Alejar', zoomReset: 'Zoom 100%', newFrom: 'Nuevo desde plantilla', shortcuts: 'Atajos de teclado', close: 'Cerrar', history: 'Historial', comments: 'Comentarios', newDocTitle: 'Nuevo', recentTitle: 'Recientes', addComment: 'Comentar', yourName: 'Tu nombre', writeComment: 'Escribe un comentario…', resolve: 'Resolver', reopen: 'Reabrir', noComments: 'Sin comentarios.', needSave: 'Guarda el documento en la biblioteca para comentar.', signHere: 'Firma aquí', drawLeft: 'Dibujar firma izquierda', drawRight: 'Dibujar firma derecha', clearDrawing: 'Quitar dibujo', tplNamePh: 'Nombre de plantilla…', tplDescPh: 'Descripción…', saveTpl: 'Guardar actual como plantilla', tplSaved: 'Plantilla guardada', tplDeleted: 'Plantilla borrada', confirmTplDel: '¿Borrar esta plantilla?', varsTitle: 'Rellena los valores', createDoc: 'Crear documento', trashTitle: 'Papelera', backToDocs: 'Volver a documentos', print: 'Imprimir (navegador)', findVersions: 'Versiones', diffVsCurrent: 'Diff vs actual', restoreVersion: 'Restaurar esta versión', restored: 'Versión restaurada', depth: 'Profundidad', allTags: '🏷 Todas', allStates: 'Todos los estados', draft: 'Borrador', in_review: 'En revisión', approved: 'Aprobado', favOnly: 'Solo favoritos', emptyTrash: 'Papelera vacía.' },
 };
 let lang = localStorage.getItem('genpdf.lang') || 'en';
 const t = (k) => (I18N[lang] && I18N[lang][k]) || I18N.en[k] || k;
@@ -73,11 +73,62 @@ function applyZoom() {
   localStorage.setItem('genpdf.zoom', zoom);
 }
 function switchView(name) {
-  document.querySelectorAll('#rail [data-view]').forEach(b => b.classList.toggle('active', b.dataset.view === name));
+  document.querySelectorAll('#sidebar [data-view]').forEach(b => b.classList.toggle('active', b.dataset.view === name));
   $('#viewEditor').hidden = name !== 'editor';
   $('#viewLibrary').hidden = name !== 'library';
   $('#panel').style.display = name === 'editor' ? '' : 'none';
   if (name === 'library') renderLib();
+  if (matchMedia('(max-width:860px)').matches) $('#sidebar').hidden = true;
+}
+
+/* ================= sidebar ================= */
+async function renderSidebar() {
+  const rec = $('#sideRecents');
+  if (!rec) return;
+  rec.innerHTML = '';
+  let docs = [];
+  try {
+    docs = await (await fetch('/api/library')).json();
+  } catch {
+    rec.innerHTML = '<div class="sideEmpty">API unreachable</div>';
+    return;
+  }
+  const top = docs.filter(d => !d.deleted_at).slice(0, 8);
+  if (!top.length) {
+    const e = document.createElement('div');
+    e.className = 'sideEmpty'; e.textContent = t('noDocs');
+    rec.appendChild(e);
+  }
+  top.forEach(d => {
+    const b = document.createElement('button');
+    b.className = 'sideItem' + (d.id === libraryId ? ' current' : '');
+    b.title = d.title;
+    const dot = document.createElement('span'); dot.className = 'dot';
+    const nm = document.createElement('span'); nm.className = 'nm'; nm.textContent = d.title;
+    b.append(dot, nm);
+    if (d.favorite) { const f = document.createElement('span'); f.className = 'fav'; f.textContent = '★'; b.appendChild(f); }
+    const sm = document.createElement('small');
+    sm.textContent = new Date(d.updated_at * 1000).toLocaleDateString();
+    b.appendChild(sm);
+    b.onclick = () => { openLibraryDoc(d.id); if (matchMedia('(max-width:860px)').matches) $('#sidebar').hidden = true; };
+    rec.appendChild(b);
+  });
+  const st = $('#sideTemplates');
+  st.innerHTML = '';
+  const addTpl = (name, fn) => {
+    const b = document.createElement('button');
+    b.className = 'sideItem'; b.title = name;
+    const dot = document.createElement('span'); dot.className = 'dot';
+    const nm = document.createElement('span'); nm.className = 'nm'; nm.textContent = name;
+    b.append(dot, nm);
+    b.onclick = fn;
+    st.appendChild(b);
+  };
+  templates.forEach(x => addTpl(x.name, () => openTemplateWithVars('builtin:' + x.id, x.name)));
+  try {
+    const uts = await (await fetch('/api/templates/user')).json();
+    uts.forEach(x => addTpl('◈ ' + x.name, () => openTemplateWithVars('user:' + x.id, x.name)));
+  } catch { /* ignore */ }
 }
 
 /* ================= edit widgets ================= */
@@ -966,6 +1017,7 @@ async function renderLib() {
     const stDiv = document.createElement('div'); stDiv.innerHTML = st;
     c.append(info, tagRow, stDiv, acts); box.appendChild(c);
   });
+  renderSidebar();
 }
 function tplCard(name, desc, onOpen) {
   const c = document.createElement('button'); c.className = 'tplCard';
@@ -1018,13 +1070,13 @@ async function openLibraryDoc(id) {
   const full = await (await fetch('/api/library/' + id)).json();
   pushHistory(); doc = full; libraryId = id; selectedId = null;
   await loadComments();
-  markDirty(); renderAll(); saveLocal(); refreshLayout(); switchView('editor'); toastMsg(t('loaded'), 'ok');
+  markDirty(); renderAll(); saveLocal(); refreshLayout(); switchView('editor'); renderSidebar(); toastMsg(t('loaded'), 'ok');
 }
 async function saveToLibrary() {
   try {
     const saved = await (await api('/api/library', doc)).json();
     doc.id = saved.id; libraryId = saved.id; saveLocal();
-    await loadComments(); renderAll();
+    await loadComments(); renderAll(); renderSidebar();
     toastMsg(t('saved'), 'ok');
   } catch (e) { toastMsg('Save failed: ' + e.message, 'err'); }
 }
@@ -1156,7 +1208,11 @@ async function init() {
   doc.page = doc.page || { size: 'A4', orientation: 'P', margin_mm: 20 };
   doc.tags = doc.tags || []; doc.status = doc.status || 'draft';
   await loadComments();
-  renderAll(); refreshLayout();
+  try {
+    if (localStorage.getItem('genpdf.side') === '0' || matchMedia('(max-width:860px)').matches) $('#sidebar').hidden = true;
+    if (localStorage.getItem('genpdf.insp') === '0') panel.classList.add('hidden');
+  } catch { /* ignore */ }
+  renderAll(); refreshLayout(); renderSidebar();
   if (!localStorage.getItem('genpdf.hint')) $('#hintbar').hidden = false;
   $('#hintX').onclick = () => { $('#hintbar').hidden = true; localStorage.setItem('genpdf.hint', '1'); };
 
@@ -1183,7 +1239,25 @@ async function init() {
     ({ pdf: exportPdf, md: exportMd, docx: exportDocx, json: exportJson, imd: () => $('#fileMd').click(), idocx: () => $('#fileDocx').click(), ijson: () => $('#fileJson').click() })[b.dataset.x]();
   });
 
-  document.querySelectorAll('#rail [data-view]').forEach(b => b.onclick = () => switchView(b.dataset.view));
+  document.querySelectorAll('#sidebar [data-view]').forEach(b => b.onclick = () => switchView(b.dataset.view));
+  $('#sideTrash').onclick = () => { libTrash = true; switchView('library'); };
+  $('#sideKeys').onclick = () => openKeys();
+  $('#btnSide').onclick = () => {
+    const sb = $('#sidebar');
+    sb.hidden = !sb.hidden;
+    try { localStorage.setItem('genpdf.side', sb.hidden ? '0' : '1'); } catch {}
+  };
+  $('#btnPanel').onclick = () => {
+    panel.classList.toggle('hidden');
+    try { localStorage.setItem('genpdf.insp', panel.classList.contains('hidden') ? '0' : '1'); } catch {}
+  };
+  $('#sideSearch').addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      $('#libSearch').value = e.target.value;
+      libTrash = false;
+      switchView('library');
+    }
+  });
   $('#libSearch').addEventListener('input', renderLib);
   $('#libSort').addEventListener('change', renderLib);
   $('#libTag').addEventListener('change', renderLib);
@@ -1215,7 +1289,7 @@ async function init() {
     keysList.append(s, kb);
   });
   const openKeys = () => { $('#keysModal').hidden = false; };
-  $('#btnKeys').onclick = openKeys; $('#statusKeys').onclick = openKeys;
+  $('#statusKeys').onclick = openKeys;
   $('#keysClose').onclick = () => { $('#keysModal').hidden = true; };
   $('#keysModal').addEventListener('click', e => { if (e.target.id === 'keysModal') $('#keysModal').hidden = true; });
   $('#histClose').onclick = () => { $('#histModal').hidden = true; };

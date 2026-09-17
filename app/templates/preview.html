@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>{{ doc.title }}</title>
+<style>
+body{font-family:Arial,Helvetica,sans-serif;margin:48px;color:#111}
+h1{text-align:center;color:#3c3c3c}
+h2{color:#282828;border-bottom:2px solid #888;padding-bottom:4px}
+.meta{display:grid;grid-template-columns:180px 1fr;gap:4px 12px;margin:12px 0}
+footer{margin-top:48px;font-size:12px;color:#666;display:flex;justify-content:space-between}
+</style></head>
+<body>
+<p><strong>{{ doc.company_name }}</strong></p>
+{% for b in doc.blocks %}
+{% if b.type.value == 'heading' %}
+{% if b.level == 1 %}<h1 style="text-align:{{ b.align.value }}">{{ b.text }}</h1>
+{% elif b.level == 3 %}<h3 style="text-align:{{ b.align.value }}">{{ b.text }}</h3>
+{% else %}<h2 style="text-align:{{ b.align.value }}">{{ b.text }}</h2>{% endif %}
+{% elif b.type.value == 'paragraph' %}<p style="text-align:{{ b.align.value }}">{{ b.text }}</p>
+{% elif b.type.value == 'keyvalue' %}<div class="meta">{% for r in b.rows %}<div><strong>{{ r.label }}:</strong></div><div>{{ r.value }}</div>{% endfor %}</div>
+{% elif b.type.value == 'bullets' %}<ul>{% for i in b.items %}<li>{{ i }}</li>{% endfor %}</ul>
+{% elif b.type.value == 'sections' %}{% for e in b.entries %}<p><strong>{{ loop.index }}. {{ e.title }}</strong><br>{{ e.text }}</p>{% endfor %}
+{% elif b.type.value == 'signatures' %}
+<table width="100%" style="margin-top:48px"><tr>
+<td align="center">_________________________<br>{{ b.left.name }}<br>{{ b.left.role }}</td>
+<td align="center">_________________________<br>{{ b.right.name }}<br>{{ b.right.role }}</td>
+</tr></table>
+{% endif %}
+{% endfor %}
+<footer><span>{{ doc.company_name }}</span><span>Generated with gen-pdf</span></footer>
+</body></html>

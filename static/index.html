@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>gen-pdf — visual PDF editor</title>
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<header>
+  <div class="brand">gen-pdf</div>
+  <input id="docTitle" class="doctitle" placeholder="Document title" title="Document title (used for the PDF filename)">
+  <select id="tplSelect" title="Load a template"></select>
+  <button id="btnTpl" title="Replace current document with the template">New</button>
+  <span class="spacer"></span>
+  <button id="btnUndo" title="Undo (Ctrl+Z)">↩</button>
+  <button id="btnRedo" title="Redo (Ctrl+Y)">↪</button>
+  <button id="btnPdf" class="primary" title="Validate and download PDF">Export PDF</button>
+</header>
+<div id="toolbar" title="Add a block at the end">
+  <span>Add:</span>
+  <button data-add="heading">Heading</button>
+  <button data-add="paragraph">Text</button>
+  <button data-add="keyvalue">Key-values</button>
+  <button data-add="bullets">Bullets</button>
+  <button data-add="sections">Sections</button>
+  <button data-add="signatures">Signatures</button>
+</div>
+<main>
+  <section id="sheet" aria-label="Preview (click text to edit, drag ⠿ to move)"></section>
+  <aside id="panel" aria-label="Properties"></aside>
+</main>
+<div id="toast"></div>
+<script src="/app.js"></script>
+</body></html>

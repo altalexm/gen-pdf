@@ -1,34 +1,21 @@
-Copyright (c) 2025 STAR Software.
-Todos los derechos reservados.
+MIT License
 
-ACUERDO DE LICENCIA DE USUARIO FINAL (EULA) para StarPDF
+Copyright (c) 2026 Alex Macias
 
-Este Acuerdo de Licencia de Usuario Final ("EULA") es un acuerdo legal entre usted (ya sea un individuo o una sola entidad) y STAR Software para el producto de software StarPDF, que incluye software de computadora y puede incluir medios asociados, materiales impresos y documentación "en línea" o electrónica (colectivamente, el "Software").
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-Al instalar, copiar o utilizar el Software, usted acepta estar obligado por los términos de este EULA. Si no está de acuerdo con los términos de este EULA, no instale ni utilice el Software.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-LICENCIA DE SOFTWARE:
-El Software es propiedad de STAR Software y está protegido por las leyes de derechos de autor y los tratados internacionales de derechos de autor, así como por otras leyes y tratados de propiedad intelectual. El Software se licencia, no se vende.
-
-1. CONCESIÓN DE LICENCIA.
-   STAR Software le concede una licencia personal, no transferible y no exclusiva para usar el Software en sus dispositivos de acuerdo con los términos de este EULA.
-
-2. RESTRICCIONES.
-   Usted no puede, y no permitirá que otros:
-   (a) Realicen ingeniería inversa, descompilen, desensamblen o intenten descubrir el código fuente o las ideas subyacentes del Software.
-   (b) Modifiquen, traduzcan o creen trabajos derivados basados en el Software.
-   (c) Copien el Software (excepto para fines de respaldo).
-   (d) Alquilen, arrienden, distribuyan, vendan o transfieran de otra manera el Software.
-   (e) Eliminen cualquier aviso de propiedad o etiquetas en el Software.
-
-3. TERMINACIÓN.
-   Sin perjuicio de otros derechos, STAR Software puede terminar este EULA si usted no cumple con los términos y condiciones. En tal caso, debe destruir todas las copias del Software.
-
-4. DERECHOS DE AUTOR.
-   Todos los títulos, incluidos, entre otros, los derechos de autor, del Software y de cualquier copia del mismo son propiedad de STAR Software.
-
-5. SIN GARANTÍAS.
-   STAR Software renuncia expresamente a cualquier garantía para el Software. El Software se proporciona "tal cual" sin ninguna garantía expresa o implícita de ningún tipo.
-
-6. LIMITACIÓN DE RESPONSABILIDAD.
-   En ningún caso STAR Software será responsable de ningún daño (incluidos, entre otros, daños por pérdida de beneficios comerciales, interrupción del negocio, pérdida de información comercial u otra pérdida pecuniaria) que surja del uso o la incapacidad de usar el Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.

@@ -1,50 +1,29 @@
-# Entorno Virtual de Python
-venv/
-.venv/
-env/
-.env/
-
-# Archivos de caché y compilados de Python
+# Python
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
-
-# Archivos de Distribución y Compilación
-build/
-dist/
+*.py[cod]
 *.egg-info/
-*.spec
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
 
-# Logs y archivos de sesión
-# No queremos subir los logs de ejecución al repositorio.
-logs/
-*.log
+# Env / secrets
+.env
+.env.local
 
-# Archivos de configuración de IDEs y editores
+# OS / editors
+.DS_Store
+Thumbs.db
+Desktop.ini
 .vscode/
 .idea/
-*.sublime-project
-*.sublime-workspace
-
-# Archivos específicos del sistema operativo
-# macOS
-.DS_Store
-.AppleDouble
-.LSOverride
-
-# Windows
-Thumbs.db
-ehthumbs.db
-Desktop.ini
-
-# Archivos de respaldo de editores
 *~
 *.swp
-*.swo
 
-*.json
+# Logs
+*.log
 
-setup_script.iss
-
-/Output
+# Local build output
+dist/
+build/

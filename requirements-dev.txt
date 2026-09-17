@@ -2,3 +2,4 @@
 pytest>=8.0
 ruff>=0.4
 httpx>=0.27
+playwright>=1.40  # browser E2E only; then: playwright install chromium

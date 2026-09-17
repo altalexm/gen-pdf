@@ -1,0 +1,7 @@
+services:
+  gen-pdf:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/srv/data

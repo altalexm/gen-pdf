@@ -27,3 +27,6 @@ Desktop.ini
 # Local build output
 dist/
 build/
+
+# Local runtime data (SQLite library, smoke-test DBs)
+data/

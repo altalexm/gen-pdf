@@ -7,6 +7,17 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+
+- Full visual redesign: workspace sidebar (search, recents, templates, trash), slim blurred topbar, collapsible inspector, warm-paper canvas, Inter type, refined dark mode, loading skeletons, print-safe chrome.
+- Mobile-first pass: drawer below the topbar with scrim, inspector as bottom sheet, floating touch toolbar (move/duplicate/delete/insert), stacked key-values, scrollable tables, compact status bar, 40px+ touch targets.
+
+### Fixed
+
+- Collapsed panels can no longer intercept pointer events (delayed `visibility`).
+- Inspector no longer covers the canvas on load in narrow viewports.
+- Mobile drawer and bottom sheet are mutually exclusive; drawer sits below the topbar with scrim; Export stays visible in a two-row topbar; sheet gets a grab handle.
+
 ### Added
 
 - New blocks: `columns` (up to 3), `pagebreak`, `toc` (auto entries with real page numbers, two-pass render).
@@ -26,6 +37,7 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - Frontend i18n (EN/ES), image upload as data-URL, table grid editor.
 - Open-source pack: `CONTRIBUTING.md`, issue/PR templates, `Dockerfile` + compose, expanded `README`.
 - UX overhaul: app shell (icon rail, views, status bar), slash menu, command palette (Ctrl+K), hover gutter actions, canvas zoom, dark mode, shortcuts dialog, stacked toasts, onboarding hint, library as a full view with sort.
+- UI QA round: inspector hidden on load in narrow viewports, shortcuts work while editing, single-row scrollable toolbar, dashed empty-image placeholder, no dead Alignment control on table/toc/pagebreak/divider, inline author field for comments.
 
 ## [0.1.0] - 2026-09-16
 

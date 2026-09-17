@@ -5,14 +5,15 @@ const docTitle = $('#docTitle'), tplSelect = $('#tplSelect');
 
 /* ================= i18n ================= */
 const I18N = {
-  en: { docTitlePh: 'Document title', newBtn: 'New', saveBtn: 'Save', exportPdf: 'Export PDF', vEditor: 'Edit', vLibrary: 'Docs', addLabel: 'Add:', bText: 'Text', bKv: 'Key-values', bBullets: 'Bullets', formatLabel: 'Format:', zoomLabel: 'Zoom:', hint: 'Click any text to edit it · type / for blocks · drag ⠿ to move · Ctrl+K for actions', emptyDoc: 'Empty document — add your first block above, or pick a template.', libraryTitle: 'Library', searchPh: 'Search…', newDoc: '+ New document', tplGallery: 'Templates', docsTitle: 'Documents', blockDoc: 'Document', company: 'Company (header/footer)', options: 'Options', pageNumbers: 'Page numbers', size: 'Size', orientation: 'Orientation', portrait: 'Portrait', landscape: 'Landscape', margin: 'Margin (mm)', tags: 'Tags (comma separated)', favorite: 'Favorite', status: 'Status', selHint: 'Select a block in the preview to edit its properties. Drag ⠿ to reorder.', block: 'Block', convertTo: 'Convert to', alignment: 'Alignment', level: 'Level', text: 'Text', addRow: '+ Add row', addItem: '+ Add item', addEntry: '+ Add entry', addCol: '+ Column', removeEntry: 'Remove entry', up: '↑ Up', down: '↓ Down', dup: '⧉ Duplicate', del: '✕ Delete', color: 'Color', headers: 'Headers (| separated)', addRowT: '+ Row', src: 'Image URL (or upload below)', upload: 'Upload image…', width: 'Width %', caption: 'Caption', open: 'Open', duplicate: 'Duplicate', delete: 'Delete', restore: 'Restore', purge: 'Delete forever', saved: 'Saved to library', savedAt: 'Saved', editing: 'Editing…', loaded: 'Document loaded', exported: 'Downloaded', fixFirst: 'Fix errors before exporting', noDocs: 'No documents here.', blocksN: 'blocks', wordsN: 'words', pagesN: 'pages', templateLoaded: 'Template loaded', imported: 'Imported', confirmDel: 'Move to trash?', confirmPurge: 'Delete forever? This cannot be undone.', palettePh: 'Type a command…', theme: 'Theme', language: 'Language', undo: 'Undo', redo: 'Redo', save: 'Save to library', export: 'Export', goEditor: 'Go to editor', goLibrary: 'Go to library', validate: 'Validate now', zoomIn: 'Zoom in', zoomOut: 'Zoom out', zoomReset: 'Reset zoom', newFrom: 'New from template', shortcuts: 'Keyboard shortcuts', close: 'Close', history: 'History', comments: 'Comments', addComment: 'Add comment', yourName: 'Your name', writeComment: 'Write a comment…', resolve: 'Resolve', reopen: 'Reopen', noComments: 'No comments yet.', needSave: 'Save the document to the library first to use comments.', signHere: 'Sign here', drawLeft: 'Draw left signature', drawRight: 'Draw right signature', clearDrawing: 'Remove drawing', tplNamePh: 'Template name…', tplDescPh: 'Description…', saveTpl: 'Save current as template', tplSaved: 'Template saved', tplDeleted: 'Template deleted', confirmTplDel: 'Delete this template?', varsTitle: 'Fill in the values', createDoc: 'Create document', trashTitle: 'Trash', backToDocs: 'Back to documents', print: 'Print (browser)', findVersions: 'Versions', diffVsCurrent: 'Diff vs current', restoreVersion: 'Restore this version', restored: 'Version restored', depth: 'Depth', allTags: '🏷 All tags', allStates: 'All states', draft: 'Draft', in_review: 'In review', approved: 'Approved', favOnly: 'Favorites only', emptyTrash: 'Trash is empty.' },
-  es: { docTitlePh: 'Título del documento', newBtn: 'Nuevo', saveBtn: 'Guardar', exportPdf: 'Exportar PDF', vEditor: 'Editar', vLibrary: 'Docs', addLabel: 'Añadir:', bText: 'Texto', bKv: 'Claves', bBullets: 'Viñetas', formatLabel: 'Formato:', zoomLabel: 'Zoom:', hint: 'Clic en cualquier texto para editar · escribe / para bloques · arrastra ⠿ para mover · Ctrl+K para acciones', emptyDoc: 'Documento vacío — añade tu primer bloque arriba o elige una plantilla.', libraryTitle: 'Biblioteca', searchPh: 'Buscar…', newDoc: '+ Nuevo documento', tplGallery: 'Plantillas', docsTitle: 'Documentos', blockDoc: 'Documento', company: 'Organización (cabecera/pie)', options: 'Opciones', pageNumbers: 'Números de página', size: 'Tamaño', orientation: 'Orientación', portrait: 'Vertical', landscape: 'Horizontal', margin: 'Margen (mm)', tags: 'Etiquetas (separadas por comas)', favorite: 'Favorito', status: 'Estado', selHint: 'Selecciona un bloque en la vista previa. Arrastra ⠿ para reordenar.', block: 'Bloque', convertTo: 'Convertir a', alignment: 'Alineación', level: 'Nivel', text: 'Texto', addRow: '+ Añadir fila', addItem: '+ Añadir punto', addEntry: '+ Añadir entrada', addCol: '+ Columna', removeEntry: 'Quitar entrada', up: '↑ Subir', down: '↓ Bajar', dup: '⧉ Duplicar', del: '✕ Borrar', color: 'Color', headers: 'Cabeceras (| separadas)', addRowT: '+ Fila', src: 'URL de imagen (o sube abajo)', upload: 'Subir imagen…', width: 'Ancho %', caption: 'Pie', open: 'Abrir', duplicate: 'Duplicar', delete: 'Borrar', restore: 'Restaurar', purge: 'Borrar para siempre', saved: 'Guardado en biblioteca', savedAt: 'Guardado', editing: 'Editando…', loaded: 'Documento cargado', exported: 'Descargado', fixFirst: 'Corrige los errores antes de exportar', noDocs: 'Nada por aquí.', blocksN: 'bloques', wordsN: 'palabras', pagesN: 'páginas', templateLoaded: 'Plantilla cargada', imported: 'Importado', confirmDel: '¿Mover a la papelera?', confirmPurge: '¿Borrar para siempre? No se puede deshacer.', palettePh: 'Escribe un comando…', theme: 'Tema', language: 'Idioma', undo: 'Deshacer', redo: 'Rehacer', save: 'Guardar en biblioteca', export: 'Exportar', goEditor: 'Ir al editor', goLibrary: 'Ir a la biblioteca', validate: 'Validar ahora', zoomIn: 'Acercar', zoomOut: 'Alejar', zoomReset: 'Zoom 100%', newFrom: 'Nuevo desde plantilla', shortcuts: 'Atajos de teclado', close: 'Cerrar', history: 'Historial', comments: 'Comentarios', addComment: 'Comentar', yourName: 'Tu nombre', writeComment: 'Escribe un comentario…', resolve: 'Resolver', reopen: 'Reabrir', noComments: 'Sin comentarios.', needSave: 'Guarda el documento en la biblioteca para comentar.', signHere: 'Firma aquí', drawLeft: 'Dibujar firma izquierda', drawRight: 'Dibujar firma derecha', clearDrawing: 'Quitar dibujo', tplNamePh: 'Nombre de plantilla…', tplDescPh: 'Descripción…', saveTpl: 'Guardar actual como plantilla', tplSaved: 'Plantilla guardada', tplDeleted: 'Plantilla borrada', confirmTplDel: '¿Borrar esta plantilla?', varsTitle: 'Rellena los valores', createDoc: 'Crear documento', trashTitle: 'Papelera', backToDocs: 'Volver a documentos', print: 'Imprimir (navegador)', findVersions: 'Versiones', diffVsCurrent: 'Diff vs actual', restoreVersion: 'Restaurar esta versión', restored: 'Versión restaurada', depth: 'Profundidad', allTags: '🏷 Todas', allStates: 'Todos los estados', draft: 'Borrador', in_review: 'En revisión', approved: 'Aprobado', favOnly: 'Solo favoritos', emptyTrash: 'Papelera vacía.' },
+  en: { docTitlePh: 'Document title', newBtn: 'New', saveBtn: 'Save', exportPdf: 'Export PDF', vEditor: 'Edit', vLibrary: 'Docs', addLabel: 'Add:', bText: 'Text', bKv: 'Key-values', bBullets: 'Bullets', formatLabel: 'Format:', zoomLabel: 'Zoom:', hint: 'Click any text to edit it · type / for blocks · drag ⠿ to move · Ctrl+K for actions', emptyDoc: 'Empty document — add your first block above, or pick a template.', libraryTitle: 'Library', searchPh: 'Search…', newDoc: '+ New document', tplGallery: 'Templates', docsTitle: 'Documents', blockDoc: 'Document', company: 'Company (header/footer)', options: 'Options', pageNumbers: 'Page numbers', size: 'Size', orientation: 'Orientation', portrait: 'Portrait', landscape: 'Landscape', margin: 'Margin (mm)', tags: 'Tags (comma separated)', favorite: 'Favorite', status: 'Status', selHint: 'Select a block in the preview to edit its properties. Drag ⠿ to reorder.', block: 'Block', convertTo: 'Convert to', alignment: 'Alignment', level: 'Level', text: 'Text', addRow: '+ Add row', addItem: '+ Add item', addEntry: '+ Add entry', addCol: '+ Column', removeEntry: 'Remove entry', up: '↑ Up', down: '↓ Down', dup: '⧉ Duplicate', del: '✕ Delete', color: 'Color', headers: 'Headers (| separated)', addRowT: '+ Row', src: 'Image URL (or upload below)', upload: 'Upload image…', width: 'Width %', caption: 'Caption', emptyImage: '🖼 No image yet — paste a URL or upload one in the panel →', open: 'Open', duplicate: 'Duplicate', delete: 'Delete', restore: 'Restore', purge: 'Delete forever', saved: 'Saved to library', savedAt: 'Saved', editing: 'Editing…', loaded: 'Document loaded', exported: 'Downloaded', fixFirst: 'Fix errors before exporting', noDocs: 'No documents here.', blocksN: 'blocks', wordsN: 'words', pagesN: 'pages', templateLoaded: 'Template loaded', imported: 'Imported', confirmDel: 'Move to trash?', confirmPurge: 'Delete forever? This cannot be undone.', palettePh: 'Type a command…', theme: 'Theme', language: 'Language', undo: 'Undo', redo: 'Redo', save: 'Save to library', export: 'Export', goEditor: 'Go to editor', goLibrary: 'Go to library', validate: 'Validate now', zoomIn: 'Zoom in', zoomOut: 'Zoom out', zoomReset: 'Reset zoom', newFrom: 'New from template', shortcuts: 'Keyboard shortcuts', close: 'Close', history: 'History', comments: 'Comments', newDocTitle: 'New', recentTitle: 'Recent', addComment: 'Add comment', yourName: 'Your name', writeComment: 'Write a comment…', resolve: 'Resolve', reopen: 'Reopen', noComments: 'No comments yet.', needSave: 'Save the document to the library first to use comments.', signHere: 'Sign here', drawLeft: 'Draw left signature', drawRight: 'Draw right signature', clearDrawing: 'Remove drawing', tplNamePh: 'Template name…', tplDescPh: 'Description…', saveTpl: 'Save current as template', tplSaved: 'Template saved', tplDeleted: 'Template deleted', confirmTplDel: 'Delete this template?', varsTitle: 'Fill in the values', createDoc: 'Create document', trashTitle: 'Trash', backToDocs: 'Back to documents', print: 'Print (browser)', findVersions: 'Versions', diffVsCurrent: 'Diff vs current', restoreVersion: 'Restore this version', restored: 'Version restored', depth: 'Depth', allTags: '🏷 All tags', allStates: 'All states', draft: 'Draft', in_review: 'In review', approved: 'Approved', favOnly: 'Favorites only', emptyTrash: 'Trash is empty.' },
+  es: { docTitlePh: 'Título del documento', newBtn: 'Nuevo', saveBtn: 'Guardar', exportPdf: 'Exportar PDF', vEditor: 'Editar', vLibrary: 'Docs', addLabel: 'Añadir:', bText: 'Texto', bKv: 'Claves', bBullets: 'Viñetas', formatLabel: 'Formato:', zoomLabel: 'Zoom:', hint: 'Clic en cualquier texto para editar · escribe / para bloques · arrastra ⠿ para mover · Ctrl+K para acciones', emptyDoc: 'Documento vacío — añade tu primer bloque arriba o elige una plantilla.', libraryTitle: 'Biblioteca', searchPh: 'Buscar…', newDoc: '+ Nuevo documento', tplGallery: 'Plantillas', docsTitle: 'Documentos', blockDoc: 'Documento', company: 'Organización (cabecera/pie)', options: 'Opciones', pageNumbers: 'Números de página', size: 'Tamaño', orientation: 'Orientación', portrait: 'Vertical', landscape: 'Horizontal', margin: 'Margen (mm)', tags: 'Etiquetas (separadas por comas)', favorite: 'Favorito', status: 'Estado', selHint: 'Selecciona un bloque en la vista previa. Arrastra ⠿ para reordenar.', block: 'Bloque', convertTo: 'Convertir a', alignment: 'Alineación', level: 'Nivel', text: 'Texto', addRow: '+ Añadir fila', addItem: '+ Añadir punto', addEntry: '+ Añadir entrada', addCol: '+ Columna', removeEntry: 'Quitar entrada', up: '↑ Subir', down: '↓ Bajar', dup: '⧉ Duplicar', del: '✕ Borrar', color: 'Color', headers: 'Cabeceras (| separadas)', addRowT: '+ Fila', src: 'URL de imagen (o sube abajo)', upload: 'Subir imagen…', width: 'Ancho %', caption: 'Pie', emptyImage: '🖼 Sin imagen — pega una URL o súbela en el panel →', open: 'Abrir', duplicate: 'Duplicar', delete: 'Borrar', restore: 'Restaurar', purge: 'Borrar para siempre', saved: 'Guardado en biblioteca', savedAt: 'Guardado', editing: 'Editando…', loaded: 'Documento cargado', exported: 'Descargado', fixFirst: 'Corrige los errores antes de exportar', noDocs: 'Nada por aquí.', blocksN: 'bloques', wordsN: 'palabras', pagesN: 'páginas', templateLoaded: 'Plantilla cargada', imported: 'Importado', confirmDel: '¿Mover a la papelera?', confirmPurge: '¿Borrar para siempre? No se puede deshacer.', palettePh: 'Escribe un comando…', theme: 'Tema', language: 'Idioma', undo: 'Deshacer', redo: 'Rehacer', save: 'Guardar en biblioteca', export: 'Exportar', goEditor: 'Ir al editor', goLibrary: 'Ir a la biblioteca', validate: 'Validar ahora', zoomIn: 'Acercar', zoomOut: 'Alejar', zoomReset: 'Zoom 100%', newFrom: 'Nuevo desde plantilla', shortcuts: 'Atajos de teclado', close: 'Cerrar', history: 'Historial', comments: 'Comentarios', newDocTitle: 'Nuevo', recentTitle: 'Recientes', addComment: 'Comentar', yourName: 'Tu nombre', writeComment: 'Escribe un comentario…', resolve: 'Resolver', reopen: 'Reabrir', noComments: 'Sin comentarios.', needSave: 'Guarda el documento en la biblioteca para comentar.', signHere: 'Firma aquí', drawLeft: 'Dibujar firma izquierda', drawRight: 'Dibujar firma derecha', clearDrawing: 'Quitar dibujo', tplNamePh: 'Nombre de plantilla…', tplDescPh: 'Descripción…', saveTpl: 'Guardar actual como plantilla', tplSaved: 'Plantilla guardada', tplDeleted: 'Plantilla borrada', confirmTplDel: '¿Borrar esta plantilla?', varsTitle: 'Rellena los valores', createDoc: 'Crear documento', trashTitle: 'Papelera', backToDocs: 'Volver a documentos', print: 'Imprimir (navegador)', findVersions: 'Versiones', diffVsCurrent: 'Diff vs actual', restoreVersion: 'Restaurar esta versión', restored: 'Versión restaurada', depth: 'Profundidad', allTags: '🏷 Todas', allStates: 'Todos los estados', draft: 'Borrador', in_review: 'En revisión', approved: 'Aprobado', favOnly: 'Solo favoritos', emptyTrash: 'Papelera vacía.' },
 };
 let lang = localStorage.getItem('genpdf.lang') || 'en';
 const t = (k) => (I18N[lang] && I18N[lang][k]) || I18N.en[k] || k;
 
 /* ================= state ================= */
 let doc = null, libraryId = null, selectedId = null;
+let currentView = 'editor', sideHidden = false, inspHidden = false;
 let history = [], future = [], focusSnapshot = null, layoutCache = null;
 let templates = [], userTemplates = [], libTrash = false, libFav = false;
 let commentsCache = [];
@@ -72,12 +73,72 @@ function applyZoom() {
   $('#zoomVal').textContent = Math.round(zoom * 100) + '%';
   localStorage.setItem('genpdf.zoom', zoom);
 }
+function applyChrome() {
+  const shell = $('#shell');
+  shell.classList.toggle('side-hidden', sideHidden);
+  shell.classList.toggle('panel-hidden', inspHidden || currentView !== 'editor');
+  const scrim = $('#scrim');
+  if (scrim) scrim.hidden = sideHidden || !matchMedia('(max-width:860px)').matches;
+}
 function switchView(name) {
-  document.querySelectorAll('#rail [data-view]').forEach(b => b.classList.toggle('active', b.dataset.view === name));
+  currentView = name;
+  document.querySelectorAll('#sidebar [data-view]').forEach(b => b.classList.toggle('active', b.dataset.view === name));
   $('#viewEditor').hidden = name !== 'editor';
   $('#viewLibrary').hidden = name !== 'library';
-  $('#panel').style.display = name === 'editor' ? '' : 'none';
+  applyChrome();
+  updateTouchbar();
   if (name === 'library') renderLib();
+  if (matchMedia('(max-width:860px)').matches) { sideHidden = true; applyChrome(); }
+}
+
+/* ================= sidebar ================= */
+async function renderSidebar() {
+  const rec = $('#sideRecents');
+  if (!rec) return;
+  rec.innerHTML = '';
+  let docs = [];
+  try {
+    docs = await (await fetch('/api/library')).json();
+  } catch {
+    rec.innerHTML = '<div class="sideEmpty">API unreachable</div>';
+    return;
+  }
+  const top = docs.filter(d => !d.deleted_at).slice(0, 8);
+  if (!top.length) {
+    const e = document.createElement('div');
+    e.className = 'sideEmpty'; e.textContent = t('noDocs');
+    rec.appendChild(e);
+  }
+  top.forEach(d => {
+    const b = document.createElement('button');
+    b.className = 'sideItem' + (d.id === libraryId ? ' current' : '');
+    b.title = d.title;
+    const dot = document.createElement('span'); dot.className = 'dot';
+    const nm = document.createElement('span'); nm.className = 'nm'; nm.textContent = d.title;
+    b.append(dot, nm);
+    if (d.favorite) { const f = document.createElement('span'); f.className = 'fav'; f.textContent = '★'; b.appendChild(f); }
+    const sm = document.createElement('small');
+    sm.textContent = new Date(d.updated_at * 1000).toLocaleDateString();
+    b.appendChild(sm);
+    b.onclick = () => { openLibraryDoc(d.id); if (matchMedia('(max-width:860px)').matches) { sideHidden = true; applyChrome(); } };
+    rec.appendChild(b);
+  });
+  const st = $('#sideTemplates');
+  st.innerHTML = '';
+  const addTpl = (name, fn) => {
+    const b = document.createElement('button');
+    b.className = 'sideItem'; b.title = name;
+    const dot = document.createElement('span'); dot.className = 'dot';
+    const nm = document.createElement('span'); nm.className = 'nm'; nm.textContent = name;
+    b.append(dot, nm);
+    b.onclick = fn;
+    st.appendChild(b);
+  };
+  templates.forEach(x => addTpl(x.name, () => openTemplateWithVars('builtin:' + x.id, x.name)));
+  try {
+    const uts = await (await fetch('/api/templates/user')).json();
+    uts.forEach(x => addTpl('◈ ' + x.name, () => openTemplateWithVars('user:' + x.id, x.name)));
+  } catch { /* ignore */ }
 }
 
 /* ================= edit widgets ================= */
@@ -103,6 +164,9 @@ function richEdit(getter, setter, ph) {
     ed.addEventListener('input', () => { setter(ed.textContent); markDirty(); saveLocal(); onSlashInput(ed); });
     ed.addEventListener('blur', () => { setter(ed.textContent); saveLocal(); show(); endSession(); closeSlash(); });
     ed.addEventListener('keydown', (e) => {
+      // Global shortcuts (palette, save, bold/italic) live on document:
+      // let Ctrl/Cmd combos bubble instead of swallowing them here.
+      if ((e.ctrlKey || e.metaKey) && ['k', 's', 'b', 'i'].includes(e.key.toLowerCase())) return;
       e.stopPropagation();
       if (e.key === 'Escape') { if (slash.open) closeSlash(); else ed.blur(); return; }
       if (!slash.open) return;
@@ -131,7 +195,10 @@ function plainEdit(getter, setter, ph, bold) {
   s.addEventListener('input', () => { setter(s.textContent); markDirty(); saveLocal(); });
   s.addEventListener('focus', beginSession);
   s.addEventListener('blur', () => { setter(s.textContent); saveLocal(); endSession(); });
-  s.addEventListener('keydown', e => e.stopPropagation());
+  s.addEventListener('keydown', e => {
+    if ((e.ctrlKey || e.metaKey) && ['k', 's', 'b', 'i'].includes(e.key.toLowerCase())) return;
+    e.stopPropagation();
+  });
   return s;
 }
 function surround(pre, post) {
@@ -319,6 +386,10 @@ function blockEl(b) {
       const img = document.createElement('img');
       img.src = b.image.src; img.style.maxWidth = (b.image.width_pct || 80) + '%'; img.alt = '';
       d.appendChild(img); d.appendChild(document.createElement('br'));
+    } else {
+      const ph = document.createElement('div'); ph.className = 'emptyimg';
+      ph.textContent = t('emptyImage');
+      d.appendChild(ph);
     }
     const cap = document.createElement('div'); cap.className = 'cap';
     cap.appendChild(plainEdit(() => b.image.caption, v => { b.image.caption = v; }, 'Caption — set image in the panel →'));
@@ -365,10 +436,13 @@ function selectVisual(id) {
   selectedId = id;
   sheet.querySelectorAll('.block.selected').forEach(el => el.classList.remove('selected'));
   if (id) { const el = sheet.querySelector(`[data-id="${id}"]`); if (el) el.classList.add('selected'); }
+  updateTouchbar();
 }
 function selectBlock(id) {
   selectedId = id; selectVisual(id); renderPanel();
-  if (matchMedia('(max-width:1080px)').matches) panel.classList.remove('hidden');
+  if (matchMedia('(max-width:1180px)').matches) { inspHidden = false; applyChrome(); }
+  // On phones the drawer and the sheet cannot coexist: selecting wins.
+  if (matchMedia('(max-width:860px)').matches) { sideHidden = true; applyChrome(); }
 }
 function moveBlock(id, targetId, before) {
   const from = idxOf(id); if (from < 0) return;
@@ -376,6 +450,27 @@ function moveBlock(id, targetId, before) {
   const [b] = doc.blocks.splice(from, 1);
   doc.blocks.splice(idxOf(targetId) + (before ? 0 : 1), 0, b);
   selectedId = id; markDirty(); renderAll(); saveLocal(); refreshLayout();
+}
+
+/* Floating contextual toolbar for touch (no hover, no HTML5 DnD there) */
+const IS_TOUCH = matchMedia('(hover:none) and (pointer:coarse)').matches;
+function updateTouchbar() {
+  const bar = $('#touchbar');
+  const el = selectedId && currentView === 'editor' ? sheet.querySelector(`[data-id="${selectedId}"]`) : null;
+  if (!IS_TOUCH || !el) { bar.hidden = true; return; }
+  bar.hidden = false;
+  const r = el.getBoundingClientRect();
+  const bw = bar.offsetWidth || 230, bh = bar.offsetHeight || 48;
+  let top = r.top - bh - 8;
+  if (top < 112) top = Math.min(window.innerHeight - bh - 8, r.bottom + 8);
+  bar.style.top = Math.max(8, top) + 'px';
+  bar.style.left = Math.max(8, Math.min(window.innerWidth - bw - 8, r.left + 30)) + 'px';
+}
+let touchRaf = false;
+function scheduleTouchbar() {
+  if (touchRaf) return;
+  touchRaf = true;
+  requestAnimationFrame(() => { touchRaf = false; updateTouchbar(); });
 }
 
 /* ================= slash menu + insert menu ================= */
@@ -502,8 +597,8 @@ function colorField(b) {
 function panelCloseBtn() {
   const x = document.createElement('button');
   x.textContent = '✕'; x.className = 'ghost'; x.style.cssText = 'position:absolute;top:8px;right:8px';
-  x.style.display = matchMedia('(max-width:1080px)').matches ? '' : 'none';
-  x.onclick = () => panel.classList.add('hidden');
+  x.style.display = matchMedia('(max-width:1180px)').matches ? '' : 'none';
+  x.onclick = () => { inspHidden = true; applyChrome(); };
   panel.appendChild(x);
 }
 function msgBox() { let m = $('#msgs'); if (!m) { m = document.createElement('div'); m.id = 'msgs'; panel.appendChild(m); } return m; }
@@ -570,7 +665,7 @@ function renderPanel() {
   const as = document.createElement('select');
   ['left', 'center', 'right'].forEach(a => { const o = document.createElement('option'); o.value = a; o.textContent = a; if (b.align === a) o.selected = true; as.appendChild(o); });
   as.addEventListener('change', () => { pushHistory(); b.align = as.value; markDirty(); renderAll(); saveLocal(); });
-  panel.append(al, as);
+  if (!['table', 'toc', 'pagebreak', 'divider'].includes(b.type)) panel.append(al, as);
 
   if (['heading', 'paragraph', 'bullets'].includes(b.type)) colorField(b);
   if (b.type === 'heading') {
@@ -694,11 +789,6 @@ async function loadComments() {
   if (!libraryId) return;
   try { commentsCache = await (await fetch(`/api/library/${libraryId}/comments`)).json(); } catch { /* ignore */ }
 }
-function authorName() {
-  let a = localStorage.getItem('genpdf.author') || '';
-  if (!a) { a = prompt(t('yourName')) || 'anon'; localStorage.setItem('genpdf.author', a); }
-  return a;
-}
 function renderComments(b) {
   const h = document.createElement('h3'); h.textContent = `${t('comments')} (${commentsCache.filter(c => c.block_id === b.id && !c.resolved).length})`;
   panel.appendChild(h);
@@ -723,14 +813,21 @@ function renderComments(b) {
     };
     acts.append(rs, del); d.append(who, tx, acts); panel.appendChild(d);
   });
+  const authorRow = document.createElement('div'); authorRow.className = 'row';
+  const authorInput = document.createElement('input');
+  authorInput.type = 'text'; authorInput.placeholder = t('yourName');
+  authorInput.value = localStorage.getItem('genpdf.author') || '';
+  authorInput.style.flex = '1';
   const ta = document.createElement('textarea'); ta.rows = 2; ta.id = 'cmtText'; ta.placeholder = t('writeComment');
   const add = document.createElement('button'); add.textContent = t('addComment');
   add.onclick = async () => {
     if (!ta.value.trim()) return;
-    await fetch(`/api/library/${libraryId}/comments`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ block_id: b.id, author: authorName(), text: ta.value.trim() }) });
+    const author = (authorInput.value.trim() || 'anon').slice(0, 60);
+    localStorage.setItem('genpdf.author', author);
+    await fetch(`/api/library/${libraryId}/comments`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ block_id: b.id, author, text: ta.value.trim() }) });
     await loadComments(); renderAll(); toastMsg(t('addComment'), 'ok');
   };
-  panel.append(ta, add);
+  panel.append(authorRow); authorRow.appendChild(authorInput); panel.append(ta, add);
 }
 
 /* ================= signature pad ================= */
@@ -960,6 +1057,7 @@ async function renderLib() {
     const stDiv = document.createElement('div'); stDiv.innerHTML = st;
     c.append(info, tagRow, stDiv, acts); box.appendChild(c);
   });
+  renderSidebar();
 }
 function tplCard(name, desc, onOpen) {
   const c = document.createElement('button'); c.className = 'tplCard';
@@ -1012,13 +1110,13 @@ async function openLibraryDoc(id) {
   const full = await (await fetch('/api/library/' + id)).json();
   pushHistory(); doc = full; libraryId = id; selectedId = null;
   await loadComments();
-  markDirty(); renderAll(); saveLocal(); refreshLayout(); switchView('editor'); toastMsg(t('loaded'), 'ok');
+  markDirty(); renderAll(); saveLocal(); refreshLayout(); switchView('editor'); renderSidebar(); toastMsg(t('loaded'), 'ok');
 }
 async function saveToLibrary() {
   try {
     const saved = await (await api('/api/library', doc)).json();
     doc.id = saved.id; libraryId = saved.id; saveLocal();
-    await loadComments(); renderAll();
+    await loadComments(); renderAll(); renderSidebar();
     toastMsg(t('saved'), 'ok');
   } catch (e) { toastMsg('Save failed: ' + e.message, 'err'); }
 }
@@ -1103,7 +1201,7 @@ function drawPalette(q) {
 }
 
 /* ================= render all / load / init ================= */
-function renderAll() { docTitle.value = doc.title || ''; renderPreview(); renderPanel(); syncUndoBtns(); }
+function renderAll() { docTitle.value = doc.title || ''; renderPreview(); renderPanel(); syncUndoBtns(); updateTouchbar(); }
 async function loadTemplate(id) {
   const d = await (await fetch('/api/templates/' + id)).json();
   if (doc) pushHistory();
@@ -1150,7 +1248,14 @@ async function init() {
   doc.page = doc.page || { size: 'A4', orientation: 'P', margin_mm: 20 };
   doc.tags = doc.tags || []; doc.status = doc.status || 'draft';
   await loadComments();
-  renderAll(); refreshLayout();
+  try {
+    const storedSide = localStorage.getItem('genpdf.side');
+    const storedInsp = localStorage.getItem('genpdf.insp');
+    sideHidden = storedSide === '0' || (storedSide === null && matchMedia('(max-width:860px)').matches);
+    inspHidden = storedInsp === '0' || (storedInsp === null && matchMedia('(max-width:1180px)').matches);
+  } catch { /* ignore */ }
+  applyChrome();
+  renderAll(); refreshLayout(); renderSidebar();
   if (!localStorage.getItem('genpdf.hint')) $('#hintbar').hidden = false;
   $('#hintX').onclick = () => { $('#hintbar').hidden = true; localStorage.setItem('genpdf.hint', '1'); };
 
@@ -1159,6 +1264,17 @@ async function init() {
   docTitle.addEventListener('focusout', () => { if (focusSnapshot && focusSnapshot !== snap()) pushHistory(focusSnapshot); focusSnapshot = null; });
 
   document.querySelectorAll('#toolbar [data-add]').forEach(btn => btn.addEventListener('click', () => insertAfter(selectedId, btn.dataset.add)));
+  document.querySelectorAll('#touchbar [data-t]').forEach(b => b.onclick = () => {
+    const id = selectedId; if (!id) return;
+    const act = b.dataset.t;
+    if (act === 'up') shiftBlock(id, -1);
+    else if (act === 'down') shiftBlock(id, 1);
+    else if (act === 'add') openInsertMenu(b, id);
+    else if (act === 'dup') duplicateBlock(id);
+    else if (act === 'del') deleteBlock(id);
+  });
+  $('#canvasWrap').addEventListener('scroll', scheduleTouchbar, { passive: true });
+  window.addEventListener('resize', scheduleTouchbar);
   $('#fmtB').onclick = () => surround('**', '**');
   $('#fmtI').onclick = () => surround('*', '*');
   $('#fmtC').onclick = () => surround('`', '`');
@@ -1177,7 +1293,29 @@ async function init() {
     ({ pdf: exportPdf, md: exportMd, docx: exportDocx, json: exportJson, imd: () => $('#fileMd').click(), idocx: () => $('#fileDocx').click(), ijson: () => $('#fileJson').click() })[b.dataset.x]();
   });
 
-  document.querySelectorAll('#rail [data-view]').forEach(b => b.onclick = () => switchView(b.dataset.view));
+  document.querySelectorAll('#sidebar [data-view]').forEach(b => b.onclick = () => switchView(b.dataset.view));
+  $('#sideTrash').onclick = () => { libTrash = true; switchView('library'); };
+  $('#sideKeys').onclick = () => openKeys();
+  $('#btnSide').onclick = () => {
+    sideHidden = !sideHidden;
+    // On phones the drawer and the sheet cannot coexist: opening wins.
+    if (!sideHidden && matchMedia('(max-width:860px)').matches) inspHidden = true;
+    try { localStorage.setItem('genpdf.side', sideHidden ? '0' : '1'); } catch {}
+    applyChrome();
+  };
+  $('#scrim').onclick = () => { sideHidden = true; applyChrome(); };
+  $('#btnPanel').onclick = () => {
+    inspHidden = !inspHidden;
+    try { localStorage.setItem('genpdf.insp', inspHidden ? '0' : '1'); } catch {}
+    applyChrome();
+  };
+  $('#sideSearch').addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      $('#libSearch').value = e.target.value;
+      libTrash = false;
+      switchView('library');
+    }
+  });
   $('#libSearch').addEventListener('input', renderLib);
   $('#libSort').addEventListener('change', renderLib);
   $('#libTag').addEventListener('change', renderLib);
@@ -1209,7 +1347,7 @@ async function init() {
     keysList.append(s, kb);
   });
   const openKeys = () => { $('#keysModal').hidden = false; };
-  $('#btnKeys').onclick = openKeys; $('#statusKeys').onclick = openKeys;
+  $('#statusKeys').onclick = openKeys;
   $('#keysClose').onclick = () => { $('#keysModal').hidden = true; };
   $('#keysModal').addEventListener('click', e => { if (e.target.id === 'keysModal') $('#keysModal').hidden = true; });
   $('#histClose').onclick = () => { $('#histModal').hidden = true; };

@@ -1,34 +1,123 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>gen-pdf — visual PDF editor</title>
 <link rel="stylesheet" href="/styles.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%232563eb'/><text x='50' y='68' font-size='52' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold'>g</text></svg>">
 </head>
 <body>
-<header>
-  <div class="brand">gen-pdf</div>
-  <input id="docTitle" class="doctitle" placeholder="Document title" title="Document title (used for the PDF filename)">
-  <select id="tplSelect" title="Load a template"></select>
-  <button id="btnTpl" title="Replace current document with the template">New</button>
+<header id="topbar">
+  <div class="brand"><span class="mark">g</span> gen-pdf</div>
+  <input id="docTitle" class="doctitle" data-i18n-ph="docTitlePh" placeholder="Document title" aria-label="Document title">
+  <select id="tplSelect" aria-label="Template"></select>
+  <button id="btnTpl" data-i18n="newBtn">New</button>
   <span class="spacer"></span>
-  <button id="btnUndo" title="Undo (Ctrl+Z)">↩</button>
-  <button id="btnRedo" title="Redo (Ctrl+Y)">↪</button>
-  <button id="btnPdf" class="primary" title="Validate and download PDF">Export PDF</button>
+  <button id="btnSave" class="ghost" data-i18n="saveBtn">Save</button>
+  <button id="btnTheme" title="Toggle theme">🌙</button>
+  <button id="btnLang" title="EN/ES">ES</button>
+  <button id="btnUndo" title="Undo (Ctrl+Z)" disabled>↩</button>
+  <button id="btnRedo" title="Redo (Ctrl+Y)" disabled>↪</button>
+  <div class="split">
+    <button id="btnPdf" class="primary" data-i18n="exportPdf">Export PDF</button>
+    <button id="btnExportMenu" class="primary arrow" aria-haspopup="menu" aria-label="More export options">▾</button>
+    <div id="exportMenu" class="menu" role="menu" hidden>
+      <button data-x="pdf">PDF</button>
+      <button data-x="md">Markdown ↓</button>
+      <button data-x="docx">DOCX ↓</button>
+      <button data-x="json">JSON ↓</button>
+      <hr>
+      <button data-x="imd">Markdown ↑</button>
+      <button data-x="idocx">DOCX ↑</button>
+      <button data-x="ijson">JSON ↑</button>
+    </div>
+  </div>
 </header>
-<div id="toolbar" title="Add a block at the end">
-  <span>Add:</span>
-  <button data-add="heading">Heading</button>
-  <button data-add="paragraph">Text</button>
-  <button data-add="keyvalue">Key-values</button>
-  <button data-add="bullets">Bullets</button>
-  <button data-add="sections">Sections</button>
-  <button data-add="signatures">Signatures</button>
-</div>
-<main>
-  <section id="sheet" aria-label="Preview (click text to edit, drag ⠿ to move)"></section>
+
+<div id="shell">
+  <nav id="rail" aria-label="Views">
+    <button data-view="editor" class="active" title="Editor">✎<small data-i18n="vEditor">Edit</small></button>
+    <button data-view="library" title="Library">▤<small data-i18n="vLibrary">Docs</small></button>
+    <span class="spacer"></span>
+    <button id="btnKeys" title="Keyboard shortcuts (?)">⌨</button>
+  </nav>
+
+  <section id="viewEditor">
+    <div id="toolbar">
+      <span class="lbl" data-i18n="addLabel">Add:</span>
+      <button data-add="heading" title="Heading">H</button>
+      <button data-add="paragraph" data-i18n="bText">Text</button>
+      <button data-add="keyvalue" data-i18n="bKv">Key-values</button>
+      <button data-add="bullets" data-i18n="bBullets">Bullets</button>
+      <button data-add="checklist" title="Checklist">☑</button>
+      <button data-add="sections" title="Numbered sections">1.</button>
+      <button data-add="table" title="Table">▦</button>
+      <button data-add="columns" title="Columns">▥</button>
+      <button data-add="image" title="Image">🖼</button>
+      <button data-add="quote" title="Quote">❝</button>
+      <button data-add="code" title="Code">&lt;/&gt;</button>
+      <button data-add="toc" title="Table of contents">☰</button>
+      <button data-add="pagebreak" title="Page break">⤓</button>
+      <button data-add="divider" title="Divider">―</button>
+      <button data-add="signatures" title="Signatures">✒</button>
+      <span class="sep"></span>
+      <span class="lbl" data-i18n="formatLabel">Format:</span>
+      <button id="fmtB" title="Bold (Ctrl+B)"><b>B</b></button>
+      <button id="fmtI" title="Italic (Ctrl+I)"><i>I</i></button>
+      <button id="fmtC" title="Code"><code>`</code></button>
+      <span class="sep"></span>
+      <span class="lbl" data-i18n="zoomLabel">Zoom:</span>
+      <button id="zoomOut" title="Zoom out">−</button>
+      <span id="zoomVal">100%</span>
+      <button id="zoomIn" title="Zoom in">+</button>
+    </div>
+    <div id="hintbar" hidden><span data-i18n="hint">Click any text to edit it · type / for blocks · drag ⠿ to move · Ctrl+K for actions</span><button id="hintX" aria-label="Dismiss">✕</button></div>
+    <div id="canvasWrap">
+      <div id="canvasMeta"><span id="pageInfo"></span></div>
+      <div id="sheet" aria-label="Preview"></div>
+      <div id="dropHint" hidden><p data-i18n="emptyDoc">Empty document — add your first block above, or pick a template.</p></div>
+    </div>
+  </section>
+
+  <section id="viewLibrary" hidden>
+    <div class="libTop">
+      <h2 data-i18n="libraryTitle">Library</h2>
+      <input id="libSearch" type="text" data-i18n-ph="searchPh" placeholder="Search…">
+      <select id="libTag"><option value="">🏷 All tags</option></select>
+      <select id="libStatus"><option value="">All states</option><option value="draft">Draft</option><option value="in_review">In review</option><option value="approved">Approved</option></select>
+      <button id="libFav" title="Favorites only">☆</button>
+      <button id="libTrash" title="Trash">🗑</button>
+      <select id="libSort"><option value="updated">Updated</option><option value="title">Title</option></select>
+      <button id="libNew" class="primary" data-i18n="newDoc">+ New document</button>
+    </div>
+    <h3 data-i18n="tplGallery">Templates</h3>
+    <div class="row"><input id="tplName" type="text" placeholder="Template name…"><input id="tplDesc" type="text" placeholder="Description…"><button id="tplSave">Save current as template</button></div>
+    <div id="libTemplates"></div>
+    <h3 data-i18n="docsTitle">Documents</h3>
+    <div id="libList"></div>
+  </section>
+
   <aside id="panel" aria-label="Properties"></aside>
-</main>
-<div id="toast"></div>
+</div>
+
+<footer id="statusbar">
+  <span id="saveState">●</span>
+  <span class="sep"></span><span id="statWords"></span>
+  <span class="sep"></span><span id="statBlocks"></span>
+  <span class="sep"></span><span id="statPages"></span>
+  <span class="spacer"></span>
+  <button id="statusKeys" class="linklike" title="Shortcuts">Ctrl+K · ?</button>
+</footer>
+
+<div id="palette" hidden><div id="palBox"><input id="palInput" placeholder="Type a command…" autocomplete="off"><div id="palList"></div></div></div>
+<div id="keysModal" hidden><div class="modal"><h2>Shortcuts</h2><div id="keysList"></div><button id="keysClose">Close</button></div></div>
+<div id="sigModal" hidden><div class="modal"><h2 data-i18n="signHere">Sign here</h2><canvas id="sigCanvas" width="460" height="160"></canvas><div class="row"><button id="sigClear">Clear</button><button id="sigSave" class="primary">Use signature</button><button id="sigClose">Cancel</button></div></div></div>
+<div id="wizModal" hidden><div class="modal"><h2 id="wizTitle">Template</h2><div id="wizFields"></div><div class="row"><button id="wizStart" class="primary">Create document</button><button id="wizClose">Cancel</button></div></div></div>
+<div id="histModal" hidden><div class="modal wide"><h2 data-i18n="history">History</h2><div id="histList"></div><pre id="histDiff"></pre><div class="row"><button id="histClose">Close</button></div></div></div>
+<div id="floatMenu" class="menu" hidden></div>
+<input type="file" id="fileMd" accept=".md,.markdown,.txt" hidden>
+<input type="file" id="fileDocx" accept=".docx" hidden>
+<input type="file" id="fileJson" accept=".json" hidden>
+<div id="toasts" aria-live="polite"></div>
 <script src="/app.js"></script>
 </body></html>

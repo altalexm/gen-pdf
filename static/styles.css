@@ -150,6 +150,7 @@ table.ed th{background:#292524;color:#fafaf9}
 .codef{background:#f5f4ef;border:1px solid #e7e2d6;padding:10px;border-radius:8px;font-family:var(--mono);font-size:.85em;white-space:pre-wrap;color:#1c1917}
 .imgf img{max-width:100%;border-radius:8px;box-shadow:var(--shadow)}
 .imgf .cap{color:#78716c;font-size:.85em;font-style:italic}
+.imgf .emptyimg{border:2px dashed #d6cfbd;border-radius:10px;padding:26px 12px;text-align:center;color:#78716c;font-size:13px;background:#faf9f6}
 .cols2{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:22px;margin:8px 0}
 .cols2 .col h4{margin:.2em 0}
 .pbrk{border:1px dashed var(--line);border-radius:8px;color:var(--muted);text-align:center;padding:8px;font-size:12.5px;user-select:none;background:var(--panel2)}
@@ -242,8 +243,11 @@ html[data-theme="dark"] .toast{background:#e9e7e1;color:#1c1917}
   #sidebar{position:fixed;left:0;top:0;bottom:0;width:min(300px,86vw);z-index:70;box-shadow:var(--shadow-lg)}
   #toolbar{top:0}
   #sheet{padding:28px 22px}
-  .doctitle{max-width:none}
-  #topbar{flex-wrap:wrap}
+  .doctitle{max-width:none;flex-basis:100%;order:5}
+  #topbar{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
+  #topbar::-webkit-scrollbar{display:none}
+  #topbar>*{flex:none}
+  #topbar .doctitle{flex:1 0 140px}
   .brand .word{display:none}
 }
 @media print{

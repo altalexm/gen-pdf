@@ -30,6 +30,7 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - Frontend i18n (EN/ES), image upload as data-URL, table grid editor.
 - Open-source pack: `CONTRIBUTING.md`, issue/PR templates, `Dockerfile` + compose, expanded `README`.
 - UX overhaul: app shell (icon rail, views, status bar), slash menu, command palette (Ctrl+K), hover gutter actions, canvas zoom, dark mode, shortcuts dialog, stacked toasts, onboarding hint, library as a full view with sort.
+- UI QA round: inspector hidden on load in narrow viewports, shortcuts work while editing, single-row scrollable toolbar, dashed empty-image placeholder, no dead Alignment control on table/toc/pagebreak/divider, inline author field for comments.
 
 ## [0.1.0] - 2026-09-16
 

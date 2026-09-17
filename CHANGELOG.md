@@ -10,6 +10,12 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 ### Changed
 
 - Full visual redesign: workspace sidebar (search, recents, templates, trash), slim blurred topbar, collapsible inspector, warm-paper canvas, Inter type, refined dark mode, loading skeletons, print-safe chrome.
+- Mobile-first pass: drawer below the topbar with scrim, inspector as bottom sheet, floating touch toolbar (move/duplicate/delete/insert), stacked key-values, scrollable tables, compact status bar, 40px+ touch targets.
+
+### Fixed
+
+- Collapsed panels can no longer intercept pointer events (delayed `visibility`).
+- Inspector no longer covers the canvas on load in narrow viewports.
 
 ### Added
 

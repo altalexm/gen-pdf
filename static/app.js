@@ -77,6 +77,8 @@ function applyChrome() {
   const shell = $('#shell');
   shell.classList.toggle('side-hidden', sideHidden);
   shell.classList.toggle('panel-hidden', inspHidden || currentView !== 'editor');
+  const scrim = $('#scrim');
+  if (scrim) scrim.hidden = sideHidden || !matchMedia('(max-width:860px)').matches;
 }
 function switchView(name) {
   currentView = name;
@@ -84,6 +86,7 @@ function switchView(name) {
   $('#viewEditor').hidden = name !== 'editor';
   $('#viewLibrary').hidden = name !== 'library';
   applyChrome();
+  updateTouchbar();
   if (name === 'library') renderLib();
   if (matchMedia('(max-width:860px)').matches) { sideHidden = true; applyChrome(); }
 }
@@ -433,6 +436,7 @@ function selectVisual(id) {
   selectedId = id;
   sheet.querySelectorAll('.block.selected').forEach(el => el.classList.remove('selected'));
   if (id) { const el = sheet.querySelector(`[data-id="${id}"]`); if (el) el.classList.add('selected'); }
+  updateTouchbar();
 }
 function selectBlock(id) {
   selectedId = id; selectVisual(id); renderPanel();
@@ -444,6 +448,27 @@ function moveBlock(id, targetId, before) {
   const [b] = doc.blocks.splice(from, 1);
   doc.blocks.splice(idxOf(targetId) + (before ? 0 : 1), 0, b);
   selectedId = id; markDirty(); renderAll(); saveLocal(); refreshLayout();
+}
+
+/* Floating contextual toolbar for touch (no hover, no HTML5 DnD there) */
+const IS_TOUCH = matchMedia('(hover:none) and (pointer:coarse)').matches;
+function updateTouchbar() {
+  const bar = $('#touchbar');
+  const el = selectedId && currentView === 'editor' ? sheet.querySelector(`[data-id="${selectedId}"]`) : null;
+  if (!IS_TOUCH || !el) { bar.hidden = true; return; }
+  bar.hidden = false;
+  const r = el.getBoundingClientRect();
+  const bw = bar.offsetWidth || 230, bh = bar.offsetHeight || 48;
+  let top = r.top - bh - 8;
+  if (top < 112) top = Math.min(window.innerHeight - bh - 8, r.bottom + 8);
+  bar.style.top = Math.max(8, top) + 'px';
+  bar.style.left = Math.max(8, Math.min(window.innerWidth - bw - 8, r.left + 30)) + 'px';
+}
+let touchRaf = false;
+function scheduleTouchbar() {
+  if (touchRaf) return;
+  touchRaf = true;
+  requestAnimationFrame(() => { touchRaf = false; updateTouchbar(); });
 }
 
 /* ================= slash menu + insert menu ================= */
@@ -1174,7 +1199,7 @@ function drawPalette(q) {
 }
 
 /* ================= render all / load / init ================= */
-function renderAll() { docTitle.value = doc.title || ''; renderPreview(); renderPanel(); syncUndoBtns(); }
+function renderAll() { docTitle.value = doc.title || ''; renderPreview(); renderPanel(); syncUndoBtns(); updateTouchbar(); }
 async function loadTemplate(id) {
   const d = await (await fetch('/api/templates/' + id)).json();
   if (doc) pushHistory();
@@ -1237,6 +1262,17 @@ async function init() {
   docTitle.addEventListener('focusout', () => { if (focusSnapshot && focusSnapshot !== snap()) pushHistory(focusSnapshot); focusSnapshot = null; });
 
   document.querySelectorAll('#toolbar [data-add]').forEach(btn => btn.addEventListener('click', () => insertAfter(selectedId, btn.dataset.add)));
+  document.querySelectorAll('#touchbar [data-t]').forEach(b => b.onclick = () => {
+    const id = selectedId; if (!id) return;
+    const act = b.dataset.t;
+    if (act === 'up') shiftBlock(id, -1);
+    else if (act === 'down') shiftBlock(id, 1);
+    else if (act === 'add') openInsertMenu(b, id);
+    else if (act === 'dup') duplicateBlock(id);
+    else if (act === 'del') deleteBlock(id);
+  });
+  $('#canvasWrap').addEventListener('scroll', scheduleTouchbar, { passive: true });
+  window.addEventListener('resize', scheduleTouchbar);
   $('#fmtB').onclick = () => surround('**', '**');
   $('#fmtI').onclick = () => surround('*', '*');
   $('#fmtC').onclick = () => surround('`', '`');
@@ -1263,6 +1299,7 @@ async function init() {
     try { localStorage.setItem('genpdf.side', sideHidden ? '0' : '1'); } catch {}
     applyChrome();
   };
+  $('#scrim').onclick = () => { sideHidden = true; applyChrome(); };
   $('#btnPanel').onclick = () => {
     inspHidden = !inspHidden;
     try { localStorage.setItem('genpdf.insp', inspHidden ? '0' : '1'); } catch {}

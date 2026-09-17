@@ -64,8 +64,8 @@ select:focus,input:focus,textarea:focus{border-color:var(--accent);outline:none;
    never display:none, so the canvas never jumps */
 #shell{flex:1;display:grid;grid-template-columns:auto minmax(0,1fr) auto;min-height:0}
 /* sidebar */
-#sidebar{width:272px;background:var(--panel);border-right:1px solid var(--line);display:flex;flex-direction:column;padding:14px 12px;gap:14px;overflow:hidden auto;min-height:0;transition:width .24s ease,opacity .2s ease,padding .24s ease,border-color .2s ease}
-#shell.side-hidden #sidebar{width:0;opacity:0;padding-left:0;padding-right:0;border-right-width:0}
+#sidebar{width:272px;background:var(--panel);border-right:1px solid var(--line);display:flex;flex-direction:column;padding:14px 12px;gap:14px;overflow:hidden auto;min-height:0;transition:width .24s ease,opacity .2s ease,padding .24s ease,border-width .24s ease,visibility 0s}
+#shell.side-hidden #sidebar{width:0;opacity:0;padding-left:0;padding-right:0;border-right-width:0;visibility:hidden;transition:width .24s ease,opacity .2s ease,padding .24s ease,border-width .24s ease,visibility 0s .25s}
 #sidebar>*{min-width:228px}
 .sideSearch input{background:var(--panel2);border-color:transparent}
 .sideGroup{display:flex;flex-direction:column;gap:7px}
@@ -89,8 +89,8 @@ select:focus,input:focus,textarea:focus{border-color:var(--accent);outline:none;
 /* editor column */
 #viewEditor{display:flex;flex-direction:column;min-width:0;min-height:0}
 #viewLibrary{padding:24px 28px;overflow:auto;max-width:1080px;width:100%;margin:0 auto}
-#panel{width:324px;background:var(--panel);border-left:1px solid var(--line);padding:16px 18px;overflow:hidden auto;transition:width .24s ease,opacity .2s ease,padding .24s ease,border-color .2s ease}
-#shell.panel-hidden #panel{width:0;opacity:0;padding-left:0;padding-right:0;border-left-width:0}
+#panel{width:324px;background:var(--panel);border-left:1px solid var(--line);padding:16px 18px;overflow:hidden auto;transition:width .24s ease,opacity .2s ease,padding .24s ease,border-width .24s ease,visibility 0s}
+#shell.panel-hidden #panel{width:0;opacity:0;padding-left:0;padding-right:0;border-left-width:0;visibility:hidden;transition:width .24s ease,opacity .2s ease,padding .24s ease,border-width .24s ease,visibility 0s .25s}
 #panel>*{min-width:270px}
 #panel.hidden{display:none}
 .sideItem .nm{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -124,6 +124,7 @@ select:focus,input:focus,textarea:focus{border-color:var(--accent);outline:none;
 .gutter button{border:0;background:none;padding:2px 5px;font-size:15px;color:#a8a29e;border-radius:6px;line-height:1}
 .gutter button:hover{color:var(--ink);background:#ece7d9;box-shadow:none}
 .gutter .cbadge{background:var(--accent-soft);color:var(--accent)}
+.gutter .mvbtn{display:none}
 .grip{cursor:grab}
 .pagebreak{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:12px;margin:16px 0;user-select:none}
 .pagebreak::before,.pagebreak::after{content:'';flex:1;border-top:1px dashed var(--line)}
@@ -240,12 +241,17 @@ kbd{background:var(--panel2);border:1px solid var(--line);border-radius:5px;padd
 html[data-theme="dark"] .toast{background:#e9e7e1;color:#1c1917}
 @media (max-width:1180px){
   #shell{grid-template-columns:auto minmax(0,1fr)}
-  #panel{position:fixed;right:0;top:0;bottom:0;width:min(340px,92vw);z-index:70;box-shadow:var(--shadow-lg)}
+  /* bottom sheet: canvas stays visible above, no content hidden behind */
+  #panel{position:fixed;left:0;right:0;bottom:0;top:auto;width:auto;max-height:54vh;z-index:70;box-shadow:0 -10px 32px rgba(16,24,40,.25);border-left:0;border-top:1px solid var(--line);border-radius:16px 16px 0 0;transition:transform .24s ease,opacity .2s ease,visibility 0s}
+  #panel>*{min-width:0}
+  #shell.panel-hidden #panel{transform:translateY(103%);opacity:0;visibility:hidden;width:auto;padding:16px 18px;border-left:0;border-top:1px solid var(--line);transition:transform .24s ease,opacity .2s ease,visibility 0s .25s}
   #panel.hidden{display:none}
 }
 @media (max-width:860px){
   #shell{grid-template-columns:minmax(0,1fr)}
-  #sidebar{position:fixed;left:0;top:0;bottom:0;width:min(300px,86vw);z-index:70;box-shadow:var(--shadow-lg)}
+  /* drawer below the topbar: toggle stays reachable, scrim closes on tap */
+  #sidebar{position:fixed;left:0;top:53px;bottom:0;width:min(300px,86vw);z-index:70;box-shadow:var(--shadow-lg);border-top:1px solid var(--line)}
+  #scrim{position:fixed;left:0;right:0;top:53px;bottom:0;background:rgba(20,16,8,.4);z-index:65}
   #toolbar{top:0}
   #sheet{padding:28px 22px}
   .doctitle{max-width:none;flex-basis:100%;order:5}
@@ -254,9 +260,28 @@ html[data-theme="dark"] .toast{background:#e9e7e1;color:#1c1917}
   #topbar>*{flex:none}
   #topbar .doctitle{flex:1 0 140px}
   .brand .word{display:none}
+  /* blocks stack instead of squeezing */
+  .kv{grid-template-columns:1fr;row-gap:0}
+  .kv>.editable:nth-child(odd){margin-top:8px;font-size:12px;text-transform:uppercase;letter-spacing:.4px;color:#78716c} /* fixed: sheet is always paper */
+  .sig,.cols2{grid-template-columns:1fr;grid-auto-flow:row}
+  table.ed{display:block;overflow-x:auto}
+  /* compact status bar */
+  #statWords,#statBlocks{display:none}
 }
+/* coarse pointers: fat targets, no hover-only UI, floating block toolbar */
+@media (hover:none) and (pointer:coarse){
+  button{touch-action:manipulation}
+  #toolbar button{padding:9px 13px}
+  .gutter{display:none}
+  .block{scroll-margin-top:120px}
+}
+#touchbar{position:fixed;z-index:75;display:flex;gap:2px;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow-lg);padding:5px}
+#touchbar[hidden]{display:none}
+#touchbar button{border:0;background:none;min-width:40px;min-height:36px;font-size:15px;border-radius:8px}
+#touchbar button:hover{box-shadow:none;background:var(--panel2)}
+#touchbar button.danger{color:var(--danger)}
 @media print{
-  #topbar,#sidebar,#toolbar,#hintbar,#panel,#statusbar,#toasts,#palette,#keysModal,#sigModal,#wizModal,#histModal,#floatMenu{display:none!important}
+  #topbar,#sidebar,#toolbar,#hintbar,#panel,#statusbar,#toasts,#palette,#keysModal,#sigModal,#wizModal,#histModal,#floatMenu,#touchbar,#scrim{display:none!important}
   body{background:#fff}
   #shell{display:block}
   #canvasWrap{padding:0;overflow:visible}

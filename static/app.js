@@ -103,6 +103,9 @@ function richEdit(getter, setter, ph) {
     ed.addEventListener('input', () => { setter(ed.textContent); markDirty(); saveLocal(); onSlashInput(ed); });
     ed.addEventListener('blur', () => { setter(ed.textContent); saveLocal(); show(); endSession(); closeSlash(); });
     ed.addEventListener('keydown', (e) => {
+      // Global shortcuts (palette, save, bold/italic) live on document:
+      // let Ctrl/Cmd combos bubble instead of swallowing them here.
+      if ((e.ctrlKey || e.metaKey) && ['k', 's', 'b', 'i'].includes(e.key.toLowerCase())) return;
       e.stopPropagation();
       if (e.key === 'Escape') { if (slash.open) closeSlash(); else ed.blur(); return; }
       if (!slash.open) return;
@@ -131,7 +134,10 @@ function plainEdit(getter, setter, ph, bold) {
   s.addEventListener('input', () => { setter(s.textContent); markDirty(); saveLocal(); });
   s.addEventListener('focus', beginSession);
   s.addEventListener('blur', () => { setter(s.textContent); saveLocal(); endSession(); });
-  s.addEventListener('keydown', e => e.stopPropagation());
+  s.addEventListener('keydown', e => {
+    if ((e.ctrlKey || e.metaKey) && ['k', 's', 'b', 'i'].includes(e.key.toLowerCase())) return;
+    e.stopPropagation();
+  });
   return s;
 }
 function surround(pre, post) {

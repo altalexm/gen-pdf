@@ -2,28 +2,48 @@
 <html lang="en">
 <head><meta charset="utf-8"><title>{{ doc.title }}</title>
 <style>
-body{font-family:Arial,Helvetica,sans-serif;margin:48px;color:#111}
+body{font-family:'DejaVu Sans',Arial,Helvetica,sans-serif;margin:48px;color:#111}
 h1{text-align:center;color:#3c3c3c}
 h2{color:#282828;border-bottom:2px solid #888;padding-bottom:4px}
 .meta{display:grid;grid-template-columns:180px 1fr;gap:4px 12px;margin:12px 0}
+table.grid{border-collapse:collapse;width:100%;margin:12px 0}
+table.grid th{background:#1f2937;color:#fff;padding:8px}
+table.grid td{border:1px solid #999;padding:7px}
+blockquote{border-left:3px solid #2563eb;margin:12px 0;padding:4px 12px;color:#374151;font-style:italic}
+pre{background:#f3f4f6;padding:10px;font-size:12px;overflow-x:auto}
+.cols{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:24px;margin:12px 0}
+.pbr{display:flex;align-items:center;gap:10px;color:#999;font-size:12px;margin:14px 0}
+.pbr::before,.pbr::after{content:'';flex:1;border-top:1px dashed #ccc}
+ul.toc{list-style:none;padding:0}
 footer{margin-top:48px;font-size:12px;color:#666;display:flex;justify-content:space-between}
 </style></head>
 <body>
 <p><strong>{{ doc.company_name }}</strong></p>
 {% for b in doc.blocks %}
+{% set pg = pages.get(b.id, 1) if pages else 1 %}
+{% if pg > 1 and (loop.first or (pages.get(loop.previtem.id, 1) if pages else 1) != pg) %}<div class="pbr">— Page {{ pg }} —</div>{% endif %}
 {% if b.type.value == 'heading' %}
-{% if b.level == 1 %}<h1 style="text-align:{{ b.align.value }}">{{ b.text }}</h1>
-{% elif b.level == 3 %}<h3 style="text-align:{{ b.align.value }}">{{ b.text }}</h3>
-{% else %}<h2 style="text-align:{{ b.align.value }}">{{ b.text }}</h2>{% endif %}
-{% elif b.type.value == 'paragraph' %}<p style="text-align:{{ b.align.value }}">{{ b.text }}</p>
-{% elif b.type.value == 'keyvalue' %}<div class="meta">{% for r in b.rows %}<div><strong>{{ r.label }}:</strong></div><div>{{ r.value }}</div>{% endfor %}</div>
-{% elif b.type.value == 'bullets' %}<ul>{% for i in b.items %}<li>{{ i }}</li>{% endfor %}</ul>
-{% elif b.type.value == 'sections' %}{% for e in b.entries %}<p><strong>{{ loop.index }}. {{ e.title }}</strong><br>{{ e.text }}</p>{% endfor %}
+{% if b.level == 1 %}<h1 style="text-align:{{ b.align.value }};{% if b.color %}color:{{ b.color }}{% endif %}">{{ b.text | md }}</h1>
+{% elif b.level == 3 %}<h3 style="text-align:{{ b.align.value }};{% if b.color %}color:{{ b.color }}{% endif %}">{{ b.text | md }}</h3>
+{% else %}<h2 style="text-align:{{ b.align.value }};{% if b.color %}color:{{ b.color }}{% endif %}">{{ b.text | md }}</h2>{% endif %}
+{% elif b.type.value == 'paragraph' %}<p style="text-align:{{ b.align.value }};{% if b.color %}color:{{ b.color }}{% endif %}">{{ b.text | md }}</p>
+{% elif b.type.value == 'quote' %}<blockquote>{{ b.text | md }}</blockquote>
+{% elif b.type.value == 'code' %}<pre>{{ b.text }}</pre>
+{% elif b.type.value == 'divider' %}<hr>
+{% elif b.type.value == 'keyvalue' %}<div class="meta">{% for r in b.rows %}<div><strong>{{ r.label | md }}:</strong></div><div>{{ r.value | md }}</div>{% endfor %}</div>
+{% elif b.type.value == 'bullets' %}<ul style="{% if b.color %}color:{{ b.color }}{% endif %}">{% for i in b.items %}<li>{{ i | md }}</li>{% endfor %}</ul>
+{% elif b.type.value == 'checklist' %}<ul style="list-style:none;padding-left:4px">{% for i in b.checklist %}<li>{{ '☑' if i.checked else '☐' }} {{ i.text | md }}</li>{% endfor %}</ul>
+{% elif b.type.value == 'sections' %}{% for e in b.entries %}<p><strong>{{ loop.index }}. {{ e.title | md }}</strong><br>{{ e.text | md }}</p>{% endfor %}
+{% elif b.type.value == 'table' %}<table class="grid"><tr>{% for h in b.table.headers %}<th>{{ h | md }}</th>{% endfor %}</tr>{% for r in b.table.rows %}<tr>{% for c in r %}<td>{{ c | md }}</td>{% endfor %}</tr>{% endfor %}</table>
+{% elif b.type.value == 'image' %}{% if b.image.src %}<p style="text-align:center"><img src="{{ b.image.src }}" style="max-width:{{ b.image.width_pct }}%"><br><em>{{ b.image.caption | md }}</em></p>{% endif %}
 {% elif b.type.value == 'signatures' %}
 <table width="100%" style="margin-top:48px"><tr>
-<td align="center">_________________________<br>{{ b.left.name }}<br>{{ b.left.role }}</td>
-<td align="center">_________________________<br>{{ b.right.name }}<br>{{ b.right.role }}</td>
+<td align="center">{% if b.left.drawing %}<img src="{{ b.left.drawing }}" style="max-height:60px"><br>{% else %}_________________________<br>{% endif %}{{ b.left.name | md }}<br>{{ b.left.role | md }}</td>
+<td align="center">{% if b.right.drawing %}<img src="{{ b.right.drawing }}" style="max-height:60px"><br>{% else %}_________________________<br>{% endif %}{{ b.right.name | md }}<br>{{ b.right.role | md }}</td>
 </tr></table>
+{% elif b.type.value == 'columns' %}<div class="cols">{% for c in b.columns %}<div><strong>{{ c.title | md }}</strong><p>{{ c.text | md }}</p></div>{% endfor %}</div>
+{% elif b.type.value == 'pagebreak' %}<div class="pbr">— Page break —</div>
+{% elif b.type.value == 'toc' %}<ul class="toc">{% for e in b.toc_entries %}<li>{{ e.title | md }} … {{ e.page }}</li>{% endfor %}</ul>
 {% endif %}
 {% endfor %}
 <footer><span>{{ doc.company_name }}</span><span>Generated with gen-pdf</span></footer>

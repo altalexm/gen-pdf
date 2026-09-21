@@ -6,12 +6,15 @@ real page of every block so the preview can show true page breaks.
 """
 from __future__ import annotations
 
+import hashlib
 import re
+from collections import OrderedDict
 from pathlib import Path
 
 from fpdf import FPDF
 from fpdf.enums import XPos, YPos
 
+from . import images as _images
 from .models import Align, Block, BlockType, Document, TocEntry
 
 _FONTS = Path(__file__).parent / "fonts"
@@ -43,11 +46,19 @@ class _PDF(FPDF):
             format=doc.page.size.value,
         )
         self._doc = doc
+        self._anchors: dict[str, int] = {}
         self.set_margins(doc.page.margin_mm, doc.page.margin_mm, doc.page.margin_mm)
         self.add_font(_FONT, "", str(_FONTS / "DejaVuSans.ttf"))
         self.add_font(_FONT, "B", str(_FONTS / "DejaVuSans-Bold.ttf"))
         self.add_font(_FONT, "I", str(_FONTS / "DejaVuSans-Oblique.ttf"))
         self.add_font(_FONT, "BI", str(_FONTS / "DejaVuSans-BoldOblique.ttf"))
+
+    def header(self):
+        if self._doc.show_header_title and self._doc.title.strip():
+            self.set_font(_FONT, "", 8)
+            self.set_text_color(150)
+            self.cell(0, 8, safe_text(self._doc.title.strip()), border=0, align="R",
+                      new_x=XPos.LMARGIN, new_y=YPos.NEXT)
 
     def footer(self):
         self.set_y(-15)
@@ -67,6 +78,10 @@ def _color(pdf: _PDF, b: Block, default: tuple[int, int, int] = (0, 0, 0)) -> No
     pdf.set_text_color(*rgb)
 
 
+def _theme_rgb(doc: Document, field: str, fallback: tuple[int, int, int]) -> tuple[int, int, int]:
+    return _hex_to_rgb(getattr(doc.theme, field, "") or "") or fallback
+
+
 def _render_block(pdf: _PDF, b: Block, toc_entries: dict[str, list[TocEntry]] | None = None) -> None:
     align = _ALIGN.get(b.align, "L")
     if b.type == BlockType.heading:
@@ -74,7 +89,14 @@ def _render_block(pdf: _PDF, b: Block, toc_entries: dict[str, list[TocEntry]] | 
             return
         pdf.ln(4)
         pdf.set_font(_FONT, "B", _HEADING_SIZE.get(b.level, 13))
-        _color(pdf, b, (40, 40, 40))
+        _color(pdf, b, _theme_rgb(pdf._doc, "heading_color", (40, 40, 40)))
+        lnk = pdf.add_link()
+        pdf._anchors[b.id] = lnk
+        pdf.set_link(lnk, y=pdf.get_y(), page=pdf.page_no())
+        try:
+            pdf.start_section(safe_text(b.text), level=max(0, b.level - 1))
+        except Exception:
+            pass
         pdf.multi_cell(_width(pdf), 10, safe_text(b.text), border=0, align=align, markdown=True, **_NL)
         pdf.ln(2)
     elif b.type == BlockType.paragraph:
@@ -88,7 +110,7 @@ def _render_block(pdf: _PDF, b: Block, toc_entries: dict[str, list[TocEntry]] | 
         if not b.text.strip():
             return
         x0 = float(pdf.l_margin)
-        pdf.set_draw_color(37, 99, 235)
+        pdf.set_draw_color(*_theme_rgb(pdf._doc, "accent", (37, 99, 235)))
         pdf.set_line_width(1.0)
         y0 = pdf.get_y()
         pdf.set_x(x0 + 4)
@@ -100,7 +122,9 @@ def _render_block(pdf: _PDF, b: Block, toc_entries: dict[str, list[TocEntry]] | 
     elif b.type == BlockType.code:
         if not b.text.strip():
             return
-        pdf.set_font("Courier", "", 9)
+        # NOTE: core fonts (Courier) are latin-1 only and crash on CJK/emoji;
+        # the embedded DejaVu renders everything safely.
+        pdf.set_font(_FONT, "", 9)
         pdf.set_fill_color(243, 244, 246)
         pdf.set_text_color(17, 24, 39)
         pdf.multi_cell(_width(pdf), 6, safe_text(b.text), border=0, align="L", fill=True, **_NL)
@@ -177,7 +201,7 @@ def _render_block(pdf: _PDF, b: Block, toc_entries: dict[str, list[TocEntry]] | 
         rows = [r + [""] * (ncols - len(r)) for r in rows]
         col_w = _width(pdf) / ncols
         pdf.set_font(_FONT, "B", 9)
-        pdf.set_fill_color(31, 41, 55)
+        pdf.set_fill_color(*_theme_rgb(pdf._doc, "accent", (31, 41, 55)))
         pdf.set_text_color(255, 255, 255)
         for h in headers:
             pdf.cell(col_w, 8, safe_text(h), border=1, align="C", fill=True)
@@ -199,7 +223,7 @@ def _render_block(pdf: _PDF, b: Block, toc_entries: dict[str, list[TocEntry]] | 
         src = (b.image.src or "").strip()
         if not src:
             return
-        data = _load_image(src)
+        data = _images.load_image(src)
         if data is None:
             pdf.set_font(_FONT, "I", 9)
             pdf.set_text_color(150)
@@ -216,6 +240,40 @@ def _render_block(pdf: _PDF, b: Block, toc_entries: dict[str, list[TocEntry]] | 
             pdf.set_text_color(100)
             pdf.multi_cell(_width(pdf), 6, safe_text(b.image.caption), border=0, align="C", **_NL)
             pdf.ln(2)
+    elif b.type == BlockType.chart:
+        pts = [(p.label.strip() or f"#{i + 1}", max(0.0, p.value)) for i, p in enumerate(b.chart.points)]
+        pts = [(lb, v) for lb, v in pts if lb or v]
+        if not pts:
+            return
+        if b.chart.title.strip():
+            pdf.set_font(_FONT, "B", 11)
+            pdf.set_text_color(0, 0, 0)
+            pdf.multi_cell(_width(pdf), 8, safe_text(b.chart.title), border=0, align="C", markdown=True, **_NL)
+        max_v = max(v for _, v in pts) or 1.0
+        n = len(pts)
+        gap, label_h = 4.0, 8.0
+        plot_w = _width(pdf)
+        bar_w = (plot_w - gap * (n - 1)) / n
+        chart_h = 55.0
+        if float(pdf.h) - float(pdf.get_y()) < chart_h + label_h + 14:
+            pdf.add_page()
+        y0 = pdf.get_y()
+        accent = _theme_rgb(pdf._doc, "accent", (79, 70, 229))
+        pdf.set_draw_color(200)
+        pdf.set_line_width(0.3)
+        pdf.line(float(pdf.l_margin), y0 + chart_h, float(pdf.l_margin) + plot_w, y0 + chart_h)
+        pdf.set_fill_color(*accent)
+        pdf.set_font(_FONT, "", 7)
+        pdf.set_text_color(80, 80, 80)
+        for j, (label, value) in enumerate(pts):
+            h = (value / max_v) * chart_h if max_v else 0.0
+            x = float(pdf.l_margin) + j * (bar_w + gap)
+            if h > 0.5:
+                pdf.rect(x, y0 + chart_h - h, bar_w, h, style="F")
+            pdf.set_xy(x, y0 + chart_h + 1)
+            pdf.multi_cell(bar_w, 4, safe_text(label), border=0, align="C", **_NL)
+        pdf.set_y(y0 + chart_h + label_h + 4)
+        pdf.ln(2)
     elif b.type == BlockType.signatures:
         if float(pdf.h) - float(pdf.get_y()) < 60:
             pdf.add_page()
@@ -225,7 +283,7 @@ def _render_block(pdf: _PDF, b: Block, toc_entries: dict[str, list[TocEntry]] | 
         import io as _io
         for j, side in enumerate((b.left, b.right)):
             x = float(pdf.l_margin) + j * (col + gap)
-            drawing = _load_image(side.drawing) if (side.drawing or "").strip() else None
+            drawing = _images.load_image(side.drawing) if (side.drawing or "").strip() else None
             if drawing:
                 try:
                     img_w = col * 0.55
@@ -272,31 +330,24 @@ def _render_block(pdf: _PDF, b: Block, toc_entries: dict[str, list[TocEntry]] | 
         entries = list((toc_entries or {}).get(b.id, b.toc_entries))
         if not entries:
             return
-        pdf.set_font(_FONT, "B", 11)
         pdf.set_text_color(0, 0, 0)
         for e in entries:
-            y = pdf.get_y()
+            title, page_s = safe_text(e.title), str(e.page)
             pdf.set_font(_FONT, "", 10)
-            pdf.cell(_width(pdf) - 14, 7, safe_text(e.title), border=0)
-            pdf.cell(14, 7, str(e.page), border=0, align="R",
+            title_w = pdf.get_string_width(title)
+            page_w = pdf.get_string_width(page_s) + 2
+            dots_w = max(0.0, _width(pdf) - title_w - page_w - 4)
+            y = pdf.get_y()
+            link = pdf._anchors.get(getattr(e, "ref", ""), 0) or 0
+            pdf.cell(title_w + 2, 7, title, border=0, link=link)
+            if dots_w > 6:
+                pdf.set_text_color(150)
+                pdf.cell(dots_w, 7, ". " * int(dots_w / pdf.get_string_width(". ") / 1), border=0)
+                pdf.set_text_color(0, 0, 0)
+            pdf.cell(page_w, 7, page_s, border=0, align="R", link=link,
                      new_x=XPos.LMARGIN, new_y=YPos.NEXT)
             pdf.set_y(y + 7)
         pdf.ln(3)
-
-
-def _load_image(src: str) -> bytes | None:
-    try:
-        if src.startswith("data:"):
-            import base64
-            return base64.b64decode(src.split(",", 1)[1])
-        if src.startswith(("http://", "https://")):
-            import urllib.request
-            with urllib.request.urlopen(src, timeout=15) as r:
-                return r.read()
-        p = Path(src)
-        return p.read_bytes() if p.is_file() else None
-    except Exception:
-        return None
 
 
 def _new_pdf(doc: Document) -> _PDF:
@@ -322,11 +373,16 @@ def _collect_toc(doc: Document, pages: dict[str, int]) -> dict[str, list[TocEntr
     for b in doc.blocks:
         if b.type == BlockType.toc:
             out[b.id] = [
-                TocEntry(title=h.text.strip(), page=pages.get(h.id, 1))
+                TocEntry(title=_plain(h.text.strip()), page=pages.get(h.id, 1), ref=h.id)
                 for h in doc.blocks
                 if h.type == BlockType.heading and h.level <= b.toc_depth and h.text.strip()
             ]
     return out
+
+
+def _plain(text: str) -> str:
+    """Strip inline-markdown markers for contexts without markdown support."""
+    return re.sub(r"(\*\*|__|`)", "", text).replace("*", "")
 
 
 def render_pdf(doc: Document) -> bytes:
@@ -341,15 +397,40 @@ def render_pdf(doc: Document) -> bytes:
     return bytes(out) if isinstance(out, (bytes, bytearray)) else out.encode("latin-1")
 
 
+_LAYOUT_CACHE: OrderedDict[str, dict] = OrderedDict()
+_LAYOUT_CACHE_SIZE = 32
+
+
+def _layout_key(doc: Document) -> str:
+    return hashlib.sha256(doc.model_dump_json().encode("utf-8")).hexdigest()
+
+
 def layout(doc: Document) -> dict:
-    """Render once, recording the real page of every block (true page breaks)."""
+    """Render once, recording the real page of every block (true page breaks).
+
+    Results are memoized by document hash: the editor calls this on every
+    pause, and re-rendering identical content would burn CPU for nothing.
+    """
+    key = _layout_key(doc)
+    hit = _LAYOUT_CACHE.get(key)
+    if hit is not None:
+        _LAYOUT_CACHE.move_to_end(key)
+        return {"pages": hit["pages"], "blocks": dict(hit["blocks"])}
     record: dict[str, int] = {}
     pdf = _render_all(doc, {}, record)
-    return {"pages": pdf.pages_count or 1, "blocks": record}
+    result = {"pages": pdf.pages_count or 1, "blocks": record}
+    _LAYOUT_CACHE[key] = result
+    while len(_LAYOUT_CACHE) > _LAYOUT_CACHE_SIZE:
+        _LAYOUT_CACHE.popitem(last=False)
+    return {"pages": result["pages"], "blocks": dict(result["blocks"])}
+
+
+def layout_cache_info() -> dict:
+    return {"size": len(_LAYOUT_CACHE), "max": _LAYOUT_CACHE_SIZE}
 
 
 # Re-exported for convenience
-__all__ = ["render_pdf", "layout", "safe_text", "prepare_preview"]
+__all__ = ["render_pdf", "layout", "layout_cache_info", "safe_text", "prepare_preview"]
 
 
 def prepare_preview(doc: Document) -> tuple[Document, dict[str, int]]:

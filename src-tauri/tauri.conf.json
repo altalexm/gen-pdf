@@ -1,0 +1,21 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "gen-pdf",
+  "version": "0.1.0",
+  "identifier": "com.genpdf.app",
+  "build": {
+    "frontendDist": "../static",
+    "devUrl": "http://localhost:8000",
+    "beforeBuildCommand": ""
+  },
+  "app": {
+    "windows": [{ "title": "gen-pdf", "width": 1280, "height": 860 }],
+    "security": { "csp": "default-src 'self'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com" }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "icon": ["icons/icon.svg"],
+    "category": "Productivity"
+  }
+}

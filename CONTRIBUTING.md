@@ -21,18 +21,19 @@ docker compose up   # http://localhost:8000 (library persisted in ./data)
 
 - `app/models.py` — `Block` / `Document` schemas. **The block list is the single source of truth** for preview and PDF.
 - `app/documents.py` — built-in templates. A new document type = one builder + one registry entry.
-- `app/pdf.py` — fpdf2 rendering (DejaVu fonts bundled in `app/fonts/`). Every block type must render here.
-- `app/markdown.py`, `app/docx_io.py` — lossy-but-practical format bridges.
-- `app/library.py` — SQLite persistence (`GENPDF_DB` env var overrides the path).
-- `static/` — vanilla-JS visual editor (no build step on purpose).
+- `app/pdf.py` — fpdf2 rendering (DejaVu fonts bundled in `app/fonts/`). Every block type must render here. Core fonts are latin-1 only: never use them with user text.
+- `app/images.py` — the only place that touches untrusted image bytes (SSRF guard + Pillow re-encode). Route everything through `load_image()`.
+- `app/markdown.py`, `app/docx_io.py`, `app/pdf_import.py` — lossy-but-practical format bridges.
+- `app/library.py` — SQLite persistence (`GENPDF_DB` env var overrides the path) + versions, comments, audit, FTS, user templates.
+- `static/` — vanilla-JS visual editor (no build step on purpose). By convention: block render in `blockEl`, editing in `renderPanel`, strings via `t()` in both languages.
 
 ## Rules for a new block type
 
-1. Add the variant to `BlockType` + fields to `Block` in `app/models.py`.
-2. Render it in `app/pdf.py::_render_block` (keep `new_x/new_y` cursor discipline — see `_NL`).
-3. Render it in `app/templates/preview.html` and in `static/app.js::blockEl` (+ property panel).
+1. Add the variant to `BlockType` + fields to `Block` in `app/models.py` (+ emptiness rule in `_block_empty`).
+2. Render it in `app/pdf.py::_render_block` (keep `new_x/new_y` cursor discipline — see `_NL`; Unicode-safe fonts only).
+3. Render it in `app/templates/preview.html` and in `static/app.js::blockEl` (+ property panel, `blankBlock`, toolbar/`BLOCK_DEFS`).
 4. Map it in `app/markdown.py` both directions (or document why it can't round-trip).
-5. Add tests in `tests/test_api.py`.
+5. Add tests in `tests/test_api.py` and extend the all-blocks preview matrix in `tests/test_fuzz.py`.
 
 ## Pull requests
 

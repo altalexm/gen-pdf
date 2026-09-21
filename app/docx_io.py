@@ -10,6 +10,26 @@ from docx.shared import Pt, RGBColor
 
 from .models import Block, BlockType, Document, SectionEntry, TableData
 
+MAX_UNCOMPRESSED_BYTES = 100 * 1024 * 1024
+
+
+def _assert_safe_zip(data: bytes) -> None:
+    """Refuse zip bombs / pathoken before python-docx ever parses them."""
+    import zipfile
+
+    try:
+        with zipfile.ZipFile(io.BytesIO(data)) as zf:
+            if len(zf.infolist()) > 2000:
+                raise ValueError("too many archive entries")
+            total = sum(i.file_size for i in zf.infolist())
+            if total > MAX_UNCOMPRESSED_BYTES:
+                raise ValueError("archive expands too much")
+            ratio = total / max(1, len(data))
+            if ratio > 200:
+                raise ValueError("suspicious compression ratio")
+    except zipfile.BadZipFile as e:
+        raise ValueError("not a valid zip archive") from e
+
 
 def _id() -> str:
     return uuid.uuid4().hex[:12]
@@ -129,6 +149,7 @@ def _has_page_break(paragraph) -> bool:
 
 
 def docx_to_document(data: bytes, title: str = "Imported document") -> Document:
+    _assert_safe_zip(data)
     d = DocxDocument(io.BytesIO(data))
     blocks: list[Block] = []
     doc_title = title

@@ -219,7 +219,7 @@ kbd{background:var(--panel2);border:1px solid var(--line);border-radius:5px;padd
 .modal{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px;width:min(480px,92vw);box-shadow:var(--shadow-lg);animation:pop .14s ease-out}
 .modal h2{margin:0 0 10px;letter-spacing:-.3px}
 #keysList{display:grid;grid-template-columns:1fr auto;gap:7px 14px;margin-bottom:16px;font-size:14px}
-#keysModal,#sigModal,#wizModal,#histModal{position:fixed;inset:0;background:rgba(20,16,8,.45);backdrop-filter:blur(3px);z-index:80;display:flex;align-items:center;justify-content:center;animation:fadein .12s ease-out}
+#keysModal,#sigModal,#wizModal,#histModal,#findModal,#aiModal{position:fixed;inset:0;background:rgba(20,16,8,.45);backdrop-filter:blur(3px);z-index:80;display:flex;align-items:center;justify-content:center;animation:fadein .12s ease-out}
 .modal .row{display:flex;gap:8px;margin-top:12px}
 .modal .row>*{flex:1}
 .modal.wide{width:min(720px,94vw)}
@@ -231,6 +231,7 @@ kbd{background:var(--panel2);border:1px solid var(--line);border-radius:5px;padd
 #histDiff{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:10px;max-height:220px;overflow:auto;font-size:12px;white-space:pre-wrap;font-family:var(--mono)}
 #histDiff:empty{display:none}
 #wizFields label{font-size:12px;color:var(--muted);display:block;margin:8px 0 2px}
+#aiModal label{font-size:12px;color:var(--muted);display:block;margin:10px 0 3px}
 .cmt{border:1px solid var(--line);border-radius:10px;padding:8px 10px;margin:6px 0;font-size:13px}
 .cmt.resolved{opacity:.6}
 .cmt .who{font-size:11.5px;color:var(--muted)}
@@ -287,8 +288,27 @@ html[data-theme="dark"] .toast{background:#e9e7e1;color:#1c1917}
 #touchbar button{border:0;background:none;min-width:40px;min-height:36px;font-size:15px;border-radius:8px}
 #touchbar button:hover{box-shadow:none;background:var(--panel2)}
 #touchbar button.danger{color:var(--danger)}
+/* outline + folding + chart + find + audit */
+#sideOutline{display:flex;flex-direction:column;gap:1px;max-height:220px;overflow:auto}
+#sideOutline button{border:0;background:none;text-align:left;padding:4px 8px;border-radius:6px;font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#sideOutline button:hover{background:var(--panel2);box-shadow:none;color:var(--ink)}
+#sideOutline button.lv1{font-weight:700;color:var(--ink)}
+#sideOutline button.lv2{padding-left:18px}
+#sideOutline button.lv3{padding-left:30px;font-size:12px}
+.gutter .foldbtn{font-size:11px}
+.block.folded>.foldmark{display:block;text-align:center;color:var(--muted);font-size:12px;padding:2px;cursor:pointer}
+.chart svg{width:100%;height:auto;display:block}
+#findModal .modal,#aiModal .modal{width:min(560px,94vw)}
+#findCount{min-height:18px}
+#aiOut{white-space:pre-wrap;max-height:180px;overflow:auto}
+#auditList{max-height:160px;overflow:auto;border:1px solid var(--line);border-radius:8px;margin:8px 0}
+#auditList .arow{display:flex;gap:8px;font-size:12px;padding:6px 10px;border-bottom:1px solid var(--line-soft)}
+#auditList .arow:last-child{border-bottom:0}
+#auditList small{color:var(--muted);white-space:nowrap}
+.flash{animation:flash 1.2s ease-out}
+@keyframes flash{0%{background:#fef3c7}100%{background:transparent}}
 @media print{
-  #topbar,#sidebar,#toolbar,#hintbar,#panel,#statusbar,#toasts,#palette,#keysModal,#sigModal,#wizModal,#histModal,#floatMenu,#touchbar,#scrim{display:none!important}
+  #topbar,#sidebar,#toolbar,#hintbar,#panel,#statusbar,#toasts,#palette,#keysModal,#sigModal,#wizModal,#histModal,#findModal,#aiModal,#floatMenu,#touchbar,#scrim{display:none!important}
   body{background:#fff}
   #shell{display:block}
   #canvasWrap{padding:0;overflow:visible}

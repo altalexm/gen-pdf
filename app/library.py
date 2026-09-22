@@ -49,6 +49,13 @@ def _connect() -> sqlite3.Connection:
         "id TEXT PRIMARY KEY, name TEXT NOT NULL, description TEXT NOT NULL DEFAULT '', "
         "created_at REAL NOT NULL, data TEXT NOT NULL)"
     )
+    con.execute(
+        "CREATE TABLE IF NOT EXISTS audit_log ("
+        "id TEXT PRIMARY KEY, doc_id TEXT NOT NULL, created_at REAL NOT NULL, "
+        "actor TEXT NOT NULL DEFAULT '', action TEXT NOT NULL DEFAULT '', "
+        "detail TEXT NOT NULL DEFAULT '')"
+    )
+    con.execute("CREATE INDEX IF NOT EXISTS idx_audit_doc ON audit_log (doc_id, created_at)")
     try:
         con.execute("CREATE VIRTUAL TABLE IF NOT EXISTS docs_fts USING fts5(doc_id UNINDEXED, title, content)")
     except sqlite3.OperationalError:
@@ -357,3 +364,20 @@ def delete_user_template(template_id: str) -> bool:
     with _connect() as con:
         cur = con.execute("DELETE FROM user_templates WHERE id = ?", (template_id,))
         return cur.rowcount > 0
+
+
+# ---------------- audit ----------------
+
+def log_action(doc_id: str, action: str, detail: str = "", actor: str = "local") -> None:
+    with _connect() as con:
+        con.execute("INSERT INTO audit_log (id, doc_id, created_at, actor, action, detail) "
+                    "VALUES (?, ?, ?, ?, ?, ?)",
+                    (uuid.uuid4().hex[:12], doc_id, time.time(), actor[:60], action, detail[:500]))
+
+
+def list_audit(doc_id: str, limit: int = 100) -> list[dict]:
+    with _connect() as con:
+        cur = con.execute("SELECT created_at, actor, action, detail FROM audit_log "
+                          "WHERE doc_id = ? ORDER BY created_at DESC LIMIT ?", (doc_id, limit))
+        return [{"created_at": r[0], "actor": r[1], "action": r[2], "detail": r[3]}
+                for r in cur.fetchall()]

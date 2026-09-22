@@ -88,6 +88,13 @@ def document_to_markdown(doc: Document) -> str:
                 out += ["| " + " | ".join(t for t, _ in cols) + " |",
                         "| " + " | ".join(["---"] * len(cols)) + " |",
                         "| " + " | ".join(d.replace("\n", "<br>") for _, d in cols) + " |", ""]
+        elif b.type == BlockType.chart:
+            pts = [(p.label.strip(), p.value) for p in b.chart.points if p.label.strip() or p.value]
+            if pts:
+                if b.chart.title.strip():
+                    out += [f"**{b.chart.title.strip()}**"]
+                out += ["| label | value |", "| --- | --- |"]
+                out += [f"| {lb} | {v:g} |" for lb, v in pts] + [""]
         elif b.type == BlockType.signatures:
             out += ["::: signatures",
                     f"{b.left.name.strip()} | {b.left.role.strip()}",

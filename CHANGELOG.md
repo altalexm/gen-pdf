@@ -17,6 +17,9 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - Collapsed panels can no longer intercept pointer events (delayed `visibility`).
 - Inspector no longer covers the canvas on load in narrow viewports.
 - Mobile drawer and bottom sheet are mutually exclusive; drawer sits below the topbar with scrim; Export stays visible in a two-row topbar; sheet gets a grab handle.
+- Code blocks no longer crash the PDF on non-latin text (DejaVu instead of core Courier) — caught by the new fuzzer.
+- `save_document` normalizes through the model so `str(Enum)` values (e.g. `'DocStatus.draft'`) can never leak into storage.
+- Static `/api/templates/user*` routes no longer shadowed by `/{template_id}` (registration order).
 
 ### Added
 
@@ -36,6 +39,12 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - Markdown and DOCX import/export (both directions).
 - Frontend i18n (EN/ES), image upload as data-URL, table grid editor.
 - Open-source pack: `CONTRIBUTING.md`, issue/PR templates, `Dockerfile` + compose, expanded `README`.
+- Chart block (SVG preview, vector PDF), document outline + section folding, find & replace, CSV→table import, reusable snippets, comments convertible to applied suggestions.
+- Themes (accent/headings), running header title, clickable TOC with dot leaders + PDF bookmarks.
+- Library activity log, batch PDF→ZIP export, PDF text-layer import, `python -m app.cli`, optional `GENPDF_TOKEN` bearer auth.
+- Hardening: SSRF-safe image pipeline (private-IP deny, caps, Pillow re-encode), DOCX zip-bomb guard, schema versioning with migrations, memoized layout.
+- AI assist BYOK (browser-direct, key never leaves localStorage), PWA offline (shell cache + outbox), Tauri desktop stub.
+- Quality: seeded fuzz over all renderers, all-blocks preview contract test, coverage gate (80%), Playwright E2E.
 - UX overhaul: app shell (icon rail, views, status bar), slash menu, command palette (Ctrl+K), hover gutter actions, canvas zoom, dark mode, shortcuts dialog, stacked toasts, onboarding hint, library as a full view with sort.
 - UI QA round: inspector hidden on load in narrow viewports, shortcuts work while editing, single-row scrollable toolbar, dashed empty-image placeholder, no dead Alignment control on table/toc/pagebreak/divider, inline author field for comments.
 

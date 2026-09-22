@@ -42,6 +42,7 @@ footer{margin-top:48px;font-size:12px;color:#666;display:flex;justify-content:sp
 <td align="center">{% if b.right.drawing %}<img src="{{ b.right.drawing }}" style="max-height:60px"><br>{% else %}_________________________<br>{% endif %}{{ b.right.name | md }}<br>{{ b.right.role | md }}</td>
 </tr></table>
 {% elif b.type.value == 'columns' %}<div class="cols">{% for c in b.columns %}<div><strong>{{ c.title | md }}</strong><p>{{ c.text | md }}</p></div>{% endfor %}</div>
+{% elif b.type.value == 'chart' %}{% if b.chart.title %}<p style="text-align:center"><strong>{{ b.chart.title | md }}</strong></p>{% endif %}{% if b.chart.points %}{% set _max = (b.chart.points | map(attribute='value') | max) or 1 %}<table class="grid"><tr>{% for p in b.chart.points %}<td align="center" valign="bottom" style="height:90px"><div style="background:#4f46e5;color:#fff;font-size:11px;border-radius:3px 3px 0 0;padding:{{ ((p.value / _max) * 60) | int }}px 8px 2px">{{ p.value }}</div><br>{{ p.label | md }}</td>{% endfor %}</tr></table>{% endif %}
 {% elif b.type.value == 'pagebreak' %}<div class="pbr">— Page break —</div>
 {% elif b.type.value == 'toc' %}<ul class="toc">{% for e in b.toc_entries %}<li>{{ e.title | md }} … {{ e.page }}</li>{% endfor %}</ul>
 {% endif %}

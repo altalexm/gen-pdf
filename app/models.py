@@ -9,6 +9,18 @@ from enum import Enum
 
 from pydantic import BaseModel, Field
 
+SCHEMA_VERSION = 2
+
+
+def migrate_document(data: dict) -> dict:
+    """Forward-migrate stored documents. Pydantic fills new fields with
+    defaults; the version stamp lets future migrations branch explicitly."""
+    data = dict(data)
+    data.setdefault("schema_version", 1)
+    if data["schema_version"] < 2:
+        data["schema_version"] = 2
+    return data
+
 
 class BlockType(str, Enum):
     heading = "heading"
@@ -26,6 +38,7 @@ class BlockType(str, Enum):
     columns = "columns"
     pagebreak = "pagebreak"
     toc = "toc"
+    chart = "chart"
 
 
 class Align(str, Enum):
@@ -73,6 +86,17 @@ class Column(BaseModel):
 class TocEntry(BaseModel):
     title: str = ""
     page: int = 1
+    ref: str = ""  # heading block id, for clickable PDF links
+
+
+class ChartPoint(BaseModel):
+    label: str = ""
+    value: float = 0.0
+
+
+class ChartData(BaseModel):
+    title: str = ""
+    points: list[ChartPoint] = Field(default_factory=list)
 
 
 class TableData(BaseModel):
@@ -117,6 +141,8 @@ class Block(BaseModel):
     columns: list[Column] = Field(default_factory=list)
     toc_depth: int = Field(default=2, ge=1, le=3)
     toc_entries: list[TocEntry] = Field(default_factory=list)  # filled at render time
+    # chart
+    chart: ChartData = Field(default_factory=ChartData)
 
 
 class DocStatus(str, Enum):
@@ -125,12 +151,21 @@ class DocStatus(str, Enum):
     approved = "approved"
 
 
+class Theme(BaseModel):
+    """Visual theme applied consistently to preview and PDF."""
+    accent: str = "#4f46e5"
+    heading_color: str = "#1c1917"
+
+
 class Document(BaseModel):
     id: str = ""
+    schema_version: int = SCHEMA_VERSION
     title: str = "Untitled"
     company_name: str = ""
     show_page_numbers: bool = True
+    show_header_title: bool = False
     page: PageSettings = Field(default_factory=PageSettings)
+    theme: Theme = Field(default_factory=Theme)
     tags: list[str] = Field(default_factory=list)
     favorite: bool = False
     status: DocStatus = DocStatus.draft
@@ -161,6 +196,8 @@ def _block_empty(b: Block) -> bool:
         return not b.image.src.strip()
     if b.type == BlockType.columns:
         return not any(c.title.strip() or c.text.strip() for c in b.columns)
+    if b.type == BlockType.chart:
+        return not any(p.label.strip() or p.value for p in b.chart.points)
     return False  # divider, pagebreak, toc, signatures always render
 
 

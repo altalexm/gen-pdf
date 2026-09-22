@@ -7,6 +7,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/styles.css">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#4f46e5">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%234f46e5'/><text x='50' y='70' font-size='54' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold'>g</text></svg>">
 </head>
 <body>
@@ -51,6 +53,10 @@
       <div id="sideRecents"></div>
     </div>
     <div class="sideGroup">
+      <div class="sideLabel" data-i18n="outlineTitle">Outline</div>
+      <div id="sideOutline"></div>
+    </div>
+    <div class="sideGroup">
       <div class="sideLabel" data-i18n="tplGallery">Templates</div>
       <div id="sideTemplates"></div>
     </div>
@@ -73,6 +79,7 @@
       <button data-add="sections" title="Numbered sections">1.</button>
       <button data-add="table" title="Table">▦</button>
       <button data-add="columns" title="Columns">▥</button>
+      <button data-add="chart" title="Chart">📊</button>
       <button data-add="image" title="Image">🖼</button>
       <button data-add="quote" title="Quote">❝</button>
       <button data-add="code" title="Code">&lt;/&gt;</button>
@@ -133,7 +140,9 @@
 <div id="keysModal" hidden><div class="modal"><h2>Shortcuts</h2><div id="keysList"></div><button id="keysClose">Close</button></div></div>
 <div id="sigModal" hidden><div class="modal"><h2 data-i18n="signHere">Sign here</h2><canvas id="sigCanvas" width="460" height="160"></canvas><div class="row"><button id="sigClear">Clear</button><button id="sigSave" class="primary">Use signature</button><button id="sigClose">Cancel</button></div></div></div>
 <div id="wizModal" hidden><div class="modal"><h2 id="wizTitle">Template</h2><div id="wizFields"></div><div class="row"><button id="wizStart" class="primary">Create document</button><button id="wizClose">Cancel</button></div></div></div>
-<div id="histModal" hidden><div class="modal wide"><h2 data-i18n="history">History</h2><div id="histList"></div><pre id="histDiff"></pre><div class="row"><button id="histClose">Close</button></div></div></div>
+<div id="histModal" hidden><div class="modal wide"><h2 data-i18n="history">History</h2><div id="histList"></div><pre id="histDiff"></pre><h3 data-i18n="auditTitle">Activity</h3><div id="auditList"></div><div class="row"><button id="histClose">Close</button></div></div></div>
+<div id="findModal" hidden><div class="modal"><h2 data-i18n="findTitle">Find &amp; replace</h2><label>Find</label><input id="findText" type="text"><label>Replace</label><input id="findReplace" type="text"><div class="row"><button id="findNext">Find next</button><button id="findAll" class="primary">Replace all</button><button id="findClose">Close</button></div><div id="findCount" class="meta"></div></div></div>
+<div id="aiModal" hidden><div class="modal wide"><h2>AI assist <small style="font-weight:400;color:var(--muted)">BYOK — key stays in your browser</small></h2><div class="row"><input id="aiBase" type="text" placeholder="https://api.openai.com/v1"><input id="aiModel" type="text" placeholder="gpt-4o-mini"></div><input id="aiKey" type="password" placeholder="API key (stored locally)"><label>Instruction</label><textarea id="aiPrompt" rows="3">Summarize this document in 5 bullet points.</textarea><div class="row"><button data-ai="summarize">Summarize</button><button data-ai="tone">Formal tone</button><button data-ai="actions">Action items</button></div><div class="row"><input id="aiLang" type="text" placeholder="es"><button data-ai="translate">Translate</button><button id="aiRun" class="primary">Run instruction</button></div><div id="aiOut" class="meta"></div><div class="row"><button id="aiInsert">Insert result as block</button><button id="aiClose">Close</button></div></div></div>
 <div id="floatMenu" class="menu" hidden></div>
 <div id="touchbar" hidden>
   <button data-t="up" title="Move up">↑</button>
@@ -146,6 +155,7 @@
 <input type="file" id="fileMd" accept=".md,.markdown,.txt" hidden>
 <input type="file" id="fileDocx" accept=".docx" hidden>
 <input type="file" id="fileJson" accept=".json" hidden>
+<input type="file" id="fileCsv" accept=".csv,.txt" hidden>
 <div id="toasts" aria-live="polite"></div>
 <script src="/app.js"></script>
 </body></html>

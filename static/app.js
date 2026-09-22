@@ -5,8 +5,8 @@ const docTitle = $('#docTitle'), tplSelect = $('#tplSelect');
 
 /* ================= i18n ================= */
 const I18N = {
-  en: { docTitlePh: 'Document title', newBtn: 'New', saveBtn: 'Save', exportPdf: 'Export PDF', vEditor: 'Edit', vLibrary: 'Docs', addLabel: 'Add:', bText: 'Text', bKv: 'Key-values', bBullets: 'Bullets', formatLabel: 'Format:', zoomLabel: 'Zoom:', hint: 'Click any text to edit it · type / for blocks · drag ⠿ to move · Ctrl+K for actions', emptyDoc: 'Empty document — add your first block above, or pick a template.', libraryTitle: 'Library', searchPh: 'Search…', newDoc: '+ New document', tplGallery: 'Templates', docsTitle: 'Documents', blockDoc: 'Document', company: 'Company (header/footer)', options: 'Options', pageNumbers: 'Page numbers', size: 'Size', orientation: 'Orientation', portrait: 'Portrait', landscape: 'Landscape', margin: 'Margin (mm)', tags: 'Tags (comma separated)', favorite: 'Favorite', status: 'Status', selHint: 'Select a block in the preview to edit its properties. Drag ⠿ to reorder.', block: 'Block', convertTo: 'Convert to', alignment: 'Alignment', level: 'Level', text: 'Text', addRow: '+ Add row', addItem: '+ Add item', addEntry: '+ Add entry', addCol: '+ Column', removeEntry: 'Remove entry', up: '↑ Up', down: '↓ Down', dup: '⧉ Duplicate', del: '✕ Delete', color: 'Color', headers: 'Headers (| separated)', addRowT: '+ Row', src: 'Image URL (or upload below)', upload: 'Upload image…', width: 'Width %', caption: 'Caption', emptyImage: '🖼 No image yet — paste a URL or upload one in the panel →', open: 'Open', duplicate: 'Duplicate', delete: 'Delete', restore: 'Restore', purge: 'Delete forever', saved: 'Saved to library', savedAt: 'Saved', editing: 'Editing…', loaded: 'Document loaded', exported: 'Downloaded', fixFirst: 'Fix errors before exporting', noDocs: 'No documents here.', blocksN: 'blocks', wordsN: 'words', pagesN: 'pages', templateLoaded: 'Template loaded', imported: 'Imported', confirmDel: 'Move to trash?', confirmPurge: 'Delete forever? This cannot be undone.', palettePh: 'Type a command…', theme: 'Theme', language: 'Language', undo: 'Undo', redo: 'Redo', save: 'Save to library', export: 'Export', goEditor: 'Go to editor', goLibrary: 'Go to library', validate: 'Validate now', zoomIn: 'Zoom in', zoomOut: 'Zoom out', zoomReset: 'Reset zoom', newFrom: 'New from template', shortcuts: 'Keyboard shortcuts', close: 'Close', history: 'History', comments: 'Comments', newDocTitle: 'New', recentTitle: 'Recent', addComment: 'Add comment', yourName: 'Your name', writeComment: 'Write a comment…', resolve: 'Resolve', reopen: 'Reopen', noComments: 'No comments yet.', needSave: 'Save the document to the library first to use comments.', signHere: 'Sign here', drawLeft: 'Draw left signature', drawRight: 'Draw right signature', clearDrawing: 'Remove drawing', tplNamePh: 'Template name…', tplDescPh: 'Description…', saveTpl: 'Save current as template', tplSaved: 'Template saved', tplDeleted: 'Template deleted', confirmTplDel: 'Delete this template?', varsTitle: 'Fill in the values', createDoc: 'Create document', trashTitle: 'Trash', backToDocs: 'Back to documents', print: 'Print (browser)', findVersions: 'Versions', diffVsCurrent: 'Diff vs current', restoreVersion: 'Restore this version', restored: 'Version restored', depth: 'Depth', allTags: '🏷 All tags', allStates: 'All states', draft: 'Draft', in_review: 'In review', approved: 'Approved', favOnly: 'Favorites only', emptyTrash: 'Trash is empty.' },
-  es: { docTitlePh: 'Título del documento', newBtn: 'Nuevo', saveBtn: 'Guardar', exportPdf: 'Exportar PDF', vEditor: 'Editar', vLibrary: 'Docs', addLabel: 'Añadir:', bText: 'Texto', bKv: 'Claves', bBullets: 'Viñetas', formatLabel: 'Formato:', zoomLabel: 'Zoom:', hint: 'Clic en cualquier texto para editar · escribe / para bloques · arrastra ⠿ para mover · Ctrl+K para acciones', emptyDoc: 'Documento vacío — añade tu primer bloque arriba o elige una plantilla.', libraryTitle: 'Biblioteca', searchPh: 'Buscar…', newDoc: '+ Nuevo documento', tplGallery: 'Plantillas', docsTitle: 'Documentos', blockDoc: 'Documento', company: 'Organización (cabecera/pie)', options: 'Opciones', pageNumbers: 'Números de página', size: 'Tamaño', orientation: 'Orientación', portrait: 'Vertical', landscape: 'Horizontal', margin: 'Margen (mm)', tags: 'Etiquetas (separadas por comas)', favorite: 'Favorito', status: 'Estado', selHint: 'Selecciona un bloque en la vista previa. Arrastra ⠿ para reordenar.', block: 'Bloque', convertTo: 'Convertir a', alignment: 'Alineación', level: 'Nivel', text: 'Texto', addRow: '+ Añadir fila', addItem: '+ Añadir punto', addEntry: '+ Añadir entrada', addCol: '+ Columna', removeEntry: 'Quitar entrada', up: '↑ Subir', down: '↓ Bajar', dup: '⧉ Duplicar', del: '✕ Borrar', color: 'Color', headers: 'Cabeceras (| separadas)', addRowT: '+ Fila', src: 'URL de imagen (o sube abajo)', upload: 'Subir imagen…', width: 'Ancho %', caption: 'Pie', emptyImage: '🖼 Sin imagen — pega una URL o súbela en el panel →', open: 'Abrir', duplicate: 'Duplicar', delete: 'Borrar', restore: 'Restaurar', purge: 'Borrar para siempre', saved: 'Guardado en biblioteca', savedAt: 'Guardado', editing: 'Editando…', loaded: 'Documento cargado', exported: 'Descargado', fixFirst: 'Corrige los errores antes de exportar', noDocs: 'Nada por aquí.', blocksN: 'bloques', wordsN: 'palabras', pagesN: 'páginas', templateLoaded: 'Plantilla cargada', imported: 'Importado', confirmDel: '¿Mover a la papelera?', confirmPurge: '¿Borrar para siempre? No se puede deshacer.', palettePh: 'Escribe un comando…', theme: 'Tema', language: 'Idioma', undo: 'Deshacer', redo: 'Rehacer', save: 'Guardar en biblioteca', export: 'Exportar', goEditor: 'Ir al editor', goLibrary: 'Ir a la biblioteca', validate: 'Validar ahora', zoomIn: 'Acercar', zoomOut: 'Alejar', zoomReset: 'Zoom 100%', newFrom: 'Nuevo desde plantilla', shortcuts: 'Atajos de teclado', close: 'Cerrar', history: 'Historial', comments: 'Comentarios', newDocTitle: 'Nuevo', recentTitle: 'Recientes', addComment: 'Comentar', yourName: 'Tu nombre', writeComment: 'Escribe un comentario…', resolve: 'Resolver', reopen: 'Reabrir', noComments: 'Sin comentarios.', needSave: 'Guarda el documento en la biblioteca para comentar.', signHere: 'Firma aquí', drawLeft: 'Dibujar firma izquierda', drawRight: 'Dibujar firma derecha', clearDrawing: 'Quitar dibujo', tplNamePh: 'Nombre de plantilla…', tplDescPh: 'Descripción…', saveTpl: 'Guardar actual como plantilla', tplSaved: 'Plantilla guardada', tplDeleted: 'Plantilla borrada', confirmTplDel: '¿Borrar esta plantilla?', varsTitle: 'Rellena los valores', createDoc: 'Crear documento', trashTitle: 'Papelera', backToDocs: 'Volver a documentos', print: 'Imprimir (navegador)', findVersions: 'Versiones', diffVsCurrent: 'Diff vs actual', restoreVersion: 'Restaurar esta versión', restored: 'Versión restaurada', depth: 'Profundidad', allTags: '🏷 Todas', allStates: 'Todos los estados', draft: 'Borrador', in_review: 'En revisión', approved: 'Aprobado', favOnly: 'Solo favoritos', emptyTrash: 'Papelera vacía.' },
+  en: { docTitlePh: 'Document title', newBtn: 'New', saveBtn: 'Save', exportPdf: 'Export PDF', vEditor: 'Edit', vLibrary: 'Docs', addLabel: 'Add:', bText: 'Text', bKv: 'Key-values', bBullets: 'Bullets', formatLabel: 'Format:', zoomLabel: 'Zoom:', hint: 'Click any text to edit it · type / for blocks · drag ⠿ to move · Ctrl+K for actions', emptyDoc: 'Empty document — add your first block above, or pick a template.', libraryTitle: 'Library', searchPh: 'Search…', newDoc: '+ New document', tplGallery: 'Templates', docsTitle: 'Documents', blockDoc: 'Document', company: 'Company (header/footer)', options: 'Options', pageNumbers: 'Page numbers', size: 'Size', orientation: 'Orientation', portrait: 'Portrait', landscape: 'Landscape', margin: 'Margin (mm)', tags: 'Tags (comma separated)', favorite: 'Favorite', status: 'Status', selHint: 'Select a block in the preview to edit its properties. Drag ⠿ to reorder.', block: 'Block', convertTo: 'Convert to', alignment: 'Alignment', level: 'Level', text: 'Text', addRow: '+ Add row', addItem: '+ Add item', addEntry: '+ Add entry', addCol: '+ Column', removeEntry: 'Remove entry', up: '↑ Up', down: '↓ Down', dup: '⧉ Duplicate', del: '✕ Delete', color: 'Color', headers: 'Headers (| separated)', addRowT: '+ Row', src: 'Image URL (or upload below)', upload: 'Upload image…', width: 'Width %', caption: 'Caption', emptyImage: '🖼 No image yet — paste a URL or upload one in the panel →', open: 'Open', duplicate: 'Duplicate', delete: 'Delete', restore: 'Restore', purge: 'Delete forever', saved: 'Saved to library', savedAt: 'Saved', editing: 'Editing…', loaded: 'Document loaded', exported: 'Downloaded', fixFirst: 'Fix errors before exporting', noDocs: 'No documents here.', blocksN: 'blocks', wordsN: 'words', pagesN: 'pages', templateLoaded: 'Template loaded', imported: 'Imported', confirmDel: 'Move to trash?', confirmPurge: 'Delete forever? This cannot be undone.', palettePh: 'Type a command…', theme: 'Theme', language: 'Language', undo: 'Undo', redo: 'Redo', save: 'Save to library', export: 'Export', goEditor: 'Go to editor', goLibrary: 'Go to library', validate: 'Validate now', zoomIn: 'Zoom in', zoomOut: 'Zoom out', zoomReset: 'Reset zoom', newFrom: 'New from template', shortcuts: 'Keyboard shortcuts', close: 'Close', history: 'History', comments: 'Comments', newDocTitle: 'New', recentTitle: 'Recent', addComment: 'Add comment', yourName: 'Your name', writeComment: 'Write a comment…', resolve: 'Resolve', reopen: 'Reopen', noComments: 'No comments yet.', needSave: 'Save the document to the library first to use comments.', signHere: 'Sign here', drawLeft: 'Draw left signature', drawRight: 'Draw right signature', clearDrawing: 'Remove drawing', tplNamePh: 'Template name…', tplDescPh: 'Description…', saveTpl: 'Save current as template', tplSaved: 'Template saved', tplDeleted: 'Template deleted', confirmTplDel: 'Delete this template?', varsTitle: 'Fill in the values', createDoc: 'Create document', trashTitle: 'Trash', backToDocs: 'Back to documents', print: 'Print (browser)', findVersions: 'Versions', diffVsCurrent: 'Diff vs current', restoreVersion: 'Restore this version', restored: 'Version restored', depth: 'Depth', allTags: '🏷 All tags', allStates: 'All states', draft: 'Draft', in_review: 'In review', approved: 'Approved', favOnly: 'Favorites only', emptyTrash: 'Trash is empty.', outlineTitle: 'Outline', findTitle: 'Find & replace', auditTitle: 'Activity', themeColors: 'Accent / headings', snippet: 'Save snippet', snippetSaved: 'Snippet saved', csvImport: 'Import CSV', applySug: 'Apply suggestion', appliedSug: 'Suggestion applied', exportZip: 'Export library (.zip)', setToken: 'Set API token', clearSnippets: 'Clear snippets', outboxQueued: 'Offline — save queued', outboxFlushed: 'Queued saves synced' },
+  es: { docTitlePh: 'Título del documento', newBtn: 'Nuevo', saveBtn: 'Guardar', exportPdf: 'Exportar PDF', vEditor: 'Editar', vLibrary: 'Docs', addLabel: 'Añadir:', bText: 'Texto', bKv: 'Claves', bBullets: 'Viñetas', formatLabel: 'Formato:', zoomLabel: 'Zoom:', hint: 'Clic en cualquier texto para editar · escribe / para bloques · arrastra ⠿ para mover · Ctrl+K para acciones', emptyDoc: 'Documento vacío — añade tu primer bloque arriba o elige una plantilla.', libraryTitle: 'Biblioteca', searchPh: 'Buscar…', newDoc: '+ Nuevo documento', tplGallery: 'Plantillas', docsTitle: 'Documentos', blockDoc: 'Documento', company: 'Organización (cabecera/pie)', options: 'Opciones', pageNumbers: 'Números de página', size: 'Tamaño', orientation: 'Orientación', portrait: 'Vertical', landscape: 'Horizontal', margin: 'Margen (mm)', tags: 'Etiquetas (separadas por comas)', favorite: 'Favorito', status: 'Estado', selHint: 'Selecciona un bloque en la vista previa. Arrastra ⠿ para reordenar.', block: 'Bloque', convertTo: 'Convertir a', alignment: 'Alineación', level: 'Nivel', text: 'Texto', addRow: '+ Añadir fila', addItem: '+ Añadir punto', addEntry: '+ Añadir entrada', addCol: '+ Columna', removeEntry: 'Quitar entrada', up: '↑ Subir', down: '↓ Bajar', dup: '⧉ Duplicar', del: '✕ Borrar', color: 'Color', headers: 'Cabeceras (| separadas)', addRowT: '+ Fila', src: 'URL de imagen (o sube abajo)', upload: 'Subir imagen…', width: 'Ancho %', caption: 'Pie', emptyImage: '🖼 Sin imagen — pega una URL o súbela en el panel →', open: 'Abrir', duplicate: 'Duplicar', delete: 'Borrar', restore: 'Restaurar', purge: 'Borrar para siempre', saved: 'Guardado en biblioteca', savedAt: 'Guardado', editing: 'Editando…', loaded: 'Documento cargado', exported: 'Descargado', fixFirst: 'Corrige los errores antes de exportar', noDocs: 'Nada por aquí.', blocksN: 'bloques', wordsN: 'palabras', pagesN: 'páginas', templateLoaded: 'Plantilla cargada', imported: 'Importado', confirmDel: '¿Mover a la papelera?', confirmPurge: '¿Borrar para siempre? No se puede deshacer.', palettePh: 'Escribe un comando…', theme: 'Tema', language: 'Idioma', undo: 'Deshacer', redo: 'Rehacer', save: 'Guardar en biblioteca', export: 'Exportar', goEditor: 'Ir al editor', goLibrary: 'Ir a la biblioteca', validate: 'Validar ahora', zoomIn: 'Acercar', zoomOut: 'Alejar', zoomReset: 'Zoom 100%', newFrom: 'Nuevo desde plantilla', shortcuts: 'Atajos de teclado', close: 'Cerrar', history: 'Historial', comments: 'Comentarios', newDocTitle: 'Nuevo', recentTitle: 'Recientes', addComment: 'Comentar', yourName: 'Tu nombre', writeComment: 'Escribe un comentario…', resolve: 'Resolver', reopen: 'Reabrir', noComments: 'Sin comentarios.', needSave: 'Guarda el documento en la biblioteca para comentar.', signHere: 'Firma aquí', drawLeft: 'Dibujar firma izquierda', drawRight: 'Dibujar firma derecha', clearDrawing: 'Quitar dibujo', tplNamePh: 'Nombre de plantilla…', tplDescPh: 'Descripción…', saveTpl: 'Guardar actual como plantilla', tplSaved: 'Plantilla guardada', tplDeleted: 'Plantilla borrada', confirmTplDel: '¿Borrar esta plantilla?', varsTitle: 'Rellena los valores', createDoc: 'Crear documento', trashTitle: 'Papelera', backToDocs: 'Volver a documentos', print: 'Imprimir (navegador)', findVersions: 'Versiones', diffVsCurrent: 'Diff vs actual', restoreVersion: 'Restaurar esta versión', restored: 'Versión restaurada', depth: 'Profundidad', allTags: '🏷 Todas', allStates: 'Todos los estados', draft: 'Borrador', in_review: 'En revisión', approved: 'Aprobado', favOnly: 'Solo favoritos', emptyTrash: 'Papelera vacía.', outlineTitle: 'Índice', findTitle: 'Buscar y reemplazar', auditTitle: 'Actividad', themeColors: 'Acento / títulos', snippet: 'Guardar fragmento', snippetSaved: 'Fragmento guardado', csvImport: 'Importar CSV', applySug: 'Aplicar sugerencia', appliedSug: 'Sugerencia aplicada', exportZip: 'Exportar biblioteca (.zip)', setToken: 'Fijar token API', clearSnippets: 'Borrar fragmentos', outboxQueued: 'Sin conexión — guardado en cola', outboxFlushed: 'Cola sincronizada' },
 };
 let lang = localStorage.getItem('genpdf.lang') || 'en';
 const t = (k) => (I18N[lang] && I18N[lang][k]) || I18N.en[k] || k;
@@ -52,6 +52,59 @@ async function api(path, body) {
   const r = await fetch(path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body ?? doc) });
   if (!r.ok) { let d = {}; try { d = await r.json(); } catch { /* text */ } throw new Error(d.detail || r.statusText); }
   return r;
+}
+
+/* Optional shared-token auth: if the server sets GENPDF_TOKEN, every /api
+   call 401s until the user provides it once (kept in localStorage). */
+(function authFetch() {
+  const raw = window.fetch.bind(window);
+  window.fetch = async (url, opts = {}) => {
+    const u = String(url);
+    const isApi = u.includes('/api/');
+    const tok = localStorage.getItem('genpdf.token');
+    let options = opts;
+    if (isApi && tok) options = { ...opts, headers: { ...(opts.headers || {}), Authorization: 'Bearer ' + tok } };
+    let r = await raw(url, options);
+    if (isApi && r.status === 401 && !options._retried) {
+      const v = prompt('This server requires an API token:');
+      if (v) {
+        localStorage.setItem('genpdf.token', v.trim());
+        return raw(url, { ...options, headers: { ...(options.headers || {}), Authorization: 'Bearer ' + v.trim() }, _retried: true });
+      }
+    }
+    return r;
+  };
+})();
+
+/* Offline outbox: failed library saves are queued locally and replayed
+   FIFO when connectivity returns (the service worker only caches GETs). */
+function queueMutation(path, body) {
+  try {
+    const box = JSON.parse(localStorage.getItem('genpdf.outbox') || '[]');
+    box.push({ path, body, ts: Date.now() });
+    localStorage.setItem('genpdf.outbox', JSON.stringify(box.slice(-50)));
+  } catch { /* storage full: drop */ }
+}
+async function flushOutbox() {
+  let box = [];
+  try { box = JSON.parse(localStorage.getItem('genpdf.outbox') || '[]'); } catch { return; }
+  if (!box.length) return;
+  const rest = [];
+  for (const m of box) {
+    try {
+      const r = await fetch(m.path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(m.body) });
+      if (!r.ok) rest.push(m);
+    } catch { rest.push(m); }
+  }
+  try { localStorage.setItem('genpdf.outbox', JSON.stringify(rest)); } catch {}
+  if (rest.length !== box.length) {
+    toastMsg(t('outboxFlushed'), 'ok');
+    renderSidebar();
+  }
+}
+window.addEventListener('online', flushOutbox);
+if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+  navigator.serviceWorker.register('/sw.js').catch(() => {});
 }
 
 /* ================= markdown subset ================= */
@@ -170,7 +223,7 @@ function richEdit(getter, setter, ph) {
       e.stopPropagation();
       if (e.key === 'Escape') { if (slash.open) closeSlash(); else ed.blur(); return; }
       if (!slash.open) return;
-      const items = filterItems(BLOCK_DEFS, slash.filter);
+      const items = filterItems(slashDefs(), slash.filter);
       if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
         e.preventDefault();
         const d = e.key === 'ArrowDown' ? 1 : -1;
@@ -224,7 +277,12 @@ function renderPreview() {
   comp.className = 'companyline';
   comp.appendChild(plainEdit(() => doc.company_name, v => { doc.company_name = v; }, 'Organization (optional)'));
   sheet.appendChild(comp);
+  let skipLevel = 0;
   doc.blocks.forEach((b, i) => {
+    if (skipLevel > 0) {
+      if (b.type === 'heading' && b.level <= skipLevel) skipLevel = 0;
+      else return;
+    }
     const pg = layoutCache && layoutCache.blocks ? layoutCache.blocks[b.id] : null;
     if (pg && pg > 1 && i > 0) {
       const prevPg = layoutCache.blocks[doc.blocks[i - 1].id];
@@ -235,9 +293,58 @@ function renderPreview() {
       }
     }
     sheet.appendChild(blockEl(b));
+    if (b.type === 'heading' && foldedIds.has(b.id)) {
+      skipLevel = b.level;
+      const more = document.createElement('div');
+      more.className = 'foldmark';
+      more.textContent = '⋯';
+      more.title = 'Folded — click to expand';
+      more.onclick = () => toggleFold(b.id);
+      sheet.appendChild(more);
+    }
   });
   $('#dropHint').hidden = doc.blocks.length > 0;
   updateStatus();
+  renderOutline();
+}
+
+/* ---------- outline + folding (view state, persisted per document) ---------- */
+let foldedIds = new Set();
+function foldKey() { return 'genpdf.fold.' + (libraryId || (doc && doc.id) || 'draft'); }
+function loadFolded() {
+  try { foldedIds = new Set(JSON.parse(localStorage.getItem(foldKey()) || '[]')); }
+  catch { foldedIds = new Set(); }
+}
+function toggleFold(id) {
+  if (foldedIds.has(id)) foldedIds.delete(id);
+  else foldedIds.add(id);
+  try { localStorage.setItem(foldKey(), JSON.stringify([...foldedIds])); } catch {}
+  markDirty(); renderPreview();
+}
+function renderOutline() {
+  const box = $('#sideOutline');
+  if (!box || !doc) return;
+  box.innerHTML = '';
+  let count = 0;
+  doc.blocks.forEach(b => {
+    if (b.type !== 'heading' || !String(b.text || '').trim()) return;
+    count++;
+    const btn = document.createElement('button');
+    btn.className = 'lv' + Math.max(1, Math.min(3, b.level || 2));
+    btn.textContent = String(b.text).replace(/[*`]/g, '');
+    btn.title = btn.textContent;
+    btn.onclick = () => {
+      selectBlock(b.id);
+      const el = sheet.querySelector(`[data-id="${b.id}"]`);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    };
+    box.appendChild(btn);
+  });
+  if (!count) {
+    const e = document.createElement('div');
+    e.className = 'sideEmpty'; e.textContent = '—';
+    box.appendChild(e);
+  }
 }
 
 const BLOCK_DEFS = [
@@ -253,6 +360,7 @@ const BLOCK_DEFS = [
   { type: 'quote', icon: '❝', hint: 'Highlighted quote' },
   { type: 'code', icon: '</>', hint: 'Monospace block' },
   { type: 'toc', icon: '☰', hint: 'Auto table of contents' },
+  { type: 'chart', icon: '📊', hint: 'Bar chart' },
   { type: 'pagebreak', icon: '⤓', hint: 'Force new page' },
   { type: 'divider', icon: '―', hint: 'Horizontal rule' },
   { type: 'signatures', icon: '✒', hint: 'Two signature columns' },
@@ -273,6 +381,14 @@ function blockEl(b) {
   plus.textContent = '+'; plus.title = 'Insert block below'; plus.tabIndex = -1;
   plus.addEventListener('click', e => { e.stopPropagation(); openInsertMenu(plus, b.id); });
   gut.append(grip, plus);
+  if (b.type === 'heading') {
+    const fb = document.createElement('button');
+    fb.className = 'foldbtn'; fb.tabIndex = -1;
+    fb.textContent = foldedIds.has(b.id) ? '▸' : '▾';
+    fb.title = 'Fold / unfold section';
+    fb.addEventListener('click', e => { e.stopPropagation(); toggleFold(b.id); });
+    gut.appendChild(fb);
+  }
   const nComments = commentsCache.filter(c => c.block_id === b.id && !c.resolved).length;
   if (nComments) {
     const cb = document.createElement('button');
@@ -394,6 +510,10 @@ function blockEl(b) {
     const cap = document.createElement('div'); cap.className = 'cap';
     cap.appendChild(plainEdit(() => b.image.caption, v => { b.image.caption = v; }, 'Caption — set image in the panel →'));
     d.appendChild(cap); body.appendChild(d);
+  } else if (b.type === 'chart') {
+    const d = document.createElement('div'); d.className = 'chart';
+    d.appendChild(chartSVG(b));
+    body.appendChild(d);
   } else if (b.type === 'signatures') {
     const g = document.createElement('div'); g.className = 'sig';
     [['left', b.left], ['right', b.right]].forEach(([k, side]) => {
@@ -477,7 +597,7 @@ function scheduleTouchbar() {
 const slash = { open: false, blockId: null, filter: '', active: 0 };
 function openSlash(blockId, filter) {
   slash.open = true; slash.blockId = blockId; slash.filter = filter || ''; slash.active = 0;
-  renderFloatMenu(filterItems(BLOCK_DEFS, slash.filter), pickSlash);
+  renderFloatMenu(filterItems(slashDefs(), slash.filter), pickSlash);
 }
 function closeSlash() { slash.open = false; $('#floatMenu').hidden = true; }
 function filterItems(items, q) {
@@ -503,7 +623,8 @@ function pickSlash(def) {
     el.textContent = txt.replace(/\/[a-z]*$/i, '').trimEnd();
     syncSlashEdit(host, el.textContent);
   }
-  insertAfter(host.id, def.type);
+  if (def.type.startsWith('snippet:')) insertSnippet(host.id, +def.type.split(':')[1]);
+  else insertAfter(host.id, def.type);
 }
 function syncSlashEdit(b, text) {
   if (['heading', 'paragraph', 'quote', 'code'].includes(b.type)) b.text = text;
@@ -542,7 +663,7 @@ function openInsertMenu(anchorBtn, afterId) {
   const list = document.createElement('div'); m.appendChild(list);
   const draw = () => {
     list.innerHTML = '';
-    filterItems(BLOCK_DEFS, f.value).forEach(def => {
+    filterItems(slashDefs(), f.value).forEach(def => {
       const b = document.createElement('button');
       b.innerHTML = `<b style="width:26px;display:inline-block">${esc(def.icon)}</b> ${esc(def.type)} <small style="color:var(--muted)">${esc(def.hint)}</small>`;
       b.onclick = () => { m.hidden = true; insertAfter(afterId, def.type); };
@@ -561,6 +682,18 @@ function insertAfter(afterId, type) {
     const el = sheet.querySelector(`[data-id="${b.id}"] .editable`);
     if (el) el.focus();
   });
+  closeSlash();
+}
+function insertSnippet(afterId, index) {
+  const all = getSnippets();
+  const s = all[index];
+  if (!s) { toastMsg('Snippet gone', 'err'); return; }
+  pushHistory();
+  const b = JSON.parse(JSON.stringify(s.block));
+  b.id = uid();
+  const i = afterId ? idxOf(afterId) : doc.blocks.length - 1;
+  doc.blocks.splice(i + 1, 0, b);
+  selectedId = b.id; markDirty(); renderAll(); saveLocal(); refreshLayout();
   closeSlash();
 }
 document.addEventListener('click', e => {
@@ -647,7 +780,22 @@ function renderPanel() {
   ssize.onchange = applyPage; sori.onchange = applyPage; sm.onchange = applyPage;
   pr.append(ssize, sori, sm); panel.append(pl, pr);
 
-  miniBtns([[t('exportPdf'), exportPdf], ['Markdown ↓', exportMd], ['DOCX ↓', exportDocx], ['JSON ↓', exportJson], [t('history'), openHistory]]);
+  const th = document.createElement('label'); th.textContent = t('themeColors');
+  const tr = document.createElement('div'); tr.className = 'row';
+  const acc = document.createElement('input'); acc.type = 'color';
+  acc.value = /^#[0-9a-f]{6}$/i.test(doc.theme?.accent || '') ? doc.theme.accent : '#4f46e5';
+  const hd = document.createElement('input'); hd.type = 'color';
+  hd.value = /^#[0-9a-f]{6}$/i.test(doc.theme?.heading_color || '') ? doc.theme.heading_color : '#1c1917';
+  const applyTheme = () => {
+    pushHistory();
+    doc.theme = doc.theme || {};
+    doc.theme.accent = acc.value; doc.theme.heading_color = hd.value;
+    markDirty(); renderAll(); saveLocal();
+  };
+  acc.onchange = applyTheme; hd.onchange = applyTheme;
+  tr.append(acc, hd); panel.append(th, tr);
+
+  miniBtns([[t('exportPdf'), exportPdf], ['Markdown ↓', exportMd], ['DOCX ↓', exportDocx], ['JSON ↓', exportJson], [t('history'), openHistory], ['✨ AI', openAi]]);
   panel.appendChild(document.createElement('hr'));
 
   const b = byId(selectedId);
@@ -733,7 +881,33 @@ function renderPanel() {
     miniBtns([
       [t('addCol'), () => { pushHistory(); b.table.headers.push(''); b.table.rows.forEach(r => r.push('')); markDirty(); renderAll(); saveLocal(); }],
       [t('addRowT'), () => { pushHistory(); b.table.rows.push(Array(Math.max(1, b.table.headers.length)).fill('')); markDirty(); renderAll(); saveLocal(); refreshLayout(); }],
+      [t('csvImport'), () => $('#fileCsv').click()],
     ]);
+    const csvHandler = async e => {
+      const f = e.target.files[0]; e.target.value = '';
+      if (!f) return;
+      const grid = parseCSV(await f.text()).slice(0, 21).map(r => r.slice(0, 8));
+      if (!grid.length) { toastMsg('Empty CSV', 'err'); return; }
+      pushHistory();
+      b.table.headers = grid[0];
+      b.table.rows = grid.slice(1);
+      markDirty(); renderAll(); saveLocal(); refreshLayout();
+      toastMsg(t('imported'), 'ok');
+    };
+    $('#fileCsv').onchange = csvHandler;
+  } else if (b.type === 'chart') {
+    field('Chart title', (b.chart && b.chart.title) || '', v => { b.chart.title = v; renderPreview(); selectVisual(b.id); saveLocal(); });
+    (b.chart.points || []).forEach((p, i) => {
+      const row = document.createElement('div'); row.className = 'row';
+      const lb = document.createElement('input'); lb.type = 'text'; lb.placeholder = 'Label'; lb.value = p.label || '';
+      const vl = document.createElement('input'); vl.type = 'text'; vl.placeholder = '0'; vl.value = p.value ?? '';
+      const x = document.createElement('button'); x.textContent = '✕';
+      x.onclick = () => { pushHistory(); b.chart.points.splice(i, 1); markDirty(); renderAll(); saveLocal(); refreshLayout(); };
+      lb.addEventListener('input', () => { p.label = lb.value; renderPreview(); selectVisual(b.id); saveLocal(); });
+      vl.addEventListener('input', () => { p.value = parseFloat(vl.value) || 0; renderPreview(); selectVisual(b.id); saveLocal(); });
+      row.append(lb, vl, x); panel.appendChild(row);
+    });
+    miniBtns([[t('addItem'), () => { pushHistory(); b.chart.points.push({ label: '', value: 0 }); markDirty(); renderAll(); saveLocal(); refreshLayout(); }]]);
   } else if (b.type === 'columns') {
     (b.columns || []).forEach((c, i) => {
       field(`Column ${i + 1} title`, c.title, v => { c.title = v; renderPreview(); selectVisual(b.id); saveLocal(); });
@@ -753,11 +927,14 @@ function renderPanel() {
     field(t('src'), b.image.src && !b.image.src.startsWith('data:') ? b.image.src : '', v => { b.image.src = v; renderPreview(); selectVisual(b.id); saveLocal(); });
     const up = document.createElement('input'); up.type = 'file'; up.accept = 'image/*';
     const ul = document.createElement('label'); ul.textContent = t('upload');
-    up.addEventListener('change', () => {
+    up.addEventListener('change', async () => {
       const f = up.files[0]; if (!f) return;
-      const rd = new FileReader();
-      rd.onload = () => { pushHistory(); b.image.src = rd.result; if (!b.image.caption) b.image.caption = f.name; markDirty(); renderAll(); saveLocal(); };
-      rd.readAsDataURL(f);
+      try {
+        pushHistory();
+        b.image.src = await downscaleImage(f);
+        if (!b.image.caption) b.image.caption = f.name;
+        markDirty(); renderAll(); saveLocal();
+      } catch { toastMsg('Unreadable image', 'err'); }
     });
     panel.append(ul, up);
     field(t('width'), String(b.image.width_pct || 80), v => { b.image.width_pct = Math.max(10, Math.min(100, +v || 80)); renderPreview(); selectVisual(b.id); saveLocal(); });
@@ -773,7 +950,7 @@ function renderPanel() {
     });
   }
   panel.appendChild(document.createElement('hr'));
-  miniBtns([[t('up'), () => shiftBlock(b.id, -1)], [t('down'), () => shiftBlock(b.id, 1)], [t('dup'), () => duplicateBlock(b.id)], [t('del'), () => deleteBlock(b.id), true]]);
+  miniBtns([[t('up'), () => shiftBlock(b.id, -1)], [t('down'), () => shiftBlock(b.id, 1)], [t('dup'), () => duplicateBlock(b.id)], ['🔖 ' + t('snippet'), () => saveSnippet(b)], [t('del'), () => deleteBlock(b.id), true]]);
   renderComments(b);
   msgBox();
 }
@@ -811,7 +988,27 @@ function renderComments(b) {
       await fetch(`/api/library/${libraryId}/comments/${c.id}`, { method: 'DELETE' });
       await loadComments(); renderAll();
     };
-    acts.append(rs, del); d.append(who, tx, acts); panel.appendChild(d);
+    acts.append(rs, del);
+    const sug = parseSuggestion(c.text);
+    if (sug && !c.resolved) {
+      const ap = document.createElement('button'); ap.textContent = '✓ ' + t('applySug'); ap.className = 'primary';
+      ap.onclick = async () => {
+        const target = byId(c.block_id);
+        if (!target) { toastMsg('Block gone', 'err'); return; }
+        pushHistory();
+        let n = 0;
+        blockTextFields(target).forEach(f => {
+          const s = String(f.get() || '');
+          if (s.includes(sug.find)) { f.set(s.split(sug.find).join(sug.repl)); n++; }
+        });
+        if (!n) { toastMsg('No match', 'err'); return; }
+        await fetch(`/api/library/${libraryId}/comments/${c.id}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ resolved: true }) });
+        await loadComments(); markDirty(); renderAll(); saveLocal(); refreshLayout();
+        toastMsg(`${t('appliedSug')} (${n})`, 'ok');
+      };
+      acts.appendChild(ap);
+    }
+    d.append(who, tx, acts); panel.appendChild(d);
   });
   const authorRow = document.createElement('div'); authorRow.className = 'row';
   const authorInput = document.createElement('input');
@@ -869,7 +1066,20 @@ async function openHistory() {
   $('#histDiff').textContent = '';
   const list = $('#histList'); list.innerHTML = '';
   const versions = await (await fetch(`/api/library/${libraryId}/versions`)).json();
-  if (!versions.length) { list.innerHTML = `<p class="meta">${t('noDocs')}</p>`; return; }
+  if (!versions.length) { list.innerHTML = `<p class="meta">${t('noDocs')}</p>`; }
+  try {
+    const audit = await (await fetch(`/api/library/${libraryId}/audit`)).json();
+    const box = $('#auditList'); box.innerHTML = '';
+    audit.slice(0, 30).forEach(a => {
+      const row = document.createElement('div'); row.className = 'arow';
+      const when = document.createElement('small');
+      when.textContent = new Date(a.created_at * 1000).toLocaleString();
+      const what = document.createElement('span');
+      what.textContent = `${a.actor} · ${a.action}${a.detail ? ' — ' + a.detail : ''}`;
+      row.append(when, what); box.appendChild(row);
+    });
+    if (!audit.length) box.innerHTML = '<div class="arow"><small>—</small></div>';
+  } catch { /* audit optional */ }
   versions.forEach(v => {
     const b = document.createElement('button');
     b.innerHTML = `<span></span><small></small>`;
@@ -937,8 +1147,246 @@ function blankBlock(type) {
   if (type === 'sections') b.entries = [{ title: '', text: '' }];
   if (type === 'table') { b.table.headers = ['', '']; b.table.rows = [['', '']]; }
   if (type === 'columns') b.columns = [{ title: '', text: '' }, { title: '', text: '' }];
+  if (type === 'chart') b.chart = { title: '', points: [{ label: 'A', value: 10 }, { label: 'B', value: 20 }] };
   if (type === 'signatures') { b.left.role = 'Signer 1'; b.right.role = 'Signer 2'; }
   return b;
+}
+
+function chartSVG(b) {
+  const wrap = document.createElement('div');
+  const pts = ((b.chart && b.chart.points) || []).filter(p => String(p.label || '').trim() || +p.value);
+  if (b.chart && b.chart.title.trim()) {
+    const t = document.createElement('div');
+    t.style.fontWeight = '700'; t.style.textAlign = 'center';
+    t.appendChild(richEdit(() => b.chart.title, v => { b.chart.title = v; }, 'Chart title'));
+    wrap.appendChild(t);
+  }
+  const svgNS = 'http://www.w3.org/2000/svg';
+  const svg = document.createElementNS(svgNS, 'svg');
+  svg.setAttribute('viewBox', '0 0 560 150');
+  svg.setAttribute('role', 'img');
+  if (!pts.length) {
+    const t = document.createElement('div');
+    t.className = 'meta'; t.textContent = 'Add points in the panel →';
+    wrap.appendChild(t);
+    return wrap;
+  }
+  const max = Math.max(...pts.map(p => +p.value || 0), 1);
+  const bw = 560 / pts.length;
+  pts.forEach((p, i) => {
+    const h = Math.max(0, (+p.value || 0) / max) * 108;
+    const x = i * bw + 4;
+    const r = document.createElementNS(svgNS, 'rect');
+    r.setAttribute('x', x); r.setAttribute('y', 122 - h);
+    r.setAttribute('width', Math.max(2, bw - 8)); r.setAttribute('height', Math.max(0.5, h));
+    r.setAttribute('rx', 3); r.setAttribute('fill', '#4f46e5');
+    const tx = document.createElementNS(svgNS, 'text');
+    tx.setAttribute('x', x + (bw - 8) / 2 + 2); tx.setAttribute('y', 140);
+    tx.setAttribute('font-size', 11); tx.setAttribute('text-anchor', 'middle'); tx.setAttribute('fill', '#444');
+    tx.textContent = p.label;
+    const vv = document.createElementNS(svgNS, 'text');
+    vv.setAttribute('x', x + (bw - 8) / 2 + 2); vv.setAttribute('y', 118 - h);
+    vv.setAttribute('font-size', 10); vv.setAttribute('text-anchor', 'middle'); vv.setAttribute('fill', '#666');
+    vv.textContent = String(p.value);
+    svg.append(r, tx, vv);
+  });
+  const axis = document.createElementNS(svgNS, 'line');
+  axis.setAttribute('x1', 0); axis.setAttribute('x2', 560);
+  axis.setAttribute('y1', 122); axis.setAttribute('y2', 122);
+  axis.setAttribute('stroke', '#ccc');
+  svg.appendChild(axis);
+  wrap.appendChild(svg);
+  return wrap;
+}
+
+/* ================= csv / snippets / find-replace / suggestions / ai ================= */
+function parseCSV(text) {
+  const rows = [];
+  let row = [''], inQ = false, field = '';
+  const push = () => { row[row.length - 1] = field; };
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (inQ) {
+      if (c === '"') {
+        if (text[i + 1] === '"') { field += '"'; i++; }
+        else inQ = false;
+      } else field += c;
+    } else if (c === '"') inQ = true;
+    else if (c === ',') { push(); row.push(''); field = ''; }
+    else if (c === '\n') { push(); rows.push(row); row = ['']; field = ''; }
+    else if (c !== '\r') field += c;
+  }
+  push(); rows.push(row);
+  return rows.filter(r => r.some(c => String(c).trim() !== ''));
+}
+
+const getSnippets = () => {
+  try { return JSON.parse(localStorage.getItem('genpdf.snippets') || '[]'); }
+  catch { return []; }
+};
+function saveSnippet(b) {
+  const all = getSnippets();
+  const copy = JSON.parse(JSON.stringify(b));
+  delete copy.id;
+  all.push({ name: `${b.type} · ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`, block: copy });
+  try { localStorage.setItem('genpdf.snippets', JSON.stringify(all.slice(-50))); } catch {}
+  toastMsg('🔖 ' + t('snippetSaved'), 'ok');
+}
+function snippetDefs() {
+  return getSnippets().map((s, i) => ({ type: 'snippet:' + i, icon: '🔖', hint: s.name, snippet: s.block }));
+}
+function slashDefs() { return BLOCK_DEFS.concat(snippetDefs()); }
+
+/* Walk every editable string of the document (for find/replace + AI text). */
+function textFields() {
+  const out = [];
+  const push = (get, set, block) => out.push({ get, set, block });
+  if (!doc) return out;
+  push(() => doc.title, v => { doc.title = v; docTitle.value = v; }, null);
+  push(() => doc.company_name, v => { doc.company_name = v; }, null);
+  doc.blocks.forEach(b => {
+    if (['heading', 'paragraph', 'quote', 'code'].includes(b.type)) push(() => b.text, v => { b.text = v; }, b);
+    (b.rows || []).forEach(r => { push(() => r.label, v => { r.label = v; }, b); push(() => r.value, v => { r.value = v; }, b); });
+    (b.items || []).forEach((_, i) => push(() => b.items[i], v => { b.items[i] = v; }, b));
+    (b.entries || []).forEach(e => { push(() => e.title, v => { e.title = v; }, b); push(() => e.text, v => { e.text = v; }, b); });
+    (b.checklist || []).forEach(it => push(() => it.text, v => { it.text = v; }, b));
+    (b.table.headers || []).forEach((_, i) => push(() => b.table.headers[i], v => { b.table.headers[i] = v; }, b));
+    (b.table.rows || []).forEach((row, i) => row.forEach((_, j) => push(() => b.table.rows[i][j], v => { b.table.rows[i][j] = v; }, b)));
+    (b.columns || []).forEach(c => { push(() => c.title, v => { c.title = v; }, b); push(() => c.text, v => { c.text = v; }, b); });
+    push(() => b.image.caption, v => { b.image.caption = v; }, b);
+  });
+  return out;
+}
+function docAsText(limit = 6000) {
+  const parts = [doc.title, doc.company_name];
+  textFields().forEach(f => { if (f.block) parts.push(String(f.get() || '')); });
+  const s = parts.filter(Boolean).join('\n');
+  return s.length > limit ? s.slice(0, limit) + '\n…' : s;
+}
+function openFind() { $('#findModal').hidden = false; setTimeout(() => $('#findText').focus(), 0); }
+function findAll(q) {
+  if (!q) return [];
+  const out = [];
+  textFields().forEach(f => {
+    const s = String(f.get() || '');
+    let p = 0;
+    while (p <= s.length) {
+      const i = s.indexOf(q, p);
+      if (i < 0) break;
+      out.push({ field: f, pos: i });
+      p = i + Math.max(1, q.length);
+      if (out.length > 500) return out;
+    }
+  });
+  return out;
+}
+function flashBlock(b) {
+  selectBlock(b.id);
+  const el = sheet.querySelector(`[data-id="${b.id}"]`);
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    el.classList.add('flash');
+    setTimeout(() => el.classList.remove('flash'), 1300);
+  }
+}
+
+/* Suggestion comments: text starting with "suggest:" + "old >> new"
+   gains an Apply button that replaces the first match inside its block. */
+function parseSuggestion(text) {
+  const m = String(text || '').match(/^\s*suggest:\s*([\s\S]+?)>>([\s\S]+)$/i);
+  return m ? { find: m[1].trim(), repl: m[2].trim() } : null;
+}
+function blockTextFields(b) {
+  const out = [];
+  const push = (get, set) => out.push({ get, set });
+  if (['heading', 'paragraph', 'quote', 'code'].includes(b.type)) push(() => b.text, v => { b.text = v; });
+  (b.rows || []).forEach(r => { push(() => r.label, v => { r.label = v; }); push(() => r.value, v => { r.value = v; }); });
+  (b.items || []).forEach((_, i) => push(() => b.items[i], v => { b.items[i] = v; }));
+  (b.entries || []).forEach(e => { push(() => e.title, v => { e.title = v; }); push(() => e.text, v => { e.text = v; }); });
+  (b.checklist || []).forEach(it => push(() => it.text, v => { it.text = v; }));
+  (b.table.headers || []).forEach((_, i) => push(() => b.table.headers[i], v => { b.table.headers[i] = v; }));
+  (b.table.rows || []).forEach((row, i) => row.forEach((_, j) => push(() => b.table.rows[i][j], v => { b.table.rows[i][j] = v; })));
+  (b.columns || []).forEach(c => { push(() => c.title, v => { c.title = v; }); push(() => c.text, v => { c.text = v; }); });
+  push(() => b.image.caption, v => { b.image.caption = v; });
+  return out;
+}
+
+/* ---------- AI assist (BYOK: browser talks to the provider directly) ---------- */
+const aiCfg = () => ({
+  base: (localStorage.getItem('genpdf.ai.base') || 'https://api.openai.com/v1').replace(/\/$/, ''),
+  key: localStorage.getItem('genpdf.ai.key') || '',
+  model: localStorage.getItem('genpdf.ai.model') || 'gpt-4o-mini',
+});
+let lastAiResult = '';
+async function aiChat(system, user) {
+  const { base, key, model } = aiCfg();
+  if (!key) throw new Error('Set your API key first — it never leaves this browser.');
+  const r = await fetch(`${base}/chat/completions`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + key },
+    body: JSON.stringify({ model, messages: [{ role: 'system', content: system }, { role: 'user', content: user }], temperature: 0.4 }),
+  });
+  if (!r.ok) throw new Error('AI error ' + r.status);
+  const j = await r.json();
+  const out = j.choices && j.choices[0] && j.choices[0].message && j.choices[0].message.content;
+  return (out || '').trim();
+}
+function openAi() {
+  $('#aiModal').hidden = false;
+  $('#aiBase').value = localStorage.getItem('genpdf.ai.base') || 'https://api.openai.com/v1';
+  $('#aiModel').value = localStorage.getItem('genpdf.ai.model') || 'gpt-4o-mini';
+  $('#aiKey').value = localStorage.getItem('genpdf.ai.key') || '';
+}
+async function aiRun(kind) {
+  const out = $('#aiOut');
+  out.textContent = '…';
+  try {
+    const text = docAsText();
+    let system = 'You are a precise document assistant. Reply with the result only, no preamble.';
+    let user = '';
+    if (kind === 'summarize') user = 'Summarize this document in 5 bullet points:\n\n' + text;
+    else if (kind === 'tone') user = 'Rewrite this document in a formal, professional tone. Keep the structure:\n\n' + text;
+    else if (kind === 'actions') user = 'Extract action items as "- owner: task" lines. If none, say so:\n\n' + text;
+    else if (kind === 'translate') {
+      const langName = $('#aiLang').value.trim() || 'Spanish';
+      user = `Translate this document to ${langName}, keeping structure:\n\n` + text;
+    } else user = `${$('#aiPrompt').value}\n\n---\n\n${text}`;
+    lastAiResult = await aiChat(system, user);
+    out.textContent = lastAiResult;
+  } catch (e) { out.textContent = 'Error: ' + e.message; }
+}
+function aiInsert() {
+  if (!lastAiResult) return;
+  pushHistory();
+  const b = blankBlock('paragraph');
+  b.text = lastAiResult;
+  const i = selectedId ? idxOf(selectedId) : doc.blocks.length - 1;
+  doc.blocks.splice(i + 1, 0, b);
+  selectedId = b.id;
+  $('#aiModal').hidden = true;
+  markDirty(); renderAll(); saveLocal(); refreshLayout();
+  toastMsg(t('imported'), 'ok');
+}
+
+/* Downscale huge uploads in the browser: smaller DB, faster PDFs. */
+function downscaleImage(file, maxDim = 1600) {
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+      try {
+        const scale = Math.min(1, maxDim / Math.max(img.width, img.height));
+        const w = Math.round(img.width * scale), h = Math.round(img.height * scale);
+        const cv = document.createElement('canvas');
+        cv.width = w; cv.height = h;
+        cv.getContext('2d').drawImage(img, 0, 0, w, h);
+        URL.revokeObjectURL(url);
+        resolve(cv.toDataURL('image/jpeg', 0.85));
+      } catch (e) { reject(e); }
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('unreadable image')); };
+    img.src = url;
+  });
 }
 
 /* ================= layout + status ================= */
@@ -1118,7 +1566,12 @@ async function saveToLibrary() {
     doc.id = saved.id; libraryId = saved.id; saveLocal();
     await loadComments(); renderAll(); renderSidebar();
     toastMsg(t('saved'), 'ok');
-  } catch (e) { toastMsg('Save failed: ' + e.message, 'err'); }
+  } catch (e) {
+    if (String(e.message || '').match(/failed to fetch|network|offline|load failed/i)) {
+      queueMutation('/api/library', doc);
+      toastMsg(t('outboxQueued'), 'err');
+    } else toastMsg('Save failed: ' + e.message, 'err');
+  }
 }
 
 /* ================= import/export ================= */
@@ -1152,6 +1605,49 @@ function exportJson() {
   download(new Blob([JSON.stringify(doc, null, 2)], { type: 'application/json' }), (doc.title || 'document').replace(/\s+/g, '-').slice(0, 40) + '.json');
   toastMsg(t('exported'), 'ok');
 }
+async function exportZip() {
+  try {
+    const ids = (await (await fetch('/api/library')).json()).filter(d => !d.deleted_at).map(d => d.id);
+    if (!ids.length) { toastMsg(t('noDocs'), 'err'); return; }
+    const r = await api('/api/documents/batch-pdf', { ids });
+    download(await r.blob(), 'gen-pdf-batch.zip');
+    toastMsg(t('exported'), 'ok');
+  } catch (e) { toastMsg('Export failed: ' + e.message, 'err'); }
+}
+function openFind() { $('#findModal').hidden = false; setTimeout(() => $('#findText').focus(), 0); }
+function wireFindAi() {
+  $('#findClose').onclick = () => { $('#findModal').hidden = true; };
+  $('#findModal').addEventListener('click', e => { if (e.target.id === 'findModal') $('#findModal').hidden = true; });
+  $('#findNext').onclick = () => {
+    const q = $('#findText').value;
+    const hits = findAll(q);
+    $('#findCount').textContent = hits.length ? `${hits.length} × "${q}"` : '—';
+    const first = hits[0];
+    if (first && first.field.block) flashBlock(first.field.block);
+    else if (hits.length) docTitle.focus();
+  };
+  $('#findAll').onclick = () => {
+    const q = $('#findText').value, repl = $('#findReplace').value;
+    if (!q) return;
+    const hits = findAll(q);
+    if (!hits.length) { $('#findCount').textContent = '—'; return; }
+    pushHistory();
+    textFields().forEach(f => {
+      const s = String(f.get() || '');
+      if (s.includes(q)) f.set(s.split(q).join(repl));
+    });
+    $('#findCount').textContent = `${hits.length} → ✓`;
+    markDirty(); renderAll(); saveLocal(); refreshLayout();
+  };
+  $('#aiClose').onclick = () => { $('#aiModal').hidden = true; };
+  $('#aiModal').addEventListener('click', e => { if (e.target.id === 'aiModal') $('#aiModal').hidden = true; });
+  document.querySelectorAll('#aiModal [data-ai]').forEach(b => b.onclick = () => aiRun(b.dataset.ai));
+  $('#aiRun').onclick = () => aiRun('custom');
+  $('#aiInsert').onclick = aiInsert;
+  ['aiBase', 'aiModel', 'aiKey'].forEach(id => $('#' + id).addEventListener('change', e => {
+    localStorage.setItem('genpdf.ai.' + id.slice(2).toLowerCase(), e.target.value.trim());
+  }));
+}
 
 /* ================= command palette ================= */
 function palActions() {
@@ -1164,6 +1660,14 @@ function palActions() {
     { label: t('print'), hint: '', run: () => window.print() },
     { label: t('validate'), hint: '', run: () => { switchView('editor'); showValidation(); } },
     { label: t('history'), hint: '', run: () => { switchView('editor'); openHistory(); } },
+    { label: t('findTitle'), hint: '', run: () => { switchView('editor'); openFind(); } },
+    { label: '✨ AI assist', hint: '', run: () => { switchView('editor'); openAi(); } },
+    { label: '✨ AI: summarize', hint: '', run: async () => { switchView('editor'); openAi(); $('#aiPrompt').value = 'Summarize this document in 5 bullet points.'; await aiRun('summarize'); } },
+    { label: '✨ AI: action items', hint: '', run: async () => { switchView('editor'); openAi(); await aiRun('actions'); } },
+    { label: t('exportZip'), hint: '', run: exportZip },
+    { label: t('setToken'), hint: '', run: () => { const v = prompt('API token (empty to clear):'); if (v === null) return; if (v.trim()) localStorage.setItem('genpdf.token', v.trim()); else localStorage.removeItem('genpdf.token'); } },
+    ...getSnippets().map((s, i) => ({ label: `🔖 ${s.name}`, hint: '', run: () => { switchView('editor'); insertSnippet(selectedId, i); } })),
+    { label: t('clearSnippets'), hint: '', run: () => { localStorage.removeItem('genpdf.snippets'); toastMsg('OK', 'ok'); } },
     ...templates.map(x => ({ label: `${t('newFrom')}: ${x.name}`, hint: '', run: () => { openTemplateWithVars('builtin:' + x.id, x.name); switchView('editor'); } })),
     { label: t('goLibrary'), hint: '', run: () => switchView('library') },
     { label: t('goEditor'), hint: '', run: () => switchView('editor') },
@@ -1201,7 +1705,13 @@ function drawPalette(q) {
 }
 
 /* ================= render all / load / init ================= */
-function renderAll() { docTitle.value = doc.title || ''; renderPreview(); renderPanel(); syncUndoBtns(); updateTouchbar(); }
+let _foldKeyLoaded = '';
+function ensureFolded() {
+  if (!doc) return;
+  const k = foldKey();
+  if (k !== _foldKeyLoaded) { _foldKeyLoaded = k; loadFolded(); }
+}
+function renderAll() { ensureFolded(); docTitle.value = doc.title || ''; renderPreview(); renderPanel(); syncUndoBtns(); updateTouchbar(); }
 async function loadTemplate(id) {
   const d = await (await fetch('/api/templates/' + id)).json();
   if (doc) pushHistory();
@@ -1248,6 +1758,7 @@ async function init() {
   doc.page = doc.page || { size: 'A4', orientation: 'P', margin_mm: 20 };
   doc.tags = doc.tags || []; doc.status = doc.status || 'draft';
   await loadComments();
+  flushOutbox();
   try {
     const storedSide = localStorage.getItem('genpdf.side');
     const storedInsp = localStorage.getItem('genpdf.insp');
@@ -1349,6 +1860,7 @@ async function init() {
   const openKeys = () => { $('#keysModal').hidden = false; };
   $('#statusKeys').onclick = openKeys;
   $('#keysClose').onclick = () => { $('#keysModal').hidden = true; };
+  wireFindAi();
   $('#keysModal').addEventListener('click', e => { if (e.target.id === 'keysModal') $('#keysModal').hidden = true; });
   $('#histClose').onclick = () => { $('#histModal').hidden = true; };
 

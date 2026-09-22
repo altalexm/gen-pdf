@@ -1,14 +1,19 @@
 """gen-pdf API: templates, library, import/export and PDF rendering."""
 from __future__ import annotations
 
+import logging
+import os
 import re
+import zipfile
+from io import BytesIO
 from pathlib import Path
 
-from fastapi import FastAPI, File, HTTPException, Query, UploadFile
-from fastapi.responses import HTMLResponse, PlainTextResponse, Response
+from fastapi import FastAPI, File, HTTPException, Query, Request, UploadFile
+from fastapi.responses import HTMLResponse, JSONResponse, PlainTextResponse, Response
 from fastapi.staticfiles import StaticFiles
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from markupsafe import Markup
+from starlette.middleware.base import BaseHTTPMiddleware
 
 from . import __version__ as APP_VERSION
 from . import library
@@ -16,10 +21,27 @@ from .documents import TEMPLATES
 from .docx_io import document_to_docx, docx_to_document
 from .markdown import document_to_markdown, markdown_to_document
 from .models import Document
+from .models import migrate_document as _migrate
 from .models import validate_document as _validate
 from .pdf import layout as _layout
 from .pdf import prepare_preview as _prepare_preview
 from .pdf import render_pdf
+from .pdf_import import pdf_to_document
+
+logger = logging.getLogger("gen-pdf")
+
+API_TOKEN = os.getenv("GENPDF_TOKEN", "")
+
+
+class TokenAuthMiddleware(BaseHTTPMiddleware):
+    """Optional shared-token auth. Set GENPDF_TOKEN to require
+    `Authorization: Bearer <token>` on every /api call except /api/health."""
+
+    async def dispatch(self, request: Request, call_next):
+        if API_TOKEN and request.url.path.startswith("/api/") and request.url.path != "/api/health":
+            if request.headers.get("authorization", "") != f"Bearer {API_TOKEN}":
+                return JSONResponse({"detail": "Unauthorized"}, status_code=401)
+        return await call_next(request)
 
 BASE = Path(__file__).parent
 jinja = Environment(
@@ -47,8 +69,19 @@ def _slug(text: str) -> str:
     return slug or "document"
 
 
+def _actor(request: Request | None) -> str:
+    if request is None:
+        return "local"
+    return (request.headers.get("x-actor", "") or request.client.host if request.client else "api")[:60]
+
+
 def create_app() -> FastAPI:
     app = FastAPI(title="gen-pdf", version=APP_VERSION)
+    app.add_middleware(TokenAuthMiddleware)
+    if API_TOKEN:
+        logger.info("GENPDF_TOKEN set: /api requires bearer auth")
+    else:
+        logger.warning("GENPDF_TOKEN not set: API is open, bind to localhost unless intentional")
 
     @app.get("/api/health")
     def health():
@@ -109,6 +142,35 @@ def create_app() -> FastAPI:
             headers={"Content-Disposition": f'attachment; filename="{_slug(doc.title)}.pdf"'},
         )
 
+    @app.post("/api/documents/batch-pdf")
+    def batch_pdf(body: dict):
+        """Render several library documents into one ZIP."""
+        ids = [str(x) for x in (body.get("ids") or [])][:50]
+        if not ids:
+            raise HTTPException(status_code=422, detail="No document ids")
+        buf = BytesIO()
+        names = set()
+        with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as zf:
+            for doc_id in ids:
+                found = library.get_document(doc_id)
+                if not found or found.get("deleted_at"):
+                    continue
+                doc = Document(**_migrate(found["document"]))
+                name = _slug(doc.title) + ".pdf"
+                n, stem = 1, name
+                while name in names:
+                    n += 1
+                    name = stem[:-4] + f"-{n}.pdf"
+                names.add(name)
+                zf.writestr(name, render_pdf(doc))
+        if not names:
+            raise HTTPException(status_code=404, detail="No documents found")
+        return Response(
+            content=buf.getvalue(),
+            media_type="application/zip",
+            headers={"Content-Disposition": 'attachment; filename="gen-pdf-batch.zip"'},
+        )
+
     @app.post("/api/documents/layout")
     def layout(doc: Document):
         """True pagination: real page number of every block (same renderer as the PDF)."""
@@ -138,17 +200,19 @@ def create_app() -> FastAPI:
         return found["document"]
 
     @app.post("/api/library/{doc_id}/duplicate")
-    def library_duplicate(doc_id: str):
+    def library_duplicate(doc_id: str, request: Request):
         dup = library.duplicate_document(doc_id)
         if not dup:
             raise HTTPException(status_code=404, detail="Not found")
+        library.log_action(doc_id, "duplicate", f"-> {dup['id']}", _actor(request))
         return dup
 
     @app.delete("/api/library/{doc_id}")
-    def library_delete(doc_id: str, hard: bool = Query(default=False)):
+    def library_delete(doc_id: str, hard: bool = Query(default=False), request: Request = None):
         ok = library.purge_document(doc_id) if hard else library.soft_delete(doc_id)
         if not ok:
             raise HTTPException(status_code=404, detail="Not found")
+        library.log_action(doc_id, "purge" if hard else "trash", "", _actor(request))
         return {"ok": True}
 
     @app.post("/api/library/{doc_id}/restore")
@@ -158,7 +222,7 @@ def create_app() -> FastAPI:
         return {"ok": True}
 
     @app.patch("/api/library/{doc_id}/status")
-    def library_status(doc_id: str, body: dict):
+    def library_status(doc_id: str, body: dict, request: Request):
         found = library.get_document(doc_id)
         if not found:
             raise HTTPException(status_code=404, detail="Not found")
@@ -166,7 +230,9 @@ def create_app() -> FastAPI:
         if body.get("status") not in ("draft", "in_review", "approved"):
             raise HTTPException(status_code=422, detail="Invalid status")
         data["status"] = body["status"]
-        return library.save_document(data)
+        saved = library.save_document(data)
+        library.log_action(doc_id, "status", body["status"], _actor(request))
+        return saved
 
     # ---- versions ----
     @app.get("/api/library/{doc_id}/versions")
@@ -181,11 +247,16 @@ def create_app() -> FastAPI:
         return v
 
     @app.post("/api/library/{doc_id}/versions/{version_id}/restore")
-    def version_restore(doc_id: str, version_id: str):
+    def version_restore(doc_id: str, version_id: str, request: Request):
         data = library.restore_version(doc_id, version_id)
         if not data:
             raise HTTPException(status_code=404, detail="Not found")
+        library.log_action(doc_id, "version-restore", version_id, _actor(request))
         return data["document"]
+
+    @app.get("/api/library/{doc_id}/audit")
+    def audit_list(doc_id: str):
+        return library.list_audit(doc_id)
 
     @app.post("/api/documents/diff")
     def diff_docs(body: dict):
@@ -201,10 +272,12 @@ def create_app() -> FastAPI:
         return library.list_comments(doc_id, include_resolved=not open_only)
 
     @app.post("/api/library/{doc_id}/comments")
-    def comment_add(doc_id: str, body: dict):
+    def comment_add(doc_id: str, body: dict, request: Request):
         if not (body.get("text") or "").strip():
             raise HTTPException(status_code=422, detail="Empty comment")
-        return library.add_comment(doc_id, body.get("block_id", ""), body.get("author", ""), body["text"])
+        comment = library.add_comment(doc_id, body.get("block_id", ""), body.get("author", ""), body["text"])
+        library.log_action(doc_id, "comment", (body.get("text") or "")[:120], _actor(request))
+        return comment
 
     @app.patch("/api/library/{doc_id}/comments/{comment_id}")
     def comment_update(doc_id: str, comment_id: str, body: dict):
@@ -269,6 +342,16 @@ def create_app() -> FastAPI:
             return docx_to_document(data, file.filename or "Imported document")
         except Exception as e:
             raise HTTPException(status_code=422, detail=f"Could not parse DOCX: {e}") from e
+
+    @app.post("/api/documents/import-pdf", response_model=Document)
+    async def import_pdf(file: UploadFile = File(...)):  # noqa: B008 (FastAPI idiom)
+        data = await file.read()
+        if len(data) > 20 * 1024 * 1024:
+            raise HTTPException(status_code=413, detail="File too large (max 20 MB)")
+        try:
+            return pdf_to_document(data, (file.filename or "Imported PDF").rsplit(".", 1)[0])
+        except Exception as e:
+            raise HTTPException(status_code=422, detail=f"Could not parse PDF: {e}") from e
 
     static_dir = BASE.parent / "static"
     if static_dir.exists():
